@@ -1,0 +1,1418 @@
+[
+  {
+    "id": "rest_01",
+    "name": "Casa Doina",
+    "category": "restaurant",
+    "description": "Conac din secolul XIX restaurat cu grijă, ascuns într-o grădină din nordul Capitalei. Bucătărie românească rafinată și o sală principală pentru până la 180 de invitați.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 320,
+    "priceMax": 480,
+    "priceUnit": "RON/persoană",
+    "rating": 4.8,
+    "reviewCount": 142,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Conac istoric",
+      "Grădină",
+      "Eveniment elegant"
+    ],
+    "phone": "+40 21 230 1234",
+    "website": "casadoina.ro",
+    "instagram": "@casadoina"
+  },
+  {
+    "id": "rest_02",
+    "name": "Conacul Florilor",
+    "category": "restaurant",
+    "description": "Locație de evenimente la marginea Clujului, cu salon principal cu candelabru de cristal și terasă acoperită. Meniuri personalizate, vinuri din podgorii locale.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 280,
+    "priceMax": 420,
+    "priceUnit": "RON/persoană",
+    "rating": 4.7,
+    "reviewCount": 98,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Salon clasic",
+      "Terasă",
+      "Vinuri locale"
+    ],
+    "phone": "+40 264 412 880",
+    "website": "conaculflorilor.ro",
+    "instagram": "@conaculflorilor"
+  },
+  {
+    "id": "rest_03",
+    "name": "Restaurant La Fineţe",
+    "category": "restaurant",
+    "description": "Restaurant boutique cu meniu contemporan și chef premiat. Capacitate intimă pentru evenimente de până la 90 de invitați, ideal pentru nunți elegante.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 380,
+    "priceMax": 520,
+    "priceUnit": "RON/persoană",
+    "rating": 4.9,
+    "reviewCount": 76,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Bucătărie contemporană",
+      "Intimist",
+      "Chef premiat"
+    ],
+    "phone": "+40 21 318 4500",
+    "website": "lafinete.ro"
+  },
+  {
+    "id": "rest_04",
+    "name": "Hanul Berarilor",
+    "category": "restaurant",
+    "description": "Han tradițional renovat, în centrul vechi al Timișoarei. Atmosferă rustic-elegantă, sală principală sub bolți de cărămidă și curte interioară pavată.",
+    "judet": "Timiș",
+    "localitate": "Timișoara",
+    "priceMin": 220,
+    "priceMax": 340,
+    "priceUnit": "RON/persoană",
+    "rating": 4.6,
+    "reviewCount": 124,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Tradițional",
+      "Curte interioară",
+      "Centru vechi"
+    ],
+    "phone": "+40 256 491 188",
+    "instagram": "@hanulberarilor"
+  },
+  {
+    "id": "rest_05",
+    "name": "Vila Boemia",
+    "category": "restaurant",
+    "description": "Vilă interbelică pe drumul vechi al Brașovului, cu salon de marmură și grădină cu fântână arteziană. Meniuri sezoniere, produse locale de la fermele din Țara Bârsei.",
+    "judet": "Brașov",
+    "localitate": "Brașov",
+    "priceMin": 260,
+    "priceMax": 380,
+    "priceUnit": "RON/persoană",
+    "rating": 4.7,
+    "reviewCount": 87,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Vilă interbelică",
+      "Grădină",
+      "Produse locale"
+    ],
+    "phone": "+40 268 477 230",
+    "website": "vilaboemia.ro"
+  },
+  {
+    "id": "rest_06",
+    "name": "Restaurant Pescăruș",
+    "category": "restaurant",
+    "description": "Restaurant cu vedere directă la Marea Neagră, terasă deschisă pentru evenimente la apus. Specialități pe bază de pește proaspăt și meniuri pentru evenimente mari.",
+    "judet": "Constanța",
+    "localitate": "Mamaia",
+    "priceMin": 240,
+    "priceMax": 360,
+    "priceUnit": "RON/persoană",
+    "rating": 4.5,
+    "reviewCount": 156,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Mare",
+      "Terasă apus",
+      "Pește"
+    ],
+    "phone": "+40 241 831 200",
+    "instagram": "@pescarusmamaia"
+  },
+  {
+    "id": "rest_07",
+    "name": "Aristocrat Events",
+    "category": "restaurant",
+    "description": "Salon de evenimente cu trei spații distincte, decorate de designer. Capacitate de la 50 până la 350 de invitați, cu echipă proprie de organizare.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 300,
+    "priceMax": 460,
+    "priceUnit": "RON/persoană",
+    "rating": 4.6,
+    "reviewCount": 203,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Sală mare",
+      "Designer interior",
+      "Echipă proprie"
+    ],
+    "phone": "+40 21 411 8000",
+    "website": "aristocratevents.ro"
+  },
+  {
+    "id": "rest_08",
+    "name": "Castel Sturdza",
+    "category": "restaurant",
+    "description": "Castel boieresc restaurat lângă Iași, cu sală de bal autentică și parc de 4 hectare. Locație rară pentru nunți cu tematică istorică sau eleganță atemporală.",
+    "judet": "Iași",
+    "localitate": "Miclăușeni",
+    "priceMin": 350,
+    "priceMax": 500,
+    "priceUnit": "RON/persoană",
+    "rating": 4.9,
+    "reviewCount": 64,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Castel",
+      "Sală de bal",
+      "Parc privat"
+    ],
+    "phone": "+40 232 270 100",
+    "website": "castelsturdza.ro"
+  },
+  {
+    "id": "rest_09",
+    "name": "Conacul Bragadiru",
+    "category": "restaurant",
+    "description": "Monument istoric din centrul Bucureștiului, cu arhitectură franceză și sală mare cu candelabre originale. Atmosferă regală pentru evenimente de gală.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 360,
+    "priceMax": 500,
+    "priceUnit": "RON/persoană",
+    "rating": 4.8,
+    "reviewCount": 119,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Monument istoric",
+      "Arhitectură franceză",
+      "Eveniment de gală"
+    ],
+    "phone": "+40 21 336 9999",
+    "website": "conaculbragadiru.ro",
+    "instagram": "@conaculbragadiru"
+  },
+  {
+    "id": "rest_10",
+    "name": "Mantis Garden",
+    "category": "restaurant",
+    "description": "Locație modernă la ieșire din Cluj, cu pavilion de sticlă pentru ceremonia civilă în natură. Bucătărie modernă, meniuri vegetariene și fine dining.",
+    "judet": "Cluj",
+    "localitate": "Florești",
+    "priceMin": 270,
+    "priceMax": 400,
+    "priceUnit": "RON/persoană",
+    "rating": 4.7,
+    "reviewCount": 91,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Pavilion sticlă",
+      "Modern",
+      "Fine dining"
+    ],
+    "phone": "+40 264 555 320",
+    "instagram": "@mantisgarden"
+  },
+  {
+    "id": "rest_11",
+    "name": "Salonul Marmură",
+    "category": "restaurant",
+    "description": "Sală de evenimente pe Bega, cu pereți de marmură albă și plafoane înalte. Lumina caldă a candelabrelor și logistică pentru evenimente de peste 200 de invitați.",
+    "judet": "Timiș",
+    "localitate": "Timișoara",
+    "priceMin": 290,
+    "priceMax": 430,
+    "priceUnit": "RON/persoană",
+    "rating": 4.6,
+    "reviewCount": 78,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Marmură",
+      "Salon mare",
+      "Candelabre"
+    ],
+    "phone": "+40 256 309 870",
+    "website": "salonulmarmura.ro"
+  },
+  {
+    "id": "rest_12",
+    "name": "Bistro Caraiman",
+    "category": "restaurant",
+    "description": "Bistro montan cu vedere la Bucegi, ideal pentru nunți intime în natură. Capacitate până la 70 de invitați, meniuri inspirate din bucătăria carpatică.",
+    "judet": "Brașov",
+    "localitate": "Bușteni",
+    "priceMin": 230,
+    "priceMax": 340,
+    "priceUnit": "RON/persoană",
+    "rating": 4.7,
+    "reviewCount": 53,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Montan",
+      "Intimist",
+      "Vedere panoramică"
+    ],
+    "phone": "+40 244 320 100",
+    "instagram": "@bistrocaraiman"
+  },
+  {
+    "id": "foto_01",
+    "name": "Studio Foto Andrei Popescu",
+    "category": "fotograf",
+    "description": "Stil documentar autentic, fără poze regizate. Peste 200 de nunți acoperite în ultimii zece ani, în România și în străinătate.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 4500,
+    "priceMax": 7500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.9,
+    "reviewCount": 184,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Documentar",
+      "Experiență 10+ ani",
+      "Disponibil în străinătate"
+    ],
+    "phone": "+40 745 100 200",
+    "website": "andreipopescu.com",
+    "instagram": "@andreipopescuphoto"
+  },
+  {
+    "id": "foto_02",
+    "name": "Lumina Albă Photography",
+    "category": "fotograf",
+    "description": "Cuplu de fotografi specializat în editorial fine-art. Lumină naturală, culori soft, stil cinematografic — livrare cu album premium inclus.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 5500,
+    "priceMax": 8000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.9,
+    "reviewCount": 112,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Fine-art",
+      "Cuplu fotografi",
+      "Album inclus"
+    ],
+    "phone": "+40 723 400 500",
+    "website": "luminaalba.ro",
+    "instagram": "@luminaalba.ph"
+  },
+  {
+    "id": "foto_03",
+    "name": "Mihai Roman Photo",
+    "category": "fotograf",
+    "description": "Reportaj de nuntă cu tușe artistice, accent pe momente reale. Editare în tonuri calde, livrare în 30 de zile cu galerie online privată.",
+    "judet": "Timiș",
+    "localitate": "Timișoara",
+    "priceMin": 3500,
+    "priceMax": 5800,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 89,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Reportaj",
+      "Tonuri calde",
+      "Galerie online"
+    ],
+    "phone": "+40 740 220 880",
+    "instagram": "@mihairomanphoto"
+  },
+  {
+    "id": "foto_04",
+    "name": "Atelier Visual Iași",
+    "category": "fotograf",
+    "description": "Studio cu trei fotografi și un videograf, pachete complete pentru nunți. Stil curat, modern, cu accent pe portretele cuplului.",
+    "judet": "Iași",
+    "localitate": "Iași",
+    "priceMin": 4000,
+    "priceMax": 6500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.6,
+    "reviewCount": 71,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Pachet complet",
+      "Echipă",
+      "Portrete"
+    ],
+    "phone": "+40 232 250 300",
+    "website": "ateliervisual.ro"
+  },
+  {
+    "id": "foto_05",
+    "name": "Alexandru Onofrei Foto",
+    "category": "fotograf",
+    "description": "Fotograf cu portofoliu publicat în reviste de weddings internaționale. Stil editorial, atenție la detalii, prezență discretă pe parcursul zilei.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 6000,
+    "priceMax": 8000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.9,
+    "reviewCount": 96,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Editorial",
+      "Publicat internațional",
+      "Premium"
+    ],
+    "phone": "+40 722 880 100",
+    "website": "alexonofrei.com",
+    "instagram": "@alexonofrei"
+  },
+  {
+    "id": "foto_06",
+    "name": "Roxana Vlad Photography",
+    "category": "fotograf",
+    "description": "Specializare pe nunți outdoor și destination weddings. Stil natural, expresiv, livrare cu film de scurt metraj de 3 minute inclus.",
+    "judet": "Brașov",
+    "localitate": "Brașov",
+    "priceMin": 4200,
+    "priceMax": 6800,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.8,
+    "reviewCount": 64,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Outdoor",
+      "Destination",
+      "Film inclus"
+    ],
+    "phone": "+40 745 660 110",
+    "instagram": "@roxanavladphoto"
+  },
+  {
+    "id": "foto_07",
+    "name": "Black Frame Studio",
+    "category": "fotograf",
+    "description": "Studio din Cluj specializat în reportaj alb-negru și editorial. Două variante de livrare: galerie color completă plus selecție artistic alb-negru.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 3800,
+    "priceMax": 5500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 58,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Alb-negru",
+      "Reportaj",
+      "Editorial"
+    ],
+    "phone": "+40 264 780 990",
+    "instagram": "@blackframe.cluj"
+  },
+  {
+    "id": "foto_08",
+    "name": "Andreea Cristea Foto",
+    "category": "fotograf",
+    "description": "Fotograf cu sediu în Constanța, dar disponibilă în toată țara. Sesiuni de logodnă incluse, ședință foto cu mireasa în ziua nunții.",
+    "judet": "Constanța",
+    "localitate": "Constanța",
+    "priceMin": 3500,
+    "priceMax": 5200,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.6,
+    "reviewCount": 81,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Logodnă inclusă",
+      "Disponibilă în toată țara"
+    ],
+    "phone": "+40 728 410 220",
+    "instagram": "@andreeacristeafoto"
+  },
+  {
+    "id": "foto_09",
+    "name": "Foto Vintage George Munteanu",
+    "category": "fotograf",
+    "description": "Estetică retro inspirată din anii ’70, peliculă reală pentru cuplurile care doresc senzația aceea. Livrare hibridă: digital plus printuri retro.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 3800,
+    "priceMax": 5500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.5,
+    "reviewCount": 42,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Vintage",
+      "Peliculă",
+      "Printuri incluse"
+    ],
+    "phone": "+40 745 220 300",
+    "instagram": "@georgemunteanu.foto"
+  },
+  {
+    "id": "foto_10",
+    "name": "Two Hearts Photography",
+    "category": "fotograf",
+    "description": "Soț și soție, ambii fotografi profesioniști. Acoperire dublă a evenimentului — un unghi pentru fiecare moment important.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 5000,
+    "priceMax": 7200,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.8,
+    "reviewCount": 73,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Cuplu fotografi",
+      "Acoperire dublă"
+    ],
+    "phone": "+40 740 110 220",
+    "website": "twohearts.ro",
+    "instagram": "@twohearts.cluj"
+  },
+  {
+    "id": "dj_01",
+    "name": "DJ Alex Marin",
+    "category": "dj",
+    "description": "Set-uri personalizate după preferințele cuplului, mix între muzică românească și internațională. Sistem audio profesional inclus, lumini și fum opționale.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 3000,
+    "priceMax": 4500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.8,
+    "reviewCount": 128,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Sistem inclus",
+      "Lumini",
+      "10+ ani experiență"
+    ],
+    "phone": "+40 742 300 400",
+    "instagram": "@djalexmarin"
+  },
+  {
+    "id": "dj_02",
+    "name": "DJ Cosmin Voicu",
+    "category": "dj",
+    "description": "Specializare pe nunți elegante și evenimente corporate. Stil discret, fără efecte gălăgioase, mix curat între genuri. Disponibil ca MC.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 2800,
+    "priceMax": 4200,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 95,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Discret",
+      "MC inclus",
+      "Eveniment elegant"
+    ],
+    "phone": "+40 723 600 700",
+    "website": "djcosminvoicu.ro"
+  },
+  {
+    "id": "dj_03",
+    "name": "DJ Andrei Stanciu",
+    "category": "dj",
+    "description": "Mai mult de 300 de nunți acoperite, biblioteca muzicală cu peste 50.000 de piese. Cere lista preferințelor cu o lună înainte și pregătește set personalizat.",
+    "judet": "Timiș",
+    "localitate": "Timișoara",
+    "priceMin": 2500,
+    "priceMax": 3800,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.6,
+    "reviewCount": 142,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Bibliotecă mare",
+      "Set personalizat"
+    ],
+    "phone": "+40 740 800 900",
+    "instagram": "@djandreistanciu"
+  },
+  {
+    "id": "dj_04",
+    "name": "DJ Vlad Iancu",
+    "category": "dj",
+    "description": "Stil modern, accent pe energia ringului de dans. Lucrează cu lighting-designer dedicat, pentru cuplurile care doresc atmosferă tip club la final de seară.",
+    "judet": "Iași",
+    "localitate": "Iași",
+    "priceMin": 2200,
+    "priceMax": 3500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.6,
+    "reviewCount": 67,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Energic",
+      "Lighting designer",
+      "Club vibes"
+    ],
+    "phone": "+40 745 330 880",
+    "instagram": "@djvladiancu"
+  },
+  {
+    "id": "dj_05",
+    "name": "DJ Marius Tudor",
+    "category": "dj",
+    "description": "Stil clasic de nuntă, cu pricepere pe muzica românească de toate vârstele. Microfoane wireless incluse pentru toasturi și momente de surpriză.",
+    "judet": "Brașov",
+    "localitate": "Brașov",
+    "priceMin": 2400,
+    "priceMax": 3600,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 89,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Muzică românească",
+      "Microfoane incluse"
+    ],
+    "phone": "+40 722 110 220",
+    "instagram": "@djmariustudor"
+  },
+  {
+    "id": "dj_06",
+    "name": "DJ Răzvan Niță",
+    "category": "dj",
+    "description": "Rezidență la cluburi din nordul Capitalei, dar specializat și pe nunți. Mix house, dance și hituri internaționale pentru ringul de seară.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 3500,
+    "priceMax": 5000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 76,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "House",
+      "Internațional",
+      "Rezident club"
+    ],
+    "phone": "+40 745 550 660",
+    "instagram": "@djrazvannita"
+  },
+  {
+    "id": "dj_07",
+    "name": "DJ Cristian Dima",
+    "category": "dj",
+    "description": "Bază în Constanța, eveniment la mare specialitate. Vine cu sistem audio outdoor robust, perfect pentru petreceri pe plajă sau în grădini.",
+    "judet": "Constanța",
+    "localitate": "Constanța",
+    "priceMin": 2600,
+    "priceMax": 4000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.6,
+    "reviewCount": 54,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Outdoor",
+      "Plajă",
+      "Sistem robust"
+    ],
+    "phone": "+40 728 990 110",
+    "instagram": "@djcristiandima"
+  },
+  {
+    "id": "dj_08",
+    "name": "DJ Bogdan Petrescu",
+    "category": "dj",
+    "description": "Stil cosmopolit, peste 200 de nunți la Cluj și împrejurimi. Vine cu controller modern, vinyluri pentru momente emoționale, dar și cu efecte vizuale subtile.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 2800,
+    "priceMax": 4200,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 102,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Cosmopolit",
+      "Vinyluri"
+    ],
+    "phone": "+40 724 300 400",
+    "instagram": "@djbogdanpetrescu"
+  },
+  {
+    "id": "dj_09",
+    "name": "DJ Eduard Pop",
+    "category": "dj",
+    "description": "Specialist în trecerea fină între momentul ceremoniei și partea de petrecere. Consultanță audio inclusă, pentru cuplurile care vor un flow perfect.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 2700,
+    "priceMax": 4200,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.8,
+    "reviewCount": 88,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Consultanță audio",
+      "Tranziție lină"
+    ],
+    "phone": "+40 723 440 550",
+    "instagram": "@djeduardpop"
+  },
+  {
+    "id": "dj_10",
+    "name": "DJ Adrian Costache",
+    "category": "dj",
+    "description": "DJ și producător, deține propriul studio de producție. Poate edita remix personalizat pentru dansul mirilor — semnătură audio unică pentru evenimentul vostru.",
+    "judet": "Timiș",
+    "localitate": "Timișoara",
+    "priceMin": 3000,
+    "priceMax": 4800,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.8,
+    "reviewCount": 61,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Remix personalizat",
+      "Producător"
+    ],
+    "phone": "+40 740 770 880",
+    "instagram": "@djadriancostache"
+  },
+  {
+    "id": "form_01",
+    "name": "Trupa Estrada",
+    "category": "formatie",
+    "description": "Formație cu opt membri și solistă, repertoriu vast de la muzică românească veche la hituri internaționale. Sound live profesional, instrumente acustice și electronice.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 7500,
+    "priceMax": 10000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.8,
+    "reviewCount": 112,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "8 membri",
+      "Solistă",
+      "Repertoriu vast"
+    ],
+    "phone": "+40 745 100 110",
+    "website": "trupaestrada.ro",
+    "instagram": "@trupaestrada"
+  },
+  {
+    "id": "form_02",
+    "name": "Formația Floare de Colț",
+    "category": "formatie",
+    "description": "Specializare pe nunți tradiționale și petreceri ardelenești. Patru instrumentiști, doi soliști, repertoriu cu accent pe folclor și șlagăre.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 5500,
+    "priceMax": 7800,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 96,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Folclor ardelenesc",
+      "Doi soliști"
+    ],
+    "phone": "+40 264 880 990",
+    "instagram": "@floaredecolt"
+  },
+  {
+    "id": "form_03",
+    "name": "Acustic Live Band",
+    "category": "formatie",
+    "description": "Formație acustică cu cinci membri, set semi-acustic pentru ceremonie și set complet pentru petrecere. Stil modern, internațional, fără kitsch.",
+    "judet": "Timiș",
+    "localitate": "Timișoara",
+    "priceMin": 5000,
+    "priceMax": 7500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 58,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Acustic",
+      "Modern",
+      "Ceremonie"
+    ],
+    "phone": "+40 256 410 220",
+    "instagram": "@acusticlive"
+  },
+  {
+    "id": "form_04",
+    "name": "Romance Quartet",
+    "category": "formatie",
+    "description": "Cvartet de coarde plus pian — perfect pentru ceremonie civilă și cocktail. Repertoriu clasic și pop, aranjamente proprii pentru piesele cuplului.",
+    "judet": "Brașov",
+    "localitate": "Brașov",
+    "priceMin": 4000,
+    "priceMax": 6000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.9,
+    "reviewCount": 47,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Cvartet coarde",
+      "Pian",
+      "Aranjamente proprii"
+    ],
+    "phone": "+40 268 330 440",
+    "website": "romancequartet.ro"
+  },
+  {
+    "id": "form_05",
+    "name": "Formația Cobzaru",
+    "category": "formatie",
+    "description": "Repertoriu mixt — folclor moldovenesc autentic, plus muzică internațională. Șapte membri, instrumentiști de generații, cu mulți ani de scenă în Iași.",
+    "judet": "Iași",
+    "localitate": "Iași",
+    "priceMin": 6000,
+    "priceMax": 8500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.6,
+    "reviewCount": 73,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Folclor moldovenesc",
+      "7 membri",
+      "Generații"
+    ],
+    "phone": "+40 232 880 990",
+    "instagram": "@formatiacobzaru"
+  },
+  {
+    "id": "form_06",
+    "name": "Lucky Five",
+    "category": "formatie",
+    "description": "Formație tip cover band cu energie tinerească. Repertoriu pop-rock internațional, plus muzică românească veche. Ideali pentru cupluri sub 35 de ani.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 6500,
+    "priceMax": 9000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 84,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Cover band",
+      "Pop-rock",
+      "Energic"
+    ],
+    "phone": "+40 740 220 330",
+    "instagram": "@luckyfive.band"
+  },
+  {
+    "id": "form_07",
+    "name": "The Wedding Notes",
+    "category": "formatie",
+    "description": "Formație de șase, repertoriu jazz, soul și pop modern. Disponibili și ca trupă de cocktail în format trio plus voce.",
+    "judet": "Constanța",
+    "localitate": "Constanța",
+    "priceMin": 4500,
+    "priceMax": 7000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 51,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Jazz",
+      "Soul",
+      "Format flexibil"
+    ],
+    "phone": "+40 241 660 770",
+    "instagram": "@theweddingnotes"
+  },
+  {
+    "id": "form_08",
+    "name": "Trupa Andante",
+    "category": "formatie",
+    "description": "Trupă tânără din Cluj, sound modern, fără excese. Cinci membri, voce feminină principală, repertoriu cu accent pe baladele moderne și electro-acustic.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 5000,
+    "priceMax": 7500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.8,
+    "reviewCount": 42,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Modern",
+      "Electro-acustic",
+      "Voce feminină"
+    ],
+    "phone": "+40 723 770 880",
+    "instagram": "@trupaandante"
+  },
+  {
+    "id": "flor_01",
+    "name": "Florăria Magnolia",
+    "category": "florarie",
+    "description": "Studio floral cu 15 ani de experiență. Compoziții cu accent pe bujori, hortensii și verdeață abundentă. Livrare și montaj inclus pentru evenimente în toată țara.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 3500,
+    "priceMax": 5500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.8,
+    "reviewCount": 134,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Bujori",
+      "Verdeață abundentă",
+      "Montaj inclus"
+    ],
+    "phone": "+40 21 410 8800",
+    "website": "florariamagnolia.ro",
+    "instagram": "@florariamagnolia"
+  },
+  {
+    "id": "flor_02",
+    "name": "Atelier Floral Mireasă",
+    "category": "florarie",
+    "description": "Studio specializat exclusiv pe evenimente. Lucrează cu trandafiri David Austin importați, eucalipt și flori sezoniere locale.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 3000,
+    "priceMax": 5000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.9,
+    "reviewCount": 91,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "David Austin",
+      "Sezonier local",
+      "Doar evenimente"
+    ],
+    "phone": "+40 740 330 440",
+    "instagram": "@florala.mireasa"
+  },
+  {
+    "id": "flor_03",
+    "name": "Floral Studio Camélie",
+    "category": "florarie",
+    "description": "Estetică franțuzească, paletă romantică în nuanțe de pudră și ivoir. Buchet de mireasă inclus, plus decor pentru mese și arcadă ceremonie.",
+    "judet": "Timiș",
+    "localitate": "Timișoara",
+    "priceMin": 2800,
+    "priceMax": 4500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 67,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Estetică franțuzească",
+      "Pudră",
+      "Arcadă"
+    ],
+    "phone": "+40 256 330 220",
+    "instagram": "@floralcamelie"
+  },
+  {
+    "id": "flor_04",
+    "name": "Buchet de Bujori",
+    "category": "florarie",
+    "description": "Florăria din Iași specializată pe nunți în luna mai și iunie, când bujorii românești sunt în vârf. Compoziții voluminoase, în paletă pastel.",
+    "judet": "Iași",
+    "localitate": "Iași",
+    "priceMin": 2500,
+    "priceMax": 4200,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.6,
+    "reviewCount": 58,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Bujori sezonieri",
+      "Voluminos",
+      "Pastel"
+    ],
+    "phone": "+40 232 440 550",
+    "instagram": "@buchetdebujori"
+  },
+  {
+    "id": "flor_05",
+    "name": "La Vie en Rose Floral",
+    "category": "florarie",
+    "description": "Studio cu echipă de cinci floriste, organizare completă a decorului floral. Inclus consultanță estetică și storyboard vizual înainte de eveniment.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 4000,
+    "priceMax": 6000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.8,
+    "reviewCount": 102,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Storyboard",
+      "Consultanță",
+      "Echipă mare"
+    ],
+    "phone": "+40 21 320 5500",
+    "website": "lavienerose.ro",
+    "instagram": "@lavienerose.flowers"
+  },
+  {
+    "id": "flor_06",
+    "name": "Flori și Lumină",
+    "category": "florarie",
+    "description": "Florărie cu sediu în Brașov, specializată în decoruri romantice cu lumânări și verdeață. Lucrează cu locații montane, decor outdoor inclus.",
+    "judet": "Brașov",
+    "localitate": "Brașov",
+    "priceMin": 2200,
+    "priceMax": 3800,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 49,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Lumânări",
+      "Outdoor",
+      "Montan"
+    ],
+    "phone": "+40 268 660 880",
+    "instagram": "@florisilumina"
+  },
+  {
+    "id": "flor_07",
+    "name": "Atelier Boutique Floral",
+    "category": "florarie",
+    "description": "Boutique floral mic, două floriste pe eveniment. Stil minimalist, paletă restrânsă, accent pe textură: ierburi de câmp, ramuri și flori uscate.",
+    "judet": "Constanța",
+    "localitate": "Constanța",
+    "priceMin": 1800,
+    "priceMax": 3200,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.6,
+    "reviewCount": 38,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Minimalist",
+      "Ierburi",
+      "Texturat"
+    ],
+    "phone": "+40 241 770 880",
+    "instagram": "@atelier.boutique.floral"
+  },
+  {
+    "id": "flor_08",
+    "name": "Florăria Iris",
+    "category": "florarie",
+    "description": "Trei generații de floriste, atelier propriu în Cluj. Recunoscută pentru compoziții cu orhidee importate și aranjamente arhitecturale.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 3500,
+    "priceMax": 5800,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.8,
+    "reviewCount": 78,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Orhidee",
+      "Arhitectural",
+      "3 generații"
+    ],
+    "phone": "+40 264 220 110",
+    "instagram": "@florariairis.cluj"
+  },
+  {
+    "id": "flor_09",
+    "name": "Studio Floral Petra",
+    "category": "florarie",
+    "description": "Compoziții fine, în paletă neutră, foarte fotogenice. Studio mic, doar 12 evenimente pe an, pentru a păstra atenția la detalii.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 4500,
+    "priceMax": 6000,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.9,
+    "reviewCount": 41,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Neutru",
+      "Premium",
+      "Limitat"
+    ],
+    "phone": "+40 745 220 880",
+    "instagram": "@studiopetra.flori"
+  },
+  {
+    "id": "flor_10",
+    "name": "Magnolia Garden",
+    "category": "florarie",
+    "description": "Cultivă propriile flori într-o seră lângă Timișoara — bujori, hortensii, dahlii. Avantaj: prospețime garantată, prețuri sub piață pentru flori sezoniere.",
+    "judet": "Timiș",
+    "localitate": "Timișoara",
+    "priceMin": 2000,
+    "priceMax": 3500,
+    "priceUnit": "RON/eveniment",
+    "rating": 4.7,
+    "reviewCount": 54,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Cultivă propriu",
+      "Sezonier",
+      "Preț avantajos"
+    ],
+    "phone": "+40 256 990 110",
+    "instagram": "@magnolia.garden.tm"
+  },
+  {
+    "id": "tort_01",
+    "name": "Cofetăria Andante",
+    "category": "tort",
+    "description": "Cofetărie din nordul Bucureștiului, recunoscută pentru torturi pe etaje în stil european clasic. Degustare gratuită cu o lună înainte de eveniment.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 35,
+    "priceMax": 50,
+    "priceUnit": "RON/porție",
+    "rating": 4.8,
+    "reviewCount": 156,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Tort pe etaje",
+      "Degustare",
+      "Stil european"
+    ],
+    "phone": "+40 21 230 4400",
+    "website": "andante.ro",
+    "instagram": "@cofetaria.andante"
+  },
+  {
+    "id": "tort_02",
+    "name": "Tort Boutique Anastasia",
+    "category": "tort",
+    "description": "Cofetăreasă renumită din Cluj, specializată în torturi sculptate și design cu flori naturale. Acceptă maxim 8 evenimente pe lună pentru calitate constantă.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 40,
+    "priceMax": 50,
+    "priceUnit": "RON/porție",
+    "rating": 4.9,
+    "reviewCount": 87,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Sculptat",
+      "Flori naturale",
+      "Limitat"
+    ],
+    "phone": "+40 264 770 880",
+    "instagram": "@tort.anastasia"
+  },
+  {
+    "id": "tort_03",
+    "name": "Patiserie Madeleine",
+    "category": "tort",
+    "description": "Tradiție franțuzească, înființată în 2008. Specialitate macarons și torturi cu cremă de unt și frișcă. Livrare și instalare incluse în toată țara.",
+    "judet": "Timiș",
+    "localitate": "Timișoara",
+    "priceMin": 30,
+    "priceMax": 45,
+    "priceUnit": "RON/porție",
+    "rating": 4.7,
+    "reviewCount": 112,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Franțuzesc",
+      "Macarons",
+      "Livrare națională"
+    ],
+    "phone": "+40 256 410 100",
+    "website": "patiseriamadeleine.ro",
+    "instagram": "@madeleine.timisoara"
+  },
+  {
+    "id": "tort_04",
+    "name": "Atelier Dulce Iași",
+    "category": "tort",
+    "description": "Cofetărie boutique, lucrează cu ingrediente locale moldovenești. Torturi cu nucă, dulceață de gutui, șerbet de trandafiri — arome românești reinterpretate.",
+    "judet": "Iași",
+    "localitate": "Iași",
+    "priceMin": 28,
+    "priceMax": 42,
+    "priceUnit": "RON/porție",
+    "rating": 4.6,
+    "reviewCount": 64,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Local moldovenesc",
+      "Reinterpretare",
+      "Boutique"
+    ],
+    "phone": "+40 232 660 770",
+    "instagram": "@atelierdulce.iasi"
+  },
+  {
+    "id": "tort_05",
+    "name": "Tort Royale",
+    "category": "tort",
+    "description": "Cofetăreasă cu studii la Le Cordon Bleu. Torturi geode, drip cakes, decorațiuni cu foiță de aur 24K. Stil contemporan, fotogenic, peste 200 de evenimente acoperite.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 38,
+    "priceMax": 50,
+    "priceUnit": "RON/porție",
+    "rating": 4.9,
+    "reviewCount": 98,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Le Cordon Bleu",
+      "Foiță de aur",
+      "Contemporan"
+    ],
+    "phone": "+40 745 880 990",
+    "website": "tortroyale.ro",
+    "instagram": "@tortroyale"
+  },
+  {
+    "id": "tort_06",
+    "name": "Cake Studio Brașov",
+    "category": "tort",
+    "description": "Studio mic, condus de două surori cofetărese. Specialitate torturi pe etaje cu glazură de tip ’naked cake’ și flori naturale culese local.",
+    "judet": "Brașov",
+    "localitate": "Brașov",
+    "priceMin": 26,
+    "priceMax": 40,
+    "priceUnit": "RON/porție",
+    "rating": 4.7,
+    "reviewCount": 53,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Naked cake",
+      "Flori locale",
+      "Studio mic"
+    ],
+    "phone": "+40 268 990 110",
+    "instagram": "@cakestudio.brasov"
+  },
+  {
+    "id": "tort_07",
+    "name": "Confetti Cakes",
+    "category": "tort",
+    "description": "Specialitate dessert table — pe lângă tort, oferă mini-prăjituri, choux, tarte și meringues. Pachet complet pentru zona de candy bar.",
+    "judet": "București",
+    "localitate": "București",
+    "priceMin": 32,
+    "priceMax": 48,
+    "priceUnit": "RON/porție",
+    "rating": 4.7,
+    "reviewCount": 119,
+    "photos": [
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Dessert table",
+      "Candy bar",
+      "Mini prăjituri"
+    ],
+    "phone": "+40 745 110 220",
+    "instagram": "@confetticakes"
+  },
+  {
+    "id": "tort_08",
+    "name": "La Dolce Vita",
+    "category": "tort",
+    "description": "Influențe italiene, specialități cu mascarpone, limoncello și fistic. Cofetărie cu propriul magazin în centrul Constanței, evenimente la cerere.",
+    "judet": "Constanța",
+    "localitate": "Constanța",
+    "priceMin": 30,
+    "priceMax": 44,
+    "priceUnit": "RON/porție",
+    "rating": 4.6,
+    "reviewCount": 71,
+    "photos": [
+      "assets/images/vendors/buri.jpeg",
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Italian",
+      "Mascarpone",
+      "Fistic"
+    ],
+    "phone": "+40 241 880 990",
+    "website": "ladolcevita.ro",
+    "instagram": "@ladolcevita.constanta"
+  },
+  {
+    "id": "tort_09",
+    "name": "Atelier de Torturi Mira",
+    "category": "tort",
+    "description": "Atelier dintr-o casă veche din Cluj, condus de Mira Olteanu. Torturi minimaliste, cu accent pe textură: glazură mată, forme arhitecturale.",
+    "judet": "Cluj",
+    "localitate": "Cluj-Napoca",
+    "priceMin": 36,
+    "priceMax": 48,
+    "priceUnit": "RON/porție",
+    "rating": 4.8,
+    "reviewCount": 47,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg"
+    ],
+    "tags": [
+      "Minimalist",
+      "Glazură mată",
+      "Arhitectural"
+    ],
+    "phone": "+40 740 660 770",
+    "instagram": "@atelier.mira"
+  },
+  {
+    "id": "tort_10",
+    "name": "Dulce Eveniment",
+    "category": "tort",
+    "description": "Cofetărie pentru evenimente cu acoperire în Banat. Lucrează cu peste 30 de tipuri de blat și 40 de creme — meniul cofetăriei se ajustează după gusturile mirilor.",
+    "judet": "Timiș",
+    "localitate": "Timișoara",
+    "priceMin": 25,
+    "priceMax": 38,
+    "priceUnit": "RON/porție",
+    "rating": 4.6,
+    "reviewCount": 88,
+    "photos": [
+      "assets/images/vendors/nurburgring.jpeg",
+      "assets/images/vendors/buri.jpeg"
+    ],
+    "tags": [
+      "Variat",
+      "Personalizabil",
+      "Acoperire Banat"
+    ],
+    "phone": "+40 256 220 330",
+    "instagram": "@dulce.eveniment"
+  }
+]

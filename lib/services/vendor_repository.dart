@@ -1,0 +1,131 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart' show rootBundle;
+
+import '../core/constants/categories.dart';
+import '../models/vendor.dart';
+
+class VendorLoadException implements Exception {
+  const VendorLoadException(this.message, {this.cause});
+  final String message;
+  final Object? cause;
+
+  @override
+  String toString() =>
+      'VendorLoadException: $message${cause != null ? ' ($cause)' : ''}';
+}
+
+class VendorRepository {
+  VendorRepository({String assetPath = _defaultAssetPath})
+      : _assetPath = assetPath;
+
+  static const String _defaultAssetPath = 'assets/data/vendors.json';
+  final String _assetPath;
+  List<Vendor>? _cache;
+
+  Future<List<Vendor>> loadAll() async {
+    final cached = _cache;
+    if (cached != null) return cached;
+
+    final String raw;
+    try {
+      raw = await rootBundle.loadString(_assetPath);
+    } catch (e) {
+      throw VendorLoadException('Nu am putut citi $_assetPath.', cause: e);
+    }
+
+    final List<dynamic> decoded;
+    try {
+      decoded = jsonDecode(raw) as List<dynamic>;
+    } catch (e) {
+      throw VendorLoadException('JSON invalid în $_assetPath.', cause: e);
+    }
+
+    try {
+      final vendors = decoded
+          .cast<Map<String, dynamic>>()
+          .map(Vendor.fromJson)
+          .toList(growable: false);
+      _cache = vendors;
+      return vendors;
+    } catch (e) {
+      throw VendorLoadException(
+        'Un furnizor are date invalide.',
+        cause: e,
+      );
+    }
+  }
+
+  Future<List<Vendor>> filterBy({
+    VendorCategory? category,
+    String? judet,
+    String? query,
+    int? priceMin,
+    int? priceMax,
+  }) async {
+    final all = await loadAll();
+    final normalizedQuery = _normalize(query);
+
+    return all.where((v) {
+      if (category != null && v.category != category) return false;
+      if (judet != null && v.judet != judet) return false;
+      if (priceMin != null && v.priceMax < priceMin) return false;
+      if (priceMax != null && v.priceMin > priceMax) return false;
+      if (normalizedQuery.isNotEmpty) {
+        final haystack = _normalize(
+          '${v.name} ${v.description} ${v.localitate} ${v.tags.join(' ')}',
+        );
+        if (!haystack.contains(normalizedQuery)) return false;
+      }
+      return true;
+    }).toList(growable: false);
+  }
+
+  Future<Vendor?> findById(String id) async {
+    final all = await loadAll();
+    for (final v in all) {
+      if (v.id == id) return v;
+    }
+    return null;
+  }
+
+  Future<Map<VendorCategory, int>> countsByCategory() async {
+    final all = await loadAll();
+    final counts = <VendorCategory, int>{
+      for (final c in VendorCategory.values) c: 0,
+    };
+    for (final v in all) {
+      counts[v.category] = (counts[v.category] ?? 0) + 1;
+    }
+    return counts;
+  }
+
+  void debugSeed(List<Vendor> vendors) => _cache = List.unmodifiable(vendors);
+
+  static String _normalize(String? input) {
+    if (input == null || input.isEmpty) return '';
+    final lower = input.toLowerCase();
+    final buffer = StringBuffer();
+    for (final code in lower.runes) {
+      buffer.writeCharCode(_diacriticMap[code] ?? code);
+    }
+    return buffer.toString();
+  }
+
+  static const Map<int, int> _diacriticMap = {
+    0x103: 0x61, // ă
+    0x102: 0x61, // Ă
+    0xE2: 0x61, // â
+    0xC2: 0x61, // Â
+    0xEE: 0x69, // î
+    0xCE: 0x69, // Î
+    0x219: 0x73, // ș
+    0x218: 0x73, // Ș
+    0x15F: 0x73, // ş (legacy cedilla)
+    0x15E: 0x73, // Ş
+    0x21B: 0x74, // ț
+    0x21A: 0x74, // Ț
+    0x163: 0x74, // ţ (legacy cedilla)
+    0x162: 0x74, // Ţ
+  };
+}
