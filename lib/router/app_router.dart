@@ -10,6 +10,7 @@ import '../features/favorites/favorites_screen.dart';
 import '../features/home/home_screen.dart';
 import '../features/main/main_shell.dart';
 import '../features/profile/profile_screen.dart';
+import '../features/profile/wedding_edit_screen.dart';
 import '../features/swipe/swipe_screen.dart';
 import '../providers/session_provider.dart';
 
@@ -22,6 +23,7 @@ class AppRoutes {
   static const String favorites = '/favorites';
   static const String profile = '/profile';
   static const String swipe = '/swipe';
+  static const String weddingEdit = '/profile/edit-wedding';
   static const String designShowcase = '/_dev/design';
 }
 
@@ -76,6 +78,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.swipe,
         builder: (_, _) => const SwipeScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.weddingEdit,
+        builder: (_, _) => const WeddingEditScreen(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => MainShell(navigationShell: shell),

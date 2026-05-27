@@ -98,8 +98,11 @@ class _SwipeScreenState extends ConsumerState<SwipeScreen> {
                           final vendor = _stack[i];
                           return VendorCard(
                             vendor: vendor,
-                            onTap: () =>
-                                VendorDetailSheet.show(context, vendor),
+                            onTap: () => VendorDetailSheet.show(
+                              context,
+                              vendor,
+                              onAddedFromSwipe: () => _controller.swipeRight(),
+                            ),
                           );
                         },
                       ),

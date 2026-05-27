@@ -9,6 +9,7 @@ import '../../core/theme/app_typography.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_text_field.dart';
 import '../../core/widgets/editorial_heading.dart';
+import '../../core/widgets/password_reveal_toggle.dart';
 import '../../providers/session_provider.dart';
 
 class SignInScreen extends ConsumerStatefulWidget {
@@ -22,6 +23,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtl = TextEditingController();
   final _passwordCtl = TextEditingController();
+  bool _showPassword = false;
 
   @override
   void dispose() {
@@ -87,9 +89,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               AppTextField(
                 controller: _passwordCtl,
                 label: 'Parolă',
-                obscureText: true,
+                obscureText: !_showPassword,
                 textInputAction: TextInputAction.done,
                 prefixIcon: PhosphorIconsThin.lock,
+                suffixIcon: PasswordRevealToggle(
+                  revealed: _showPassword,
+                  onTap: () =>
+                      setState(() => _showPassword = !_showPassword),
+                ),
                 onSubmitted: (_) => _submit(),
                 validator: (v) => (v == null || v.length < 4)
                     ? 'Minimum 4 caractere'

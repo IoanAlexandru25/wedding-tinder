@@ -82,11 +82,7 @@ class ProfileScreen extends ConsumerWidget {
               child: _ListAction(
                 icon: PhosphorIconsThin.pencil,
                 label: 'Editare detalii nuntă',
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('În curând.')),
-                  );
-                },
+                onTap: () => context.push('/profile/edit-wedding'),
               ),
             ),
             Padding(

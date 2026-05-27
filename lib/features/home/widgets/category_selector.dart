@@ -6,7 +6,7 @@ import '../../../core/theme/app_radii.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_typography.dart';
 
-class CategorySelector extends StatelessWidget {
+class CategorySelector extends StatefulWidget {
   const CategorySelector({
     super.key,
     required this.selected,
@@ -19,23 +19,74 @@ class CategorySelector extends StatelessWidget {
   final ValueChanged<VendorCategory> onSelect;
 
   @override
+  State<CategorySelector> createState() => _CategorySelectorState();
+}
+
+class _CategorySelectorState extends State<CategorySelector> {
+  static const double _cardWidth = 132;
+  static const double _separator = AppSpacing.md;
+  static const double _leadingPad = AppSpacing.lg;
+
+  final ScrollController _scroll = ScrollController();
+
+  @override
+  void didUpdateWidget(covariant CategorySelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selected != oldWidget.selected && widget.selected != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _centerSelected());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.selected != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _centerSelected());
+    }
+  }
+
+  @override
+  void dispose() {
+    _scroll.dispose();
+    super.dispose();
+  }
+
+  void _centerSelected() {
+    if (!_scroll.hasClients || widget.selected == null) return;
+    final index = VendorCategory.values.indexOf(widget.selected!);
+    final cardCenter =
+        _leadingPad + index * (_cardWidth + _separator) + _cardWidth / 2;
+    final viewport = _scroll.position.viewportDimension;
+    final target = (cardCenter - viewport / 2).clamp(
+      _scroll.position.minScrollExtent,
+      _scroll.position.maxScrollExtent,
+    );
+    _scroll.animateTo(
+      target,
+      duration: const Duration(milliseconds: 360),
+      curve: Curves.easeOutCubic,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 152,
       child: ListView.separated(
+        controller: _scroll,
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+        padding: const EdgeInsets.symmetric(horizontal: _leadingPad),
         itemCount: VendorCategory.values.length,
-        separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.md),
+        separatorBuilder: (_, _) => const SizedBox(width: _separator),
         itemBuilder: (context, i) {
           final cat = VendorCategory.values[i];
-          final isSelected = cat == selected;
-          final count = counts[cat] ?? 0;
+          final isSelected = cat == widget.selected;
+          final count = widget.counts[cat] ?? 0;
           return _CategoryCard(
             category: cat,
             count: count,
             selected: isSelected,
-            onTap: () => onSelect(cat),
+            onTap: () => widget.onSelect(cat),
           );
         },
       ),

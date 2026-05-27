@@ -56,7 +56,14 @@ class AppTextField extends StatelessWidget {
       autofocus: autofocus,
       enabled: enabled,
       maxLines: obscureText ? 1 : maxLines,
+      autocorrect: false,
+      enableSuggestions: false,
+      smartDashesType: SmartDashesType.disabled,
+      smartQuotesType: SmartQuotesType.disabled,
+      enableIMEPersonalizedLearning: false,
+      autofillHints: const <String>[],
       style: AppTypography.bodyLarge,
+      textAlignVertical: TextAlignVertical.center,
       cursorColor: AppColors.primary,
       cursorWidth: 1.5,
       decoration: InputDecoration(
@@ -70,7 +77,8 @@ class AppTextField extends StatelessWidget {
         prefixIcon: prefixIcon != null
             ? Padding(
                 padding: const EdgeInsets.only(right: AppSpacing.sm),
-                child: Icon(prefixIcon, size: 20, color: AppColors.onSurfaceMuted),
+                child:
+                    Icon(prefixIcon, size: 20, color: AppColors.onSurfaceMuted),
               )
             : null,
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),

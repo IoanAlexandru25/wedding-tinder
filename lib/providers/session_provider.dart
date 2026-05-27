@@ -100,6 +100,29 @@ class SessionNotifier extends Notifier<SessionState> {
     state = state.copyWith(wedding: wedding, isLoading: false);
   }
 
+  Future<void> updateWedding({
+    required DateTime weddingDateStart,
+    required DateTime weddingDateEnd,
+    required int guestCount,
+    required int budgetMin,
+    required int budgetMax,
+  }) async {
+    final current = state.wedding;
+    if (current == null) return;
+    state = state.copyWith(isLoading: true, clearError: true);
+    await Future<void>.delayed(const Duration(milliseconds: 250));
+    state = state.copyWith(
+      wedding: current.copyWith(
+        weddingDateStart: weddingDateStart,
+        weddingDateEnd: weddingDateEnd,
+        guestCount: guestCount,
+        budgetMin: budgetMin,
+        budgetMax: budgetMax,
+      ),
+      isLoading: false,
+    );
+  }
+
   Future<void> joinWedding(String inviteCode) async {
     final user = state.user;
     if (user == null) return;

@@ -18,16 +18,28 @@ import '../../../providers/favorites_provider.dart';
 import '../../../providers/session_provider.dart';
 
 class VendorDetailSheet extends ConsumerWidget {
-  const VendorDetailSheet({super.key, required this.vendor});
+  const VendorDetailSheet({
+    super.key,
+    required this.vendor,
+    this.onAddedFromSwipe,
+  });
 
   final Vendor vendor;
+  final VoidCallback? onAddedFromSwipe;
 
-  static Future<void> show(BuildContext context, Vendor vendor) {
+  static Future<void> show(
+    BuildContext context,
+    Vendor vendor, {
+    VoidCallback? onAddedFromSwipe,
+  }) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.surface,
-      builder: (_) => VendorDetailSheet(vendor: vendor),
+      builder: (_) => VendorDetailSheet(
+        vendor: vendor,
+        onAddedFromSwipe: onAddedFromSwipe,
+      ),
     );
   }
 
@@ -133,7 +145,14 @@ class VendorDetailSheet extends ConsumerWidget {
                       final favs = ref.read(favoritesProvider.notifier);
                       if (isFav) {
                         favs.remove(vendor.id);
-                      } else if (user != null) {
+                        return;
+                      }
+                      if (onAddedFromSwipe != null) {
+                        Navigator.of(context).pop();
+                        onAddedFromSwipe!();
+                        return;
+                      }
+                      if (user != null) {
                         favs.like(vendor, addedBy: user.id);
                       }
                     },
@@ -159,13 +178,27 @@ class VendorDetailSheet extends ConsumerWidget {
   }
 }
 
-class _PhotoCarousel extends StatelessWidget {
+class _PhotoCarousel extends StatefulWidget {
   const _PhotoCarousel({required this.photos});
   final List<String> photos;
 
   @override
+  State<_PhotoCarousel> createState() => _PhotoCarouselState();
+}
+
+class _PhotoCarouselState extends State<_PhotoCarousel> {
+  final PageController _ctl = PageController();
+  int _index = 0;
+
+  @override
+  void dispose() {
+    _ctl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (photos.isEmpty) {
+    if (widget.photos.isEmpty) {
       return Container(
         height: 240,
         color: AppColors.surfaceVariant,
@@ -175,28 +208,243 @@ class _PhotoCarousel extends StatelessWidget {
     }
     return SizedBox(
       height: 280,
-      child: PageView.builder(
-        itemCount: photos.length,
-        itemBuilder: (context, i) {
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      AppColors.wine.withValues(alpha: 0.7),
-                      AppColors.peach.withValues(alpha: 0.9),
-                    ],
-                  ),
+      child: Stack(
+        children: [
+          PageView.builder(
+            controller: _ctl,
+            itemCount: widget.photos.length,
+            onPageChanged: (i) => setState(() => _index = i),
+            itemBuilder: (context, i) {
+              return GestureDetector(
+                onTap: () => _openFullscreen(context, i),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppColors.wine.withValues(alpha: 0.7),
+                            AppColors.peach.withValues(alpha: 0.9),
+                          ],
+                        ),
+                      ),
+                    ),
+                    GradientPhoto(
+                      assetPath: widget.photos[i],
+                      gradientHeight: 0.4,
+                    ),
+                  ],
                 ),
+              );
+            },
+          ),
+          if (widget.photos.length > 1)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: AppSpacing.md,
+              child: _PageDots(
+                count: widget.photos.length,
+                index: _index,
               ),
-              GradientPhoto(assetPath: photos[i], gradientHeight: 0.4),
-            ],
+            ),
+          Positioned(
+            top: AppSpacing.md,
+            right: AppSpacing.md,
+            child: Container(
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: Colors.black.withValues(alpha: 0.32),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                PhosphorIconsThin.arrowsOutSimple,
+                size: 16,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _openFullscreen(BuildContext context, int initialIndex) {
+    Navigator.of(context).push(
+      PageRouteBuilder<void>(
+        opaque: false,
+        barrierColor: Colors.black,
+        transitionDuration: const Duration(milliseconds: 220),
+        reverseTransitionDuration: const Duration(milliseconds: 180),
+        pageBuilder: (_, animation, _) {
+          return FadeTransition(
+            opacity: animation,
+            child: _FullscreenGallery(
+              photos: widget.photos,
+              initialIndex: initialIndex,
+            ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _PageDots extends StatelessWidget {
+  const _PageDots({required this.count, required this.index});
+  final int count;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.xs + 2,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.28),
+          borderRadius: AppRadii.fullAll,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var i = 0; i < count; i++)
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 220),
+                curve: Curves.easeOutCubic,
+                margin: EdgeInsets.only(left: i == 0 ? 0 : 6),
+                width: i == index ? 18 : 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: i == index
+                      ? Colors.white
+                      : Colors.white.withValues(alpha: 0.5),
+                  borderRadius: AppRadii.fullAll,
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FullscreenGallery extends StatefulWidget {
+  const _FullscreenGallery({
+    required this.photos,
+    required this.initialIndex,
+  });
+  final List<String> photos;
+  final int initialIndex;
+
+  @override
+  State<_FullscreenGallery> createState() => _FullscreenGalleryState();
+}
+
+class _FullscreenGalleryState extends State<_FullscreenGallery> {
+  late final PageController _ctl =
+      PageController(initialPage: widget.initialIndex);
+  late int _index = widget.initialIndex;
+
+  @override
+  void dispose() {
+    _ctl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            PageView.builder(
+              controller: _ctl,
+              itemCount: widget.photos.length,
+              onPageChanged: (i) => setState(() => _index = i),
+              itemBuilder: (context, i) {
+                return InteractiveViewer(
+                  minScale: 1.0,
+                  maxScale: 4.0,
+                  child: Center(
+                    child: Image.asset(
+                      widget.photos[i],
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stack) {
+                        return const Center(
+                          child: Icon(
+                            Icons.broken_image_outlined,
+                            color: Colors.white54,
+                            size: 64,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+            Positioned(
+              top: AppSpacing.sm,
+              right: AppSpacing.sm,
+              child: _CircleIconButton(
+                icon: PhosphorIconsThin.x,
+                onTap: () => Navigator.of(context).pop(),
+              ),
+            ),
+            if (widget.photos.length > 1)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: AppSpacing.lg,
+                child: Column(
+                  children: [
+                    _PageDots(count: widget.photos.length, index: _index),
+                    AppSpacing.gapSm,
+                    Text(
+                      '${_index + 1} / ${widget.photos.length}',
+                      style: AppTypography.overline.copyWith(
+                        color: Colors.white.withValues(alpha: 0.7),
+                        letterSpacing: 1.6,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CircleIconButton extends StatelessWidget {
+  const _CircleIconButton({required this.icon, required this.onTap});
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.5),
+          shape: BoxShape.circle,
+        ),
+        child: const Icon(
+          PhosphorIconsThin.x,
+          color: Colors.white,
+          size: 22,
+        ),
       ),
     );
   }

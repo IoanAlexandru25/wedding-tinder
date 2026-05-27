@@ -18,6 +18,23 @@ final vendorCountsProvider = FutureProvider<Map<VendorCategory, int>>((ref) {
   return ref.read(vendorRepositoryProvider).countsByCategory();
 });
 
+final filteredCategoryCountsProvider =
+    Provider<Map<VendorCategory, int>>((ref) {
+  final all = ref.watch(vendorsProvider).asData?.value ?? const <Vendor>[];
+  final filters = ref.watch(filtersProvider);
+
+  final counts = <VendorCategory, int>{
+    for (final c in VendorCategory.values) c: 0,
+  };
+  for (final v in all) {
+    if (filters.judet != null && v.judet != filters.judet) continue;
+    if (filters.priceMin != null && v.priceMax < filters.priceMin!) continue;
+    if (filters.priceMax != null && v.priceMin > filters.priceMax!) continue;
+    counts[v.category] = (counts[v.category] ?? 0) + 1;
+  }
+  return counts;
+});
+
 final filteredVendorsProvider = Provider<List<Vendor>>((ref) {
   final all = ref.watch(vendorsProvider).asData?.value ?? const <Vendor>[];
   final filters = ref.watch(filtersProvider);
