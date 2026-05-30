@@ -40,7 +40,7 @@ class BudgetSummary extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                'ESTIMARE TOTALĂ',
+                'TOTAL ESTIMATE',
                 style: AppTypography.overline.copyWith(letterSpacing: 1.4),
               ),
               const Spacer(),
@@ -69,8 +69,8 @@ class BudgetSummary extends StatelessWidget {
           AppSpacing.gapSm,
           Text(
             overBudget
-                ? 'Peste bugetul de ${Formatters.ron(budgetMax)} cu ${Formatters.ron(estimated - budgetMax)}.'
-                : 'Din ${Formatters.ron(budgetMax)} buget total.',
+                ? 'Over the ${Formatters.ron(budgetMax)} budget by ${Formatters.ron(estimated - budgetMax)}.'
+                : 'of ${Formatters.ron(budgetMax)} total budget.',
             style: AppTypography.bodySmall.copyWith(
               color: overBudget ? AppColors.error : AppColors.onSurfaceMuted,
             ),

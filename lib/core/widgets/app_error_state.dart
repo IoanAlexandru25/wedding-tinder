@@ -32,7 +32,7 @@ class AppErrorState extends StatelessWidget {
             color: AppColors.error,
           ),
           AppSpacing.gapLg,
-          Text('Ceva nu a mers', style: AppTypography.headlineItalic),
+          Text('Something went wrong', style: AppTypography.headlineItalic),
           AppSpacing.gapSm,
           Text(
             message ?? AppStrings.eroareNecunoscuta,

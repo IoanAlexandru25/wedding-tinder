@@ -17,7 +17,7 @@ class PasswordRevealToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onTap,
-      tooltip: revealed ? 'Ascunde parola' : 'Afișează parola',
+      tooltip: revealed ? 'Hide password' : 'Show password',
       splashRadius: 1,
       icon: Icon(
         revealed ? PhosphorIconsThin.eyeSlash : PhosphorIconsThin.eye,

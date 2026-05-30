@@ -96,19 +96,19 @@ class _PricePickerState extends State<PricePicker> {
             ),
           ),
           AppSpacing.gapLg,
-          Text('FILTRU PREȚ', style: AppTypography.overline),
+          Text('PRICE FILTER', style: AppTypography.overline),
           AppSpacing.gapSm,
           EditorialHeading(
             style: AppTypography.headlineLarge,
             spans: const [
-              EditorialSpan('Interval '),
-              EditorialSpan('buget', italic: true),
+              EditorialSpan('Budget '),
+              EditorialSpan('range', italic: true),
               EditorialSpan('.'),
             ],
           ),
           AppSpacing.gapSm,
           Text(
-            'Se aplică la prețul listat al fiecărui vendor (per total sau per persoană).',
+            'Applies to the listed price for each vendor (total or per person).',
             style: AppTypography.bodySmall.copyWith(
               color: AppColors.onSurfaceMuted,
             ),
@@ -117,14 +117,14 @@ class _PricePickerState extends State<PricePicker> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _ValueChip(label: 'MINIM', value: Formatters.ron(minRon)),
+              _ValueChip(label: 'MIN', value: Formatters.ron(minRon)),
               Icon(
                 PhosphorIconsThin.arrowRight,
                 size: 18,
                 color: AppColors.onSurfaceMuted,
               ),
               _ValueChip(
-                label: 'MAXIM',
+                label: 'MAX',
                 value: maxRon >= _maxRon
                     ? '${Formatters.ron(_maxRon)}+'
                     : Formatters.ron(maxRon),
@@ -150,7 +150,7 @@ class _PricePickerState extends State<PricePicker> {
           ),
           AppSpacing.gapXl,
           AppButton(
-            label: 'Aplică filtrul',
+            label: 'Apply filter',
             onPressed: () {
               Navigator.of(context).pop(
                 PriceRange(
@@ -167,7 +167,7 @@ class _PricePickerState extends State<PricePicker> {
               onPressed: () => Navigator.of(context)
                   .pop(const PriceRange(min: null, max: null)),
               child: Text(
-                'Toate prețurile',
+                'All prices',
                 style: AppTypography.labelSmall.copyWith(
                   color: AppColors.onSurfaceMuted,
                 ),

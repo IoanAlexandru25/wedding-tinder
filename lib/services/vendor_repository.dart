@@ -31,14 +31,14 @@ class VendorRepository {
     try {
       raw = await rootBundle.loadString(_assetPath);
     } catch (e) {
-      throw VendorLoadException('Nu am putut citi $_assetPath.', cause: e);
+      throw VendorLoadException('Unable to read $_assetPath.', cause: e);
     }
 
     final List<dynamic> decoded;
     try {
       decoded = jsonDecode(raw) as List<dynamic>;
     } catch (e) {
-      throw VendorLoadException('JSON invalid în $_assetPath.', cause: e);
+      throw VendorLoadException('Invalid JSON in $_assetPath.', cause: e);
     }
 
     try {
@@ -50,7 +50,7 @@ class VendorRepository {
       return vendors;
     } catch (e) {
       throw VendorLoadException(
-        'Un furnizor are date invalide.',
+        'A vendor has invalid data.',
         cause: e,
       );
     }

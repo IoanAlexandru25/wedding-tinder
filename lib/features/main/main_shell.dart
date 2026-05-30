@@ -62,15 +62,15 @@ class MainShell extends StatelessWidget {
             tabs: const [
               GButton(
                 icon: PhosphorIconsThin.houseLine,
-                text: 'ACASĂ',
+                text: 'HOME',
               ),
               GButton(
                 icon: PhosphorIconsThin.heart,
-                text: 'FAVORITE',
+                text: 'FAVORITES',
               ),
               GButton(
                 icon: PhosphorIconsThin.userCircle,
-                text: 'PROFIL',
+                text: 'PROFILE',
               ),
             ],
             selectedIndex: navigationShell.currentIndex,

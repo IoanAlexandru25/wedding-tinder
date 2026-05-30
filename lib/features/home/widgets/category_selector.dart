@@ -142,7 +142,7 @@ class _CategoryCard extends StatelessWidget {
                 ),
                 AppSpacing.gapXs,
                 Text(
-                  '$count OPȚIUNI',
+                  '$count OPTIONS',
                   style: AppTypography.overline.copyWith(color: mutedFg),
                 ),
               ],

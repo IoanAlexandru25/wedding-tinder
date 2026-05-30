@@ -65,9 +65,9 @@ class HomeScreen extends ConsumerWidget {
                   child: EditorialHeading(
                     style: AppTypography.displayLarge,
                     spans: [
-                      const EditorialSpan('Bună, '),
+                      const EditorialSpan('Hello, '),
                       EditorialSpan(
-                        user?.displayName ?? 'voi',
+                        user?.displayName ?? 'you',
                         italic: true,
                       ),
                       const EditorialSpan('.'),
@@ -78,7 +78,7 @@ class HomeScreen extends ConsumerWidget {
                 Padding(
                   padding: AppSpacing.screenEdge,
                   child: Text(
-                    'Alegeți o categorie și începeți să dați swipe.',
+                    'Pick a category and start swiping.',
                     style: AppTypography.bodyMedium.copyWith(
                       color: AppColors.onSurfaceMuted,
                     ),
@@ -87,7 +87,7 @@ class HomeScreen extends ConsumerWidget {
                 AppSpacing.gapXl,
                 Padding(
                   padding: AppSpacing.screenEdge,
-                  child: _SectionTitle('Categorii', '01'),
+                  child: _SectionTitle('Categories', '01'),
                 ),
                 AppSpacing.gapLg,
                 CategorySelector(
@@ -101,7 +101,7 @@ class HomeScreen extends ConsumerWidget {
                 AppSpacing.gapXl,
                 Padding(
                   padding: AppSpacing.screenEdge,
-                  child: _SectionTitle('Filtre', '02'),
+                  child: _SectionTitle('Filters', '02'),
                 ),
                 AppSpacing.gapMd,
                 Padding(
@@ -112,7 +112,7 @@ class HomeScreen extends ConsumerWidget {
                     children: [
                       _FilterPill(
                         icon: PhosphorIconsThin.mapPin,
-                        label: filters.judet ?? 'TOATE JUDEȚELE',
+                        label: filters.judet ?? 'ALL COUNTIES',
                         active: filters.judet != null,
                         onTap: () async {
                           final selected = await JudetPicker.show(
@@ -188,7 +188,7 @@ class _WeddingInfoChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final parts = <String>[
       dateLabel,
-      if (guestCount != null) '$guestCount INVITAȚI',
+      if (guestCount != null) '$guestCount GUESTS',
       if (budgetMax != null) '${(budgetMax! / 1000).round()}K RON',
     ];
     return Container(
@@ -288,9 +288,9 @@ class _FilterPill extends StatelessWidget {
 }
 
 String _priceLabel(int? min, int? max) {
-  if (min == null && max == null) return 'ORICE PREȚ';
-  if (min == null) return 'PÂNĂ LA ${Formatters.ron(max!).toUpperCase()}';
-  if (max == null) return 'DE LA ${Formatters.ron(min).toUpperCase()}';
+  if (min == null && max == null) return 'ANY PRICE';
+  if (min == null) return 'UP TO ${Formatters.ron(max!).toUpperCase()}';
+  if (max == null) return 'FROM ${Formatters.ron(min).toUpperCase()}';
   return '${Formatters.ron(min).toUpperCase()} – ${Formatters.ron(max).toUpperCase()}';
 }
 
@@ -301,7 +301,7 @@ class _StartSwipeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppButton(
-      label: 'Începe să dai swipe',
+      label: 'Start swiping',
       icon: PhosphorIconsThin.arrowRight,
       onPressed: onStart,
       fullWidth: true,
