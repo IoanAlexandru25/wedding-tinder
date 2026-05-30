@@ -42,6 +42,15 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<SessionState>(sessionProvider, (previous, next) {
+      final error = next.error;
+      if (error != null && error != previous?.error && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error)),
+        );
+      }
+    });
+
     final isLoading = ref.watch(sessionProvider).isLoading;
 
     return Scaffold(
@@ -68,7 +77,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               ),
               AppSpacing.gapMd,
               Text(
-                'Let\'s continue the planning',
+                'Pick up planning right where you left off.',
                 style: AppTypography.bodyMedium.copyWith(
                   color: AppColors.onSurfaceMuted,
                 ),
@@ -77,18 +86,18 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               AppTextField(
                 controller: _emailCtl,
                 label: 'Email',
-                hintText: 'tu@exemplu.ro',
+                hintText: 'you@example.com',
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 prefixIcon: PhosphorIconsThin.envelopeSimple,
                 validator: (v) => (v == null || !v.contains('@'))
-                    ? 'Email invalid'
+                    ? 'Invalid email'
                     : null,
               ),
               AppSpacing.gapLg,
               AppTextField(
                 controller: _passwordCtl,
-                label: 'Parolă',
+                label: 'Password',
                 obscureText: !_showPassword,
                 textInputAction: TextInputAction.done,
                 prefixIcon: PhosphorIconsThin.lock,
@@ -99,12 +108,12 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                 ),
                 onSubmitted: (_) => _submit(),
                 validator: (v) => (v == null || v.length < 4)
-                    ? 'Minimum 4 caractere'
+                    ? 'Minimum 4 characters'
                     : null,
               ),
               AppSpacing.gapXxl,
               AppButton(
-                label: 'Autentificare',
+                label: 'Sign in',
                 onPressed: _submit,
                 isLoading: isLoading,
                 fullWidth: true,
@@ -121,7 +130,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                       children: [
                         const TextSpan(text: 'Don\'t have an account? '),
                         TextSpan(
-                          text: 'Create an account',
+                          text: 'Create account',
                           style: AppTypography.bodyMedium.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,

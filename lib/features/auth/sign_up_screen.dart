@@ -47,6 +47,15 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<SessionState>(sessionProvider, (previous, next) {
+      final error = next.error;
+      if (error != null && error != previous?.error && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(error)),
+        );
+      }
+    });
+
     final isLoading = ref.watch(sessionProvider).isLoading;
 
     return Scaffold(
@@ -71,13 +80,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 style: AppTypography.displayLarge,
                 spans: const [
                   EditorialSpan('Let\'s '),
-                  EditorialSpan('start', italic: true),
+                  EditorialSpan('get started', italic: true),
                   EditorialSpan('.'),
                 ],
               ),
               AppSpacing.gapMd,
               Text(
-                'Câteva detalii și sunteți pe drum.',
+                'A few details and you\'re on your way.',
                 style: AppTypography.bodyMedium.copyWith(
                   color: AppColors.onSurfaceMuted,
                 ),
@@ -85,31 +94,31 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               AppSpacing.gapXxl,
               AppTextField(
                 controller: _nameCtl,
-                label: 'Nume complet',
-                hintText: 'Maria Popescu',
+                label: 'Full name',
+                hintText: 'Alex Smith',
                 keyboardType: TextInputType.name,
                 textInputAction: TextInputAction.next,
                 prefixIcon: PhosphorIconsThin.user,
                 validator: (v) => (v == null || v.trim().length < 2)
-                    ? 'Minimum 2 caractere'
+                    ? 'Minimum 2 characters'
                     : null,
               ),
               AppSpacing.gapLg,
               AppTextField(
                 controller: _emailCtl,
                 label: 'Email',
-                hintText: 'tu@exemplu.ro',
+                hintText: 'you@example.com',
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 prefixIcon: PhosphorIconsThin.envelopeSimple,
                 validator: (v) => (v == null || !v.contains('@'))
-                    ? 'Email invalid'
+                    ? 'Invalid email'
                     : null,
               ),
               AppSpacing.gapLg,
               AppTextField(
                 controller: _passwordCtl,
-                label: 'Parolă',
+                label: 'Password',
                 obscureText: !_showPassword,
                 textInputAction: TextInputAction.next,
                 prefixIcon: PhosphorIconsThin.lock,
@@ -118,26 +127,27 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   onTap: () =>
                       setState(() => _showPassword = !_showPassword),
                 ),
-                helperText: 'Minimum 6 caractere · toggle aplică ambele câmpuri',
+                helperText:
+                    'Minimum 6 characters · toggle applies to both fields',
                 validator: (v) => (v == null || v.length < 6)
-                    ? 'Minimum 6 caractere'
+                    ? 'Minimum 6 characters'
                     : null,
               ),
               AppSpacing.gapLg,
               AppTextField(
                 controller: _confirmCtl,
-                label: 'Confirmă parola',
+                label: 'Confirm password',
                 obscureText: !_showPassword,
                 textInputAction: TextInputAction.done,
                 prefixIcon: PhosphorIconsThin.lock,
                 onSubmitted: (_) => _submit(),
                 validator: (v) => (v != _passwordCtl.text)
-                    ? 'Parolele nu se potrivesc'
+                    ? 'Passwords do not match'
                     : null,
               ),
               AppSpacing.gapXxl,
               AppButton(
-                label: 'Creează cont',
+                label: 'Create account',
                 onPressed: _submit,
                 isLoading: isLoading,
                 fullWidth: true,
@@ -152,9 +162,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         color: AppColors.onSurfaceMuted,
                       ),
                       children: [
-                        const TextSpan(text: 'Ai deja cont? '),
+                        const TextSpan(text: 'Already have an account? '),
                         TextSpan(
-                          text: 'Autentifică-te',
+                          text: 'Sign in',
                           style: AppTypography.bodyMedium.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,
