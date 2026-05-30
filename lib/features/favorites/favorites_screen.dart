@@ -844,7 +844,7 @@ class _PriceInputSheetState extends State<_PriceInputSheet> {
 
 int vendorMidContribution(Vendor v, int guestCount) {
   final mid = ((v.priceMin + v.priceMax) / 2).round();
-  if (v.priceUnit.contains('persoană') || v.priceUnit.contains('porție')) {
+  if (v.priceUnit.contains('person') || v.priceUnit.contains('portion')) {
     return mid * guestCount;
   }
   return mid;

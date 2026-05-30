@@ -40,7 +40,7 @@ lib/
   main.dart                — entry point, status-bar config, ProviderScope
   app.dart                 — MaterialApp.router with theme + router
   core/
-    constants/             — categories, județe, shared Romanian strings
+    constants/             — categories, counties, shared English strings
     theme/                 — colors, typography, spacing, radii, ThemeData
     widgets/               — reusable UI primitives (AppButton, AppCard, etc.)
     utils/                 — formatters, helpers (Phase 1+)
@@ -68,7 +68,7 @@ lib/
   calls or business logic inside widgets.
 - **Services don't touch UI** — they return data or throw exceptions.
   Providers translate exceptions into `AsyncValue` for the UI.
-- **Romanian UI strings only** — with correct diacritics (ă, â, î, ș, ț).
+- **English UI strings only** — use clear, natural English.
   Code, comments, and docs stay in English.
 - **`const` everywhere possible** — every constructor that can be const, is.
 - **No raw hex codes** in `lib/` outside `app_colors.dart`.

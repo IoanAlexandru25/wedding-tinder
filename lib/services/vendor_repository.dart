@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:http/http.dart' as http;
 
 import '../core/constants/categories.dart';
 import '../models/vendor.dart';
@@ -16,44 +16,52 @@ class VendorLoadException implements Exception {
 }
 
 class VendorRepository {
-  VendorRepository({String assetPath = _defaultAssetPath})
-      : _assetPath = assetPath;
+  VendorRepository({
+    String? apiUrl,
+    http.Client? client,
+  })  : _apiUrl = apiUrl ?? _defaultApiUrl,
+        _client = client;
 
-  static const String _defaultAssetPath = 'assets/data/vendors.json';
-  final String _assetPath;
+  static const String _defaultApiUrl =
+      String.fromEnvironment(
+        'VENDORS_API_URL',
+        defaultValue:
+            'https://us-central1-wedding-tinder-7fa8b.cloudfunctions.net/vendors',
+      );
+
+  final String _apiUrl;
+  final http.Client? _client;
   List<Vendor>? _cache;
 
   Future<List<Vendor>> loadAll() async {
     final cached = _cache;
     if (cached != null) return cached;
 
-    final String raw;
-    try {
-      raw = await rootBundle.loadString(_assetPath);
-    } catch (e) {
-      throw VendorLoadException('Unable to read $_assetPath.', cause: e);
-    }
-
-    final List<dynamic> decoded;
-    try {
-      decoded = jsonDecode(raw) as List<dynamic>;
-    } catch (e) {
-      throw VendorLoadException('Invalid JSON in $_assetPath.', cause: e);
-    }
-
-    try {
-      final vendors = decoded
-          .cast<Map<String, dynamic>>()
-          .map(Vendor.fromJson)
-          .toList(growable: false);
-      _cache = vendors;
-      return vendors;
-    } catch (e) {
+    final uri = Uri.parse(_apiUrl);
+    final response = _client == null
+        ? await http.get(uri)
+        : await _client!.get(uri);
+    if (response.statusCode != 200) {
       throw VendorLoadException(
-        'A vendor has invalid data.',
-        cause: e,
+        'Failed to load vendors from $_apiUrl.',
+        cause: 'HTTP ${response.statusCode}',
       );
     }
+
+    final decoded = jsonDecode(response.body);
+    if (decoded is! List) {
+      throw VendorLoadException('Vendor API returned an invalid payload.');
+    }
+
+    final vendors = decoded.map((item) {
+      if (item is! Map<String, dynamic>) {
+        throw VendorLoadException('Vendor API returned invalid vendor data.');
+      }
+      return Vendor.fromJson(item);
+    }).toList(growable: false);
+
+    _cache = vendors;
+    return vendors;
   }
 
   Future<List<Vendor>> filterBy({

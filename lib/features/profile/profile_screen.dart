@@ -214,7 +214,7 @@ class _InviteCodeCard extends StatelessWidget {
                   await Clipboard.setData(ClipboardData(text: code));
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Cod copiat.')),
+                      const SnackBar(content: Text('Code copied.')),
                     );
                   }
                 },

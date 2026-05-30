@@ -18,8 +18,8 @@ app touches external systems.
      stream).
    - `WeddingService` — `weddings/` collection: create with invite code,
      join by code, listen to wedding doc, favorites CRUD on the subcollection.
-   - `VendorRepository` — loads `assets/data/vendors.json` once, exposes
-     filter methods.
+   - `VendorRepository` — fetches the vendor catalog from Firebase Functions
+     once, caches it, and exposes filter methods.
 
 ## Firestore document layout
 

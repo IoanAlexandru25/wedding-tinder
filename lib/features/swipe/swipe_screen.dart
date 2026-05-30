@@ -250,16 +250,16 @@ class _EmptyDeck extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppEmptyState(
-              italicTitle: 'Asta a fost lista',
+              italicTitle: "That's the list",
               subtitle:
-                  'Ai văzut toți furnizorii din această categorie. Schimbă filtrele sau întoarce-te acasă.',
+                  "You've seen all vendors in this category. Change filters or go back home.",
               icon: PhosphorIconsThin.confetti,
             ),
             AppSpacing.gapMd,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
               child: AppButton(
-                label: 'Schimbă categoria',
+                label: 'Change category',
                 onPressed: onChangeCategory,
                 variant: AppButtonVariant.secondary,
                 fullWidth: true,

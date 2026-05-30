@@ -96,7 +96,7 @@ class VendorDetailSheet extends ConsumerWidget {
                       ),
                       AppSpacing.gapXs,
                       Text(
-                        '· ${vendor.reviewCount} recenzii',
+                        '· ${vendor.reviewCount} reviews',
                         style: AppTypography.bodySmall,
                       ),
                     ],
@@ -105,16 +105,16 @@ class VendorDetailSheet extends ConsumerWidget {
                   Text(vendor.description, style: AppTypography.bodyLarge),
                   AppSpacing.gapXl,
                   _MetaRow(
-                    label: 'PREȚ',
+                    label: 'PRICE',
                     value: Formatters.priceRange(
                       vendor.priceMin,
                       vendor.priceMax,
                       vendor.priceUnit,
                     ),
                   ),
-                  _MetaRow(label: 'JUDEȚ', value: vendor.judet),
+                  _MetaRow(label: 'COUNTY', value: vendor.judet),
                   if (vendor.phone != null)
-                    _MetaRow(label: 'TELEFON', value: vendor.phone!),
+                    _MetaRow(label: 'PHONE', value: vendor.phone!),
                   if (vendor.website != null)
                     _MetaRow(label: 'WEBSITE', value: vendor.website!),
                   if (vendor.instagram != null)
@@ -131,8 +131,8 @@ class VendorDetailSheet extends ConsumerWidget {
                   AppSpacing.gapXl,
                   AppButton(
                     label: isFav
-                        ? 'Elimină din favorite'
-                        : 'Adaugă la favorite',
+                        ? 'Remove from favorites'
+                        : 'Add to favorites',
                     icon: isFav
                         ? PhosphorIconsThin.heartBreak
                         : PhosphorIconsThin.heart,

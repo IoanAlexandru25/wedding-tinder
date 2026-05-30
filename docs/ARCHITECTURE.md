@@ -41,11 +41,13 @@ inside another provider rather than packing logic into one giant notifier.
 
 ## Data flow
 
-### Vendor catalog (static)
+### Vendor catalog (Firebase Functions API)
 ```
-assets/data/vendors.json
-   ↓  (read once at app start)
-VendorRepository  ← in services/, throws on parse error
+functions/vendors.json
+   ↓  (served by Firebase HTTPS function)
+GET /vendors
+   ↓
+VendorRepository  ← in services/, fetches and caches the response
    ↓
 vendorsProvider (FutureProvider<List<Vendor>>)
    ↓
