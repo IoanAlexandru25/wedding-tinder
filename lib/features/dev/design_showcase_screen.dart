@@ -178,7 +178,7 @@ class _ShowcaseHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('MIRI · DESIGN SYSTEM', style: AppTypography.overline),
+        Text('Wedding tinder · DESIGN SYSTEM', style: AppTypography.overline),
         AppSpacing.gapSm,
         EditorialHeading(
           style: AppTypography.displayLarge,

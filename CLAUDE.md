@@ -1,4 +1,4 @@
-# Miri — Wedding Tinder
+# Wedding Tinder
 
 Flutter app for engaged couples to swipe through wedding vendors and build a
 shared shortlist. University project — code quality is graded alongside
