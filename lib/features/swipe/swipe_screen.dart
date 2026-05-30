@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 import '../../core/constants/categories.dart';
 import '../../core/theme/app_colors.dart';
@@ -250,16 +250,16 @@ class _EmptyDeck extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppEmptyState(
-              italicTitle: 'Asta a fost lista',
+              italicTitle: "That's the list",
               subtitle:
-                  'Ai văzut toți furnizorii din această categorie. Schimbă filtrele sau întoarce-te acasă.',
+                  "You've seen all vendors in this category. Change filters or go back home.",
               icon: PhosphorIconsThin.confetti,
             ),
             AppSpacing.gapMd,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
               child: AppButton(
-                label: 'Schimbă categoria',
+                label: 'Change category',
                 onPressed: onChangeCategory,
                 variant: AppButtonVariant.secondary,
                 fullWidth: true,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
@@ -50,9 +50,9 @@ class _WeddingSetupScreenState extends ConsumerState<WeddingSetupScreen> {
       initialDateRange: DateTimeRange(start: _start, end: _end),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-      helpText: 'Alegeți data nunții',
-      saveText: 'Salvează',
-      cancelText: 'Anulează',
+      helpText: 'Choose the wedding date',
+      saveText: 'Save',
+      cancelText: 'Cancel',
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -78,7 +78,7 @@ class _WeddingSetupScreenState extends ConsumerState<WeddingSetupScreen> {
     final bMin = int.tryParse(_budgetMinCtl.text);
     final bMax = int.tryParse(_budgetMaxCtl.text);
     if (guests == null || bMin == null || bMax == null || bMin > bMax) {
-      _showError('Verifică datele introduse.');
+      _showError('Check the details and try again.');
       return;
     }
     await ref.read(sessionProvider.notifier).createWedding(
@@ -118,19 +118,19 @@ class _WeddingSetupScreenState extends ConsumerState<WeddingSetupScreen> {
             AppSpacing.lg,
           ),
           children: [
-            Text('PASUL FINAL', style: AppTypography.overline),
+            Text('FINAL STEP', style: AppTypography.overline),
             AppSpacing.gapMd,
             EditorialHeading(
               style: AppTypography.displayLarge,
               spans: const [
-                EditorialSpan('Spuneți-ne despre '),
-                EditorialSpan('nunta voastră', italic: true),
+                EditorialSpan('Tell us about '),
+                EditorialSpan('your wedding', italic: true),
                 EditorialSpan('.'),
               ],
             ),
             AppSpacing.gapMd,
             Text(
-              'Vom personaliza recomandările pe baza acestor detalii.',
+              'We will tailor recommendations based on these details.',
               style: AppTypography.bodyMedium.copyWith(
                 color: AppColors.onSurfaceMuted,
               ),
@@ -155,8 +155,8 @@ class _WeddingSetupScreenState extends ConsumerState<WeddingSetupScreen> {
             AppSpacing.gapXxl,
             AppButton(
               label: _mode == _SetupMode.create
-                  ? 'Creează nunta'
-                  : 'Alătură-te nunții',
+                  ? 'Create wedding'
+                  : 'Join wedding',
               onPressed: _mode == _SetupMode.create ? _submitCreate : _submitJoin,
               isLoading: session.isLoading,
               fullWidth: true,
@@ -185,14 +185,14 @@ class _ModeToggle extends StatelessWidget {
         children: [
           Expanded(
             child: _ToggleButton(
-              label: 'Creează',
+              label: 'Create',
               selected: mode == _SetupMode.create,
               onTap: () => onChanged(_SetupMode.create),
             ),
           ),
           Expanded(
             child: _ToggleButton(
-              label: 'Cod invitație',
+              label: 'Invite code',
               selected: mode == _SetupMode.join,
               onTap: () => onChanged(_SetupMode.join),
             ),
@@ -275,7 +275,7 @@ class _CreateForm extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'DATA NUNȚII',
+                  'WEDDING DATE',
                   style: AppTypography.overline.copyWith(
                     color: AppColors.primary,
                   ),
@@ -302,7 +302,7 @@ class _CreateForm extends StatelessWidget {
         AppSpacing.gapLg,
         AppTextField(
           controller: guestsCtl,
-          label: 'Număr invitați',
+          label: 'Guest count',
           keyboardType: TextInputType.number,
           prefixIcon: PhosphorIconsThin.users,
         ),
@@ -312,7 +312,7 @@ class _CreateForm extends StatelessWidget {
             Expanded(
               child: AppTextField(
                 controller: budgetMinCtl,
-                label: 'Buget min (RON)',
+                label: 'Min budget (RON)',
                 keyboardType: TextInputType.number,
               ),
             ),
@@ -320,7 +320,7 @@ class _CreateForm extends StatelessWidget {
             Expanded(
               child: AppTextField(
                 controller: budgetMaxCtl,
-                label: 'Buget max (RON)',
+                label: 'Max budget (RON)',
                 keyboardType: TextInputType.number,
               ),
             ),
@@ -341,7 +341,7 @@ class _JoinForm extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Introdu codul primit de la partener.',
+          'Enter the code you received from your partner.',
           style: AppTypography.bodyMedium.copyWith(
             color: AppColors.onSurfaceMuted,
           ),
@@ -349,7 +349,7 @@ class _JoinForm extends StatelessWidget {
         AppSpacing.gapLg,
         AppTextField(
           controller: codeCtl,
-          label: 'Cod invitație',
+          label: 'Invite code',
           hintText: 'WED-XXXX',
           prefixIcon: PhosphorIconsThin.envelope,
           textInputAction: TextInputAction.done,

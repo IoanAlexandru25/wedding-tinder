@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 import '../constants/strings.dart';
 import '../theme/app_colors.dart';
@@ -32,7 +32,7 @@ class AppErrorState extends StatelessWidget {
             color: AppColors.error,
           ),
           AppSpacing.gapLg,
-          Text('Ceva nu a mers', style: AppTypography.headlineItalic),
+          Text('Something went wrong', style: AppTypography.headlineItalic),
           AppSpacing.gapSm,
           Text(
             message ?? AppStrings.eroareNecunoscuta,

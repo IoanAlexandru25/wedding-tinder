@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 import '../../core/constants/categories.dart';
 import '../../core/theme/app_colors.dart';
@@ -71,15 +71,15 @@ class _FavoritesScreenState extends ConsumerState<FavoritesScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'LISTA VOASTRĂ',
+                        'YOUR LIST',
                         style: AppTypography.overline,
                       ),
                       AppSpacing.gapMd,
                       EditorialHeading(
                         style: AppTypography.displayLarge,
                         spans: const [
-                          EditorialSpan('Cei '),
-                          EditorialSpan('aleși', italic: true),
+                          EditorialSpan('Your '),
+                          EditorialSpan('picks', italic: true),
                           EditorialSpan('.'),
                         ],
                       ),
@@ -110,7 +110,7 @@ class _EditorialTabs extends StatelessWidget {
   const _EditorialTabs({required this.controller});
   final TabController controller;
 
-  static const _labels = ['FAVORITE', 'LISTA FINALĂ'];
+  static const _labels = ['FAVORITES', 'FINAL LIST'];
 
   @override
   Widget build(BuildContext context) {
@@ -287,8 +287,8 @@ class _CategorySection extends ConsumerWidget {
                   padding: const EdgeInsets.only(bottom: 6),
                   child: Text(
                     isEmpty
-                        ? 'NICIUN ALES'
-                        : '${vendors.length} ${vendors.length == 1 ? 'ALES' : 'ALEȘI'}',
+                        ? 'NO PICKS'
+                        : '${vendors.length} ${vendors.length == 1 ? 'PICK' : 'PICKS'}',
                     style: AppTypography.overline.copyWith(
                       color: AppColors.onSurfaceMuted,
                       letterSpacing: 1.4,
@@ -380,7 +380,7 @@ class _EmptyCategoryCard extends StatelessWidget {
             AppSpacing.gapMd,
             Expanded(
               child: Text(
-                'Începe să dai swipe pentru ${category.pluralLabel.toLowerCase()}',
+                'Start swiping for ${category.pluralLabel.toLowerCase()}',
                 style: AppTypography.bodyMedium.copyWith(
                   color: AppColors.onSurfaceMuted,
                 ),
@@ -471,9 +471,9 @@ class _FinalListTab extends ConsumerWidget {
       return Padding(
         padding: AppSpacing.screenEdge,
         child: AppEmptyState(
-          italicTitle: 'Nicio alegere finală',
+          italicTitle: 'No final picks',
           subtitle:
-              'Confirmați un vendor din tab-ul Favorite (✓) pentru a-l adăuga aici cu prețul real negociat.',
+              'Confirm a vendor from the Favorites tab (✓) to add it here with the negotiated price.',
           icon: PhosphorIconsThin.checkCircle,
         ),
       );
@@ -688,7 +688,7 @@ class _FinalSelectionCard extends StatelessWidget {
                     size: 20,
                     color: AppColors.onSurfaceMuted,
                   ),
-                  tooltip: 'Editează prețul',
+                  tooltip: 'Edit price',
                 ),
                 IconButton(
                   onPressed: onRemove,
@@ -697,7 +697,7 @@ class _FinalSelectionCard extends StatelessWidget {
                     size: 20,
                     color: AppColors.onSurfaceMuted,
                   ),
-                  tooltip: 'Elimină din lista finală',
+                  tooltip: 'Remove from final list',
                 ),
               ],
             ),
@@ -757,7 +757,7 @@ class _PriceInputSheetState extends State<_PriceInputSheet> {
     final parsed = int.tryParse(raw);
     if (parsed == null || parsed < 0) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Introdu o sumă validă în RON.')),
+        const SnackBar(content: Text('Enter a valid amount in RON.')),
       );
       return;
     }
@@ -789,12 +789,12 @@ class _PriceInputSheetState extends State<_PriceInputSheet> {
             ),
           ),
           AppSpacing.gapLg,
-          Text('PREȚ NEGOCIAT', style: AppTypography.overline),
+          Text('NEGOTIATED PRICE', style: AppTypography.overline),
           AppSpacing.gapSm,
           EditorialHeading(
             style: AppTypography.headlineLarge,
             spans: [
-              const EditorialSpan('Cât plătiți pentru '),
+              const EditorialSpan('How much will you pay for '),
               EditorialSpan(widget.vendor.name, italic: true),
               const EditorialSpan('?'),
             ],
@@ -809,7 +809,7 @@ class _PriceInputSheetState extends State<_PriceInputSheet> {
           AppSpacing.gapLg,
           AppTextField(
             controller: _ctl,
-            label: 'Sumă totală (RON)',
+            label: 'Total amount (RON)',
             hintText: 'ex. 12000',
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
@@ -817,7 +817,7 @@ class _PriceInputSheetState extends State<_PriceInputSheet> {
           ),
           AppSpacing.gapLg,
           AppButton(
-            label: 'Salvează',
+            label: 'Save',
             onPressed: _submit,
             fullWidth: true,
           ),
@@ -829,7 +829,7 @@ class _PriceInputSheetState extends State<_PriceInputSheet> {
                 Navigator.of(context).pop(const _PriceSheetResult(null));
               },
               child: Text(
-                'Revino la estimarea din catalog',
+                'Revert to catalog estimate',
                 style: AppTypography.labelSmall.copyWith(
                   color: AppColors.onSurfaceMuted,
                 ),
@@ -844,7 +844,7 @@ class _PriceInputSheetState extends State<_PriceInputSheet> {
 
 int vendorMidContribution(Vendor v, int guestCount) {
   final mid = ((v.priceMin + v.priceMax) / 2).round();
-  if (v.priceUnit.contains('persoană') || v.priceUnit.contains('porție')) {
+  if (v.priceUnit.contains('person') || v.priceUnit.contains('portion')) {
     return mid * guestCount;
   }
   return mid;

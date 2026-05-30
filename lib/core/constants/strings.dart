@@ -2,31 +2,31 @@ class AppStrings {
   const AppStrings._();
 
   // Brand
-  static const String appName = 'Miri';
+  static const String appName = 'Wedding tinder';
 
   // Common actions
-  static const String continua = 'Continuă';
-  static const String salveaza = 'Salvează';
-  static const String anuleaza = 'Anulează';
-  static const String inapoi = 'Înapoi';
-  static const String inchide = 'Închide';
-  static const String reincearca = 'Reîncearcă';
-  static const String sterge = 'Șterge';
-  static const String confirma = 'Confirmă';
+  static const String continua = 'Continue';
+  static const String salveaza = 'Save';
+  static const String anuleaza = 'Cancel';
+  static const String inapoi = 'Back';
+  static const String inchide = 'Close';
+  static const String reincearca = 'Retry';
+  static const String sterge = 'Delete';
+  static const String confirma = 'Confirm';
 
   // Auth
-  static const String autentificare = 'Autentificare';
-  static const String creeazaCont = 'Creează cont';
+  static const String autentificare = 'Sign in';
+  static const String creeazaCont = 'Create account';
   static const String email = 'Email';
-  static const String parola = 'Parolă';
-  static const String deconectare = 'Deconectare';
+  static const String parola = 'Password';
+  static const String deconectare = 'Sign out';
 
   // Generic state
-  static const String seIncarca = 'Se încarcă';
-  static const String eroareNecunoscuta = 'A apărut o eroare. Încearcă din nou.';
+  static const String seIncarca = 'Loading';
+  static const String eroareNecunoscuta = 'Something went wrong. Try again.';
   static const String verificaConexiunea =
-      'Verifică conexiunea la internet și încearcă din nou.';
+      'Check your internet connection and try again.';
 
   // Empty states
-  static const String niciUnRezultat = 'Nimic de afișat';
+  static const String niciUnRezultat = 'Nothing to show';
 }

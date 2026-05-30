@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 import '../../../core/constants/judete.dart';
 import '../../../core/theme/app_colors.dart';
@@ -67,8 +67,8 @@ class _JudetPickerState extends State<JudetPicker> {
               child: EditorialHeading(
                 style: AppTypography.displaySmall,
                 spans: const [
-                  EditorialSpan('Alege '),
-                  EditorialSpan('județul', italic: true),
+                  EditorialSpan('Choose '),
+                  EditorialSpan('the county', italic: true),
                 ],
               ),
             ),
@@ -88,7 +88,7 @@ class _JudetPickerState extends State<JudetPicker> {
                 itemBuilder: (context, i) {
                   if (i == 0) {
                     return _JudetRow(
-                      label: 'Toate județele',
+                      label: 'All counties',
                       selected: widget.initial == null,
                       onTap: () => Navigator.of(context).pop(''),
                     );
@@ -152,7 +152,7 @@ class _SearchField extends StatelessWidget {
               onChanged: onChanged,
               style: AppTypography.bodyMedium,
               decoration: InputDecoration(
-                hintText: 'Caută județ',
+                hintText: 'Search county',
                 hintStyle: AppTypography.bodyMedium.copyWith(
                   color: AppColors.onSurfaceMuted,
                 ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 import '../../core/constants/categories.dart';
 import '../../core/theme/app_colors.dart';
@@ -80,14 +80,13 @@ class _DesignShowcaseScreenState extends State<DesignShowcaseScreen> {
                   EditorialHeading(
                     style: AppTypography.displayMedium,
                     spans: const [
-                      EditorialSpan('Pentru '),
-                      EditorialSpan('nunta', italic: true),
-                      EditorialSpan(' voastră'),
+                      EditorialSpan('For '),
+                      EditorialSpan('your wedding', italic: true),
                     ],
                   ),
                   AppSpacing.gapMd,
                   Text(
-                    'O selecție îngrijită de furnizori pentru ziua perfectă.',
+                    'A curated selection of vendors for the perfect day.',
                     style: AppTypography.bodyMedium.copyWith(
                       color: AppColors.onSurfaceMuted,
                     ),
@@ -129,10 +128,9 @@ class _DesignShowcaseScreenState extends State<DesignShowcaseScreen> {
                   AppCard(
                     padding: AppSpacing.allMd,
                     child: AppEmptyState(
-                      italicTitle: 'Încă nimic salvat',
-                      subtitle:
-                          'Începeți să dați swipe pentru a construi lista voastră.',
-                      actionLabel: 'Începe',
+                      italicTitle: 'Nothing saved yet',
+                      subtitle: 'Start swiping to build your list.',
+                      actionLabel: 'Get started',
                       onAction: () {},
                       icon: PhosphorIconsThin.heart,
                     ),
@@ -142,7 +140,7 @@ class _DesignShowcaseScreenState extends State<DesignShowcaseScreen> {
                     padding: AppSpacing.allMd,
                     child: AppErrorState(
                       message:
-                          'Nu am putut încărca furnizorii. Verifică conexiunea.',
+                          'We could not load the vendors. Check your connection.',
                       onRetry: () {},
                     ),
                   ),
@@ -178,7 +176,7 @@ class _ShowcaseHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('MIRI · DESIGN SYSTEM', style: AppTypography.overline),
+        Text('Wedding tinder · DESIGN SYSTEM', style: AppTypography.overline),
         AppSpacing.gapSm,
         EditorialHeading(
           style: AppTypography.displayLarge,
@@ -283,18 +281,18 @@ class _TypographyShowcase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final samples = <(String, TextStyle, String)>[
-      ('Display L · Cormorant 56', AppTypography.displayLarge, 'Nuntă perfectă'),
-      ('Display M · Cormorant 44', AppTypography.displayMedium, 'Nuntă perfectă'),
-      ('Display S · Cormorant 34', AppTypography.displaySmall, 'Nuntă perfectă'),
-      ('Headline L · Cormorant 28', AppTypography.headlineLarge, 'Restaurante'),
+      ('Display L · Cormorant 56', AppTypography.displayLarge, 'Perfect wedding'),
+      ('Display M · Cormorant 44', AppTypography.displayMedium, 'Perfect wedding'),
+      ('Display S · Cormorant 34', AppTypography.displaySmall, 'Perfect wedding'),
+      ('Headline L · Cormorant 28', AppTypography.headlineLarge, 'Restaurants'),
       ('Headline M · Cormorant 22', AppTypography.headlineMedium, 'Casa Doina'),
-      ('Title L · Inter 17 600', AppTypography.titleLarge, 'Detalii furnizor'),
+      ('Title L · Inter 17 600', AppTypography.titleLarge, 'Vendor details'),
       ('Body L · Inter 16', AppTypography.bodyLarge,
-          'Local elegant în inima Bucureștiului, cu meniuri personalizate.'),
+          'Elegant venue in the heart of Bucharest, with custom menus.'),
       ('Body M · Inter 14', AppTypography.bodyMedium,
-          'Local elegant în inima Bucureștiului.'),
-      ('Label · Inter 13 500', AppTypography.labelMedium, 'Adaugă la favorite'),
-      ('Overline · Inter 11 +1.6', AppTypography.overline, 'RESTAURANT · BUCUREȘTI'),
+          'Elegant venue in the heart of Bucharest.'),
+      ('Label · Inter 13 500', AppTypography.labelMedium, 'Add to favorites'),
+      ('Overline · Inter 11 +1.6', AppTypography.overline, 'RESTAURANT · BUCHAREST'),
     ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -326,14 +324,14 @@ class _ButtonsShowcase extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AppButton(
-          label: 'Începe să dai swipe',
+          label: 'Start swiping',
           onPressed: () {},
           fullWidth: true,
           isLoading: isLoading,
         ),
         AppSpacing.gapMd,
         AppButton(
-          label: 'Vezi favoritele',
+          label: 'View favorites',
           onPressed: () {},
           variant: AppButtonVariant.secondary,
           fullWidth: true,
@@ -342,7 +340,7 @@ class _ButtonsShowcase extends StatelessWidget {
         Align(
           alignment: Alignment.centerLeft,
           child: AppButton(
-            label: isLoading ? 'Oprește încărcarea' : 'Simulează încărcare',
+            label: isLoading ? 'Stop loading' : 'Simulate loading',
             onPressed: onToggleLoading,
             variant: AppButtonVariant.text,
             icon: PhosphorIconsThin.arrowRight,
@@ -350,14 +348,14 @@ class _ButtonsShowcase extends StatelessWidget {
         ),
         AppSpacing.gapMd,
         AppButton(
-          label: 'Șterge contul',
+          label: 'Delete account',
           onPressed: () {},
           variant: AppButtonVariant.destructive,
           fullWidth: true,
         ),
         AppSpacing.gapMd,
         const AppButton(
-          label: 'Dezactivat',
+          label: 'Disabled',
           onPressed: null,
           fullWidth: true,
         ),
@@ -375,20 +373,20 @@ class _InputsShowcase extends StatelessWidget {
       children: [
         AppTextField(
           label: 'Email',
-          hintText: 'tu@exemplu.ro',
+          hintText: 'you@example.com',
           keyboardType: TextInputType.emailAddress,
           prefixIcon: PhosphorIconsThin.envelopeSimple,
         ),
         AppSpacing.gapLg,
         AppTextField(
-          label: 'Parolă',
+          label: 'Password',
           obscureText: true,
           prefixIcon: PhosphorIconsThin.lock,
-          helperText: 'Minimum 8 caractere.',
+          helperText: 'Minimum 8 characters.',
         ),
         AppSpacing.gapLg,
         AppTextField(
-          label: 'Cod invitație',
+          label: 'Invite code',
           hintText: 'WED-XXXX',
           prefixIcon: PhosphorIconsThin.envelope,
         ),
@@ -405,11 +403,11 @@ class _ChipsShowcase extends StatefulWidget {
 }
 
 class _ChipsShowcaseState extends State<_ChipsShowcase> {
-  final Set<String> _selected = {'Eveniment elegant'};
+  final Set<String> _selected = {'Elegant event'};
 
   @override
   Widget build(BuildContext context) {
-    const tags = ['Eveniment elegant', 'Buget mediu', 'Curte interioară', 'Outdoor'];
+    const tags = ['Elegant event', 'Mid-range budget', 'Inner courtyard', 'Outdoor'];
     return Wrap(
       spacing: AppSpacing.sm,
       runSpacing: AppSpacing.sm,
@@ -485,7 +483,7 @@ class _CategorySelectorPreview extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '— SELECTEAZĂ',
+                      '— SELECT',
                       style: AppTypography.overline.copyWith(
                         color: isSelected
                             ? AppColors.background.withValues(alpha: 0.7)
@@ -566,7 +564,7 @@ class _VendorCardPreview extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'RESTAURANT · BUCUREȘTI',
+                    'RESTAURANT · BUCHAREST',
                     style: AppTypography.overline.copyWith(
                       color: AppColors.background.withValues(alpha: 0.85),
                     ),
@@ -586,7 +584,7 @@ class _VendorCardPreview extends StatelessWidget {
                     children: [
                       _OverlayBadge(
                         child: Text(
-                          '320 – 480 RON / pers.',
+                          '320 - 480 RON / person',
                           style: AppTypography.labelSmall.copyWith(
                             color: AppColors.background,
                           ),
@@ -681,26 +679,26 @@ class _WeddingFieldPreview extends StatelessWidget {
         EditorialHeading(
           style: AppTypography.displaySmall,
           spans: const [
-            EditorialSpan('Spuneți-ne despre '),
-            EditorialSpan('nunta voastră', italic: true),
+            EditorialSpan('Tell us about '),
+            EditorialSpan('your wedding', italic: true),
           ],
         ),
         AppSpacing.gapSm,
         Text(
-          'Vom personaliza recomandările pe baza acestor detalii.',
+          "We'll personalize recommendations based on these details.",
           style: AppTypography.bodyMedium.copyWith(
             color: AppColors.onSurfaceMuted,
           ),
         ),
         AppSpacing.gapXl,
         const AppTextField(
-          label: 'Număr invitați',
+          label: 'Guest count',
           hintText: '150',
           keyboardType: TextInputType.number,
         ),
         AppSpacing.gapLg,
         const AppTextField(
-          label: 'Buget total (RON)',
+          label: 'Total budget (RON)',
           hintText: '80.000',
           keyboardType: TextInputType.number,
         ),

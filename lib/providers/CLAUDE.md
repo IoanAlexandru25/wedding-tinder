@@ -30,8 +30,8 @@ Riverpod providers — the bridge between services and UI.
   `users/{uid}` doc.
 - `weddingProvider` — `StreamProvider<Wedding?>` for the current user's
   wedding. Returns `null` if no wedding linked yet.
-- `vendorsProvider` — `FutureProvider<List<Vendor>>` loading from JSON.
-- `filtersProvider` — `StateProvider<VendorFilters>` (category, județ,
+- `vendorsProvider` — `FutureProvider<List<Vendor>>` loading from the vendor API.
+- `filtersProvider` — `StateProvider<VendorFilters>` (category, county,
   price range, search query).
 - `filteredVendorsProvider` — `Provider<List<Vendor>>` derived from vendors
   + filters + already-seen-in-session set.

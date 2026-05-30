@@ -1,8 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/utils/invite_code_generator.dart';
 import '../models/user_model.dart';
 import '../models/wedding.dart';
+import '../services/auth_service.dart';
+
+final firebaseAuthProvider =
+    Provider<fb_auth.FirebaseAuth>((_) => fb_auth.FirebaseAuth.instance);
+
+final authServiceProvider =
+    Provider<AuthService>((ref) => AuthService(ref.watch(firebaseAuthProvider)));
+
+final authStateChangesProvider = StreamProvider<fb_auth.User?>(
+  (ref) => ref.watch(authServiceProvider).authStateChanges(),
+);
 
 class SessionState {
   const SessionState({
@@ -41,23 +53,45 @@ class SessionState {
 
 class SessionNotifier extends Notifier<SessionState> {
   @override
-  SessionState build() => const SessionState();
+  SessionState build() {
+    ref.listen<AsyncValue<fb_auth.User?>>(
+      authStateChangesProvider,
+      (_, next) {
+        next.whenData((firebaseUser) {
+          if (firebaseUser == null) {
+            state = const SessionState();
+            return;
+          }
+          final shouldClearWedding =
+              state.user != null && state.user!.id != firebaseUser.uid;
+          state = state.copyWith(
+            user: _fromFirebase(firebaseUser),
+            isLoading: false,
+            clearError: true,
+            clearWedding: shouldClearWedding,
+          );
+        });
+      },
+    );
+    return const SessionState();
+  }
 
   Future<void> signIn({
     required String email,
     required String password,
   }) async {
-    final user = UserModel(
-      id: 'mock_${email.hashCode.toUnsigned(32)}',
-      email: email,
-      displayName: _displayNameFromEmail(email),
-      createdAt: DateTime.now(),
-    );
-    // Mock convention: accounts that "sign in" come pre-seeded with a wedding
-    // so we can test the full app quickly. Use sign-up to experience the
-    // onboarding path.
-    final wedding = _mockSeededWedding(user.id);
-    state = state.copyWith(user: user, wedding: wedding);
+    state = state.copyWith(isLoading: true, clearError: true);
+    try {
+      await ref.read(authServiceProvider).signIn(
+            email: email,
+            password: password,
+          );
+    } on fb_auth.FirebaseAuthException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: _authErrorMessage(e),
+      );
+    }
   }
 
   Future<void> signUp({
@@ -65,14 +99,19 @@ class SessionNotifier extends Notifier<SessionState> {
     required String password,
     required String displayName,
   }) async {
-    final user = UserModel(
-      id: 'mock_${email.hashCode.toUnsigned(32)}',
-      email: email,
-      displayName: displayName.trim(),
-      createdAt: DateTime.now(),
-    );
-    // No wedding yet — UI redirects to wedding setup.
-    state = state.copyWith(user: user);
+    state = state.copyWith(isLoading: true, clearError: true);
+    try {
+      await ref.read(authServiceProvider).signUp(
+            email: email,
+            password: password,
+            displayName: displayName,
+          );
+    } on fb_auth.FirebaseAuthException catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: _authErrorMessage(e),
+      );
+    }
   }
 
   Future<void> createWedding({
@@ -127,7 +166,7 @@ class SessionNotifier extends Notifier<SessionState> {
     final user = state.user;
     if (user == null) return;
     if (!InviteCodeGenerator.isValidFormat(inviteCode)) {
-      state = state.copyWith(error: 'Codul nu are formatul corect.');
+      state = state.copyWith(error: 'Invite code format is invalid.');
       return;
     }
     state = state.copyWith(isLoading: true, clearError: true);
@@ -141,23 +180,52 @@ class SessionNotifier extends Notifier<SessionState> {
   }
 
   void signOut() {
-    state = const SessionState();
+    ref.read(authServiceProvider).signOut();
   }
 
   /// Best-effort display name from an email address. "ioana.popescu@..." →
   /// "Ioana Popescu". Used only when signing in (sign-up takes a real name).
   static String _displayNameFromEmail(String email) {
     final local = email.split('@').first;
-    if (local.isEmpty) return 'Tu';
+    if (local.isEmpty) return 'You';
     final words = local.split(RegExp(r'[._\-+]'));
     final cleaned = words
         .where((w) => w.isNotEmpty)
         .map((w) => w[0].toUpperCase() + w.substring(1).toLowerCase())
         .toList();
-    return cleaned.isEmpty ? 'Tu' : cleaned.join(' ');
+    return cleaned.isEmpty ? 'You' : cleaned.join(' ');
   }
 
-  /// Seeded wedding for sign-in shortcut and join flow. Tuned to feel real
+  static UserModel _fromFirebase(fb_auth.User user) {
+    final email = user.email ?? '';
+    return UserModel(
+      id: user.uid,
+      email: email,
+      displayName: user.displayName ?? _displayNameFromEmail(email),
+      createdAt: user.metadata.creationTime ?? DateTime.now(),
+    );
+  }
+
+  static String _authErrorMessage(fb_auth.FirebaseAuthException e) {
+    switch (e.code) {
+      case 'invalid-email':
+        return 'Invalid email address.';
+      case 'user-disabled':
+        return 'This account has been disabled.';
+      case 'user-not-found':
+      case 'wrong-password':
+      case 'invalid-credential':
+        return 'Incorrect email or password.';
+      case 'email-already-in-use':
+        return 'An account already exists for that email.';
+      case 'weak-password':
+        return 'Password is too weak.';
+      default:
+        return e.message ?? 'Authentication failed.';
+    }
+  }
+
+  /// Seeded wedding for the join flow. Tuned to feel real
   /// in the UI — June 2026, 150 guests, 80k RON.
   static Wedding _mockSeededWedding(String userId) {
     return Wedding(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
@@ -51,9 +51,9 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
       initialDateRange: DateTimeRange(start: _start, end: _end),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
-      helpText: 'Alegeți data nunții',
-      saveText: 'Salvează',
-      cancelText: 'Anulează',
+      helpText: 'Choose the wedding date',
+      saveText: 'Save',
+      cancelText: 'Cancel',
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -80,7 +80,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
     final bMax = int.tryParse(_budgetMaxCtl.text);
     if (guests == null || guests <= 0 || bMin == null || bMax == null || bMin > bMax) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Verifică datele introduse.')),
+        const SnackBar(content: Text('Check the details you entered.')),
       );
       return;
     }
@@ -93,7 +93,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
         );
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Detaliile au fost salvate.')),
+      const SnackBar(content: Text('Details saved.')),
     );
     context.pop();
   }
@@ -109,7 +109,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
           onPressed: () => context.pop(),
         ),
         title: Text(
-          'EDITARE NUNTĂ',
+          'EDIT WEDDING',
           style: AppTypography.overline.copyWith(letterSpacing: 1.6),
         ),
         centerTitle: true,
@@ -126,14 +126,14 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
             EditorialHeading(
               style: AppTypography.displayMedium,
               spans: const [
-                EditorialSpan('Ajustați '),
-                EditorialSpan('detaliile', italic: true),
+                EditorialSpan('Adjust '),
+                EditorialSpan('the details', italic: true),
                 EditorialSpan('.'),
               ],
             ),
             AppSpacing.gapMd,
             Text(
-              'Modificările se aplică imediat în toată aplicația.',
+              'Changes apply immediately across the app.',
               style: AppTypography.bodyMedium.copyWith(
                 color: AppColors.onSurfaceMuted,
               ),
@@ -153,7 +153,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'DATA NUNȚII',
+                      'WEDDING DATE',
                       style: AppTypography.overline.copyWith(
                         color: AppColors.primary,
                       ),
@@ -187,7 +187,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
             AppSpacing.gapLg,
             AppTextField(
               controller: _guestsCtl,
-              label: 'Număr invitați',
+              label: 'Guest count',
               keyboardType: TextInputType.number,
               prefixIcon: PhosphorIconsThin.users,
             ),
@@ -197,7 +197,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
                 Expanded(
                   child: AppTextField(
                     controller: _budgetMinCtl,
-                    label: 'Buget min (RON)',
+                    label: 'Min budget (RON)',
                     keyboardType: TextInputType.number,
                   ),
                 ),
@@ -205,7 +205,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
                 Expanded(
                   child: AppTextField(
                     controller: _budgetMaxCtl,
-                    label: 'Buget max (RON)',
+                    label: 'Max budget (RON)',
                     keyboardType: TextInputType.number,
                   ),
                 ),
@@ -213,7 +213,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
             ),
             AppSpacing.gapXxl,
             AppButton(
-              label: 'Salvează modificările',
+              label: 'Save changes',
               onPressed: _save,
               isLoading: isLoading,
               fullWidth: true,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
@@ -62,15 +62,15 @@ class MainShell extends StatelessWidget {
             tabs: const [
               GButton(
                 icon: PhosphorIconsThin.houseLine,
-                text: 'ACASĂ',
+                text: 'HOME',
               ),
               GButton(
                 icon: PhosphorIconsThin.heart,
-                text: 'FAVORITE',
+                text: 'FAVORITES',
               ),
               GButton(
                 icon: PhosphorIconsThin.userCircle,
-                text: 'PROFIL',
+                text: 'PROFILE',
               ),
             ],
             selectedIndex: navigationShell.currentIndex,

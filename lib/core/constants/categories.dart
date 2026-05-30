@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 enum VendorCategory {
   restaurant,
@@ -33,32 +33,32 @@ extension VendorCategoryX on VendorCategory {
       case VendorCategory.restaurant:
         return 'Restaurant';
       case VendorCategory.fotograf:
-        return 'Fotograf';
+        return 'Photographer';
       case VendorCategory.dj:
         return 'DJ';
       case VendorCategory.formatie:
-        return 'Formație';
+        return 'Band';
       case VendorCategory.florarie:
-        return 'Florărie';
+        return 'Florist';
       case VendorCategory.tort:
-        return 'Cofetărie';
+        return 'Bakery';
     }
   }
 
   String get pluralLabel {
     switch (this) {
       case VendorCategory.restaurant:
-        return 'Restaurante';
+        return 'Restaurants';
       case VendorCategory.fotograf:
-        return 'Fotografi';
+        return 'Photographers';
       case VendorCategory.dj:
         return 'DJ';
       case VendorCategory.formatie:
-        return 'Formații';
+        return 'Bands';
       case VendorCategory.florarie:
-        return 'Florării';
+        return 'Florists';
       case VendorCategory.tort:
-        return 'Cofetării';
+        return 'Bakeries';
     }
   }
 
