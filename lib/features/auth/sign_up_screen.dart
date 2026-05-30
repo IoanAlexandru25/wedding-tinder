@@ -70,8 +70,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               EditorialHeading(
                 style: AppTypography.displayLarge,
                 spans: const [
-                  EditorialSpan('Hai să '),
-                  EditorialSpan('începem', italic: true),
+                  EditorialSpan('Let\'s '),
+                  EditorialSpan('start', italic: true),
                   EditorialSpan('.'),
                 ],
               ),

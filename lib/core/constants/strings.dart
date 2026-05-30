@@ -2,7 +2,7 @@ class AppStrings {
   const AppStrings._();
 
   // Brand
-  static const String appName = 'Miri';
+  static const String appName = 'Wedding tinder';
 
   // Common actions
   static const String continua = 'Continue';

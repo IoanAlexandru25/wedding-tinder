@@ -33,7 +33,7 @@ class ProfileScreen extends ConsumerWidget {
           children: [
             Padding(
               padding: AppSpacing.screenEdge,
-              child: Text('CONT', style: AppTypography.overline),
+              child: Text('OUR PROFILE', style: AppTypography.overline),
             ),
             AppSpacing.gapMd,
             Padding(
@@ -41,7 +41,7 @@ class ProfileScreen extends ConsumerWidget {
               child: EditorialHeading(
                 style: AppTypography.displayLarge,
                 spans: [
-                  const EditorialSpan('Bună, '),
+                  const EditorialSpan('Hello, '),
                   EditorialSpan(user?.displayName ?? '—', italic: true),
                   const EditorialSpan('.'),
                 ],
@@ -81,7 +81,7 @@ class ProfileScreen extends ConsumerWidget {
               padding: AppSpacing.screenEdge,
               child: _ListAction(
                 icon: PhosphorIconsThin.pencil,
-                label: 'Editare detalii nuntă',
+                label: 'Edit wedding details',
                 onTap: () => context.push('/profile/edit-wedding'),
               ),
             ),
@@ -135,11 +135,11 @@ class _WeddingCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('DETALII NUNTĂ', style: AppTypography.overline),
+          Text('Wedding details', style: AppTypography.overline),
           AppSpacing.gapMd,
-          _Row(label: 'Data', value: dateRange),
-          _Row(label: 'Invitați', value: '$guests'),
-          _Row(label: 'Buget', value: budget),
+          _Row(label: 'Date', value: dateRange),
+          _Row(label: 'Guests', value: '$guests'),
+          _Row(label: 'Budget', value: budget),
         ],
       ),
     );
@@ -190,7 +190,7 @@ class _InviteCodeCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'COD INVITAȚIE PARTENER',
+            'INVITE PARTNER CODE',
             style: AppTypography.overline.copyWith(
               color: AppColors.background.withValues(alpha: 0.65),
               letterSpacing: 1.6,

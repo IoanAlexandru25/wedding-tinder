@@ -56,19 +56,19 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               AppSpacing.lg,
             ),
             children: [
-              Text('MIRI', style: AppTypography.overline),
+              Text('Wedding tinder', style: AppTypography.overline),
               AppSpacing.gapXl,
               EditorialHeading(
                 style: AppTypography.displayLarge,
                 spans: const [
-                  EditorialSpan('Bună '),
-                  EditorialSpan('revenire', italic: true),
+                  EditorialSpan('Welcome '),
+                  EditorialSpan('back', italic: true),
                   EditorialSpan('.'),
                 ],
               ),
               AppSpacing.gapMd,
               Text(
-                'Continuăm planificarea de unde ați rămas.',
+                'Let\'s continue the planning',
                 style: AppTypography.bodyMedium.copyWith(
                   color: AppColors.onSurfaceMuted,
                 ),
@@ -119,9 +119,9 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         color: AppColors.onSurfaceMuted,
                       ),
                       children: [
-                        const TextSpan(text: 'Nu ai cont? '),
+                        const TextSpan(text: 'Don\'t have an account? '),
                         TextSpan(
-                          text: 'Creează cont',
+                          text: 'Create an account',
                           style: AppTypography.bodyMedium.copyWith(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,
