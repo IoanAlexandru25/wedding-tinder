@@ -97,7 +97,7 @@ class ProfileScreen extends ConsumerWidget {
             Padding(
               padding: AppSpacing.screenEdge,
               child: AppButton(
-                label: 'Deconectare',
+                label: 'Sign out',
                 variant: AppButtonVariant.secondary,
                 onPressed: () {
                   ref.read(sessionProvider.notifier).signOut();
