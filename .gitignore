@@ -32,6 +32,7 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+pubspec.lock
 
 # Symbolication related
 app.*.symbols
@@ -44,5 +45,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-pubspec.lock
-wedding-tinder.json
+
+# Firebase configs
+firebase.json
+/lib/firebase_options.dart
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
