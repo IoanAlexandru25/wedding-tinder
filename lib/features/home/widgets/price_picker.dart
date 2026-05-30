@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radii.dart';

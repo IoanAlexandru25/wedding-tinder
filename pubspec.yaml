@@ -15,7 +15,6 @@ dependencies:
   go_router: ^14.6.2
   appinio_swiper: ^2.1.1
   google_fonts: ^6.2.1
-  phosphor_flutter: ^2.1.0
   intl: ^0.19.0
   google_nav_bar: ^5.0.7
 
@@ -29,3 +28,7 @@ flutter:
   assets:
     - assets/data/
     - assets/images/vendors/
+  fonts:
+    - family: PhosphorThin
+      fonts:
+        - asset: assets/fonts/Phosphor-Thin.ttf
