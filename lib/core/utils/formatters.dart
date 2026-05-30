@@ -22,7 +22,7 @@ class Formatters {
     final str = amount.toString();
     final buffer = StringBuffer();
     for (var i = 0; i < str.length; i++) {
-      if (i > 0 && (str.length - i) % 3 == 0) buffer.write('.');
+      if (i > 0 && (str.length - i) % 3 == 0) buffer.write(',');
       buffer.write(str[i]);
     }
     return buffer.toString();
@@ -32,13 +32,13 @@ class Formatters {
       a.year == b.year && a.month == b.month;
 
   static const List<String> _monthsLong = [
-    'ianuarie', 'februarie', 'martie', 'aprilie', 'mai', 'iunie',
-    'iulie', 'august', 'septembrie', 'octombrie', 'noiembrie', 'decembrie',
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
   ];
 
   static const List<String> _monthsShort = [
-    'ian', 'feb', 'mar', 'apr', 'mai', 'iun',
-    'iul', 'aug', 'sep', 'oct', 'noi', 'dec',
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
   ];
 
   static String _monthLong(int m) => _monthsLong[m - 1];

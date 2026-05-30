@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:wedding_tinder/core/icons/phosphor_icons_thin.dart';
 
 import '../theme/app_colors.dart';
 
@@ -17,7 +17,7 @@ class PasswordRevealToggle extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: onTap,
-      tooltip: revealed ? 'Ascunde parola' : 'Afișează parola',
+      tooltip: revealed ? 'Hide password' : 'Show password',
       splashRadius: 1,
       icon: Icon(
         revealed ? PhosphorIconsThin.eyeSlash : PhosphorIconsThin.eye,

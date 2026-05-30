@@ -10,7 +10,7 @@ Everything here is safe to import from any feature.
   instead of raw values.
 - `widgets/` — reusable UI primitives. Compose feature widgets out of these,
   don't build one-off versions.
-- `constants/` — `VendorCategory` enum, list of județe, shared Romanian
+- `constants/` — `VendorCategory` enum, list of counties, shared English
   strings. Feature-specific strings stay in the feature.
 - `utils/` — pure helper functions (formatters, invite-code generator).
 
