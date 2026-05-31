@@ -44,6 +44,11 @@ class _SwipeScreenState extends ConsumerState<SwipeScreen> {
     super.dispose();
   }
 
+  void _restart() {
+    ref.read(seenInSessionProvider.notifier).reset();
+    setState(() => _stack = ref.read(filteredVendorsProvider));
+  }
+
   void _onSwipeEnd(int prev, int target, SwiperActivity activity) {
     if (activity is! Swipe) return;
     final vendor = _stack[prev];
@@ -74,6 +79,7 @@ class _SwipeScreenState extends ConsumerState<SwipeScreen> {
               child: _stack.isEmpty
                   ? _EmptyDeck(
                       onChangeCategory: () => context.pop(),
+                      onRestart: _restart,
                     )
                   : Padding(
                       padding: const EdgeInsets.symmetric(
@@ -237,8 +243,12 @@ class _CircleAction extends StatelessWidget {
 }
 
 class _EmptyDeck extends StatelessWidget {
-  const _EmptyDeck({required this.onChangeCategory});
+  const _EmptyDeck({
+    required this.onChangeCategory,
+    required this.onRestart,
+  });
   final VoidCallback onChangeCategory;
+  final VoidCallback onRestart;
 
   @override
   Widget build(BuildContext context) {
@@ -258,11 +268,21 @@ class _EmptyDeck extends StatelessWidget {
             AppSpacing.gapMd,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-              child: AppButton(
-                label: 'Change category',
-                onPressed: onChangeCategory,
-                variant: AppButtonVariant.secondary,
-                fullWidth: true,
+              child: Column(
+                children: [
+                  AppButton(
+                    label: 'Start over',
+                    onPressed: onRestart,
+                    fullWidth: true,
+                  ),
+                  AppSpacing.gapSm,
+                  AppButton(
+                    label: 'Change category',
+                    onPressed: onChangeCategory,
+                    variant: AppButtonVariant.secondary,
+                    fullWidth: true,
+                  ),
+                ],
               ),
             ),
           ],

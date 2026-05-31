@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 
 import '../core/constants/categories.dart';
 import '../models/vendor.dart';
@@ -16,46 +16,31 @@ class VendorLoadException implements Exception {
 }
 
 class VendorRepository {
-  VendorRepository({
-    String? apiUrl,
-    http.Client? client,
-  })  : _apiUrl = apiUrl ?? _defaultApiUrl,
-        _client = client;
+  VendorRepository();
 
-  static const String _defaultApiUrl =
-      String.fromEnvironment(
-        'VENDORS_API_URL',
-        defaultValue:
-            'https://us-central1-wedding-tinder-7fa8b.cloudfunctions.net/vendors',
-      );
+  static const String _assetPath = 'assets/data/vendors.json';
 
-  final String _apiUrl;
-  final http.Client? _client;
   List<Vendor>? _cache;
 
   Future<List<Vendor>> loadAll() async {
     final cached = _cache;
     if (cached != null) return cached;
 
-    final uri = Uri.parse(_apiUrl);
-    final response = _client == null
-        ? await http.get(uri)
-        : await _client!.get(uri);
-    if (response.statusCode != 200) {
-      throw VendorLoadException(
-        'Failed to load vendors from $_apiUrl.',
-        cause: 'HTTP ${response.statusCode}',
-      );
+    final String raw;
+    try {
+      raw = await rootBundle.loadString(_assetPath);
+    } catch (e) {
+      throw VendorLoadException('Failed to load vendors asset.', cause: e);
     }
 
-    final decoded = jsonDecode(response.body);
+    final decoded = jsonDecode(raw);
     if (decoded is! List) {
-      throw VendorLoadException('Vendor API returned an invalid payload.');
+      throw VendorLoadException('vendors.json has an invalid payload.');
     }
 
     final vendors = decoded.map((item) {
       if (item is! Map<String, dynamic>) {
-        throw VendorLoadException('Vendor API returned invalid vendor data.');
+        throw VendorLoadException('vendors.json contains invalid vendor data.');
       }
       return Vendor.fromJson(item);
     }).toList(growable: false);
