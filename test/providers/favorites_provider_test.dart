@@ -3,6 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wedding_tinder/core/constants/categories.dart';
 import 'package:wedding_tinder/models/vendor.dart';
 import 'package:wedding_tinder/providers/favorites_provider.dart';
+import 'package:wedding_tinder/providers/service_providers.dart';
+import 'package:wedding_tinder/providers/session_provider.dart';
+import 'package:wedding_tinder/services/mock/mock_favorites_service.dart';
 
 Vendor _vendor(String id, {VendorCategory category = VendorCategory.fotograf}) {
   return Vendor(
@@ -22,13 +25,22 @@ Vendor _vendor(String id, {VendorCategory category = VendorCategory.fotograf}) {
   );
 }
 
+ProviderContainer _makeContainer() {
+  return ProviderContainer(
+    overrides: [
+      favoritesServiceProvider.overrideWithValue(MockFavoritesService()),
+      currentWeddingIdProvider.overrideWithValue('test_wedding'),
+    ],
+  );
+}
+
 void main() {
   group('FavoritesNotifier', () {
     late ProviderContainer container;
     late FavoritesNotifier notifier;
 
     setUp(() {
-      container = ProviderContainer();
+      container = _makeContainer();
       notifier = container.read(favoritesProvider.notifier);
     });
 
@@ -38,57 +50,57 @@ void main() {
       expect(container.read(favoritesProvider), isEmpty);
     });
 
-    test('like adds vendor to favorites', () {
-      notifier.like(_vendor('foto_01'), addedBy: 'user_1');
+    test('like adds vendor to favorites', () async {
+      await notifier.like(_vendor('foto_01'), addedBy: 'user_1');
       final faves = container.read(favoritesProvider);
       expect(faves.length, 1);
       expect(faves.first.vendorId, 'foto_01');
       expect(faves.first.addedBy, 'user_1');
     });
 
-    test('like stores the correct category from the vendor', () {
-      notifier.like(_vendor('dj_01', category: VendorCategory.dj),
+    test('like stores the correct category from the vendor', () async {
+      await notifier.like(_vendor('dj_01', category: VendorCategory.dj),
           addedBy: 'user_1');
       expect(container.read(favoritesProvider).first.category,
           VendorCategory.dj);
     });
 
-    test('like is idempotent — duplicate not added', () {
-      notifier.like(_vendor('foto_01'), addedBy: 'user_1');
-      notifier.like(_vendor('foto_01'), addedBy: 'user_1');
+    test('like is idempotent — duplicate not added', () async {
+      await notifier.like(_vendor('foto_01'), addedBy: 'user_1');
+      await notifier.like(_vendor('foto_01'), addedBy: 'user_1');
       expect(container.read(favoritesProvider).length, 1);
     });
 
-    test('like multiple different vendors all appear', () {
-      notifier.like(_vendor('f1'), addedBy: 'u');
-      notifier.like(_vendor('f2'), addedBy: 'u');
-      notifier.like(_vendor('f3'), addedBy: 'u');
+    test('like multiple different vendors all appear', () async {
+      await notifier.like(_vendor('f1'), addedBy: 'u');
+      await notifier.like(_vendor('f2'), addedBy: 'u');
+      await notifier.like(_vendor('f3'), addedBy: 'u');
       expect(container.read(favoritesProvider).length, 3);
     });
 
-    test('remove deletes the vendor', () {
-      notifier.like(_vendor('foto_01'), addedBy: 'user_1');
-      notifier.remove('foto_01');
+    test('remove deletes the vendor', () async {
+      await notifier.like(_vendor('foto_01'), addedBy: 'user_1');
+      await notifier.remove('foto_01');
       expect(container.read(favoritesProvider), isEmpty);
     });
 
-    test('remove on non-existent id is a no-op', () {
-      notifier.like(_vendor('foto_01'), addedBy: 'user_1');
-      notifier.remove('nonexistent');
+    test('remove on non-existent id is a no-op', () async {
+      await notifier.like(_vendor('foto_01'), addedBy: 'user_1');
+      await notifier.remove('nonexistent');
       expect(container.read(favoritesProvider).length, 1);
     });
 
-    test('remove only deletes the target, not other favorites', () {
-      notifier.like(_vendor('f1'), addedBy: 'u');
-      notifier.like(_vendor('f2'), addedBy: 'u');
-      notifier.remove('f1');
+    test('remove only deletes the target, not other favorites', () async {
+      await notifier.like(_vendor('f1'), addedBy: 'u');
+      await notifier.like(_vendor('f2'), addedBy: 'u');
+      await notifier.remove('f1');
       final faves = container.read(favoritesProvider);
       expect(faves.length, 1);
       expect(faves.first.vendorId, 'f2');
     });
 
-    test('contains returns true after liking', () {
-      notifier.like(_vendor('dj_01', category: VendorCategory.dj),
+    test('contains returns true after liking', () async {
+      await notifier.like(_vendor('dj_01', category: VendorCategory.dj),
           addedBy: 'user_1');
       expect(notifier.contains('dj_01'), isTrue);
     });
@@ -97,9 +109,9 @@ void main() {
       expect(notifier.contains('foto_01'), isFalse);
     });
 
-    test('contains returns false after removing', () {
-      notifier.like(_vendor('foto_01'), addedBy: 'user_1');
-      notifier.remove('foto_01');
+    test('contains returns false after removing', () async {
+      await notifier.like(_vendor('foto_01'), addedBy: 'user_1');
+      await notifier.remove('foto_01');
       expect(notifier.contains('foto_01'), isFalse);
     });
   });
@@ -107,20 +119,20 @@ void main() {
   group('favoritesByCategoryProvider', () {
     late ProviderContainer container;
 
-    setUp(() => container = ProviderContainer());
+    setUp(() => container = _makeContainer());
     tearDown(() => container.dispose());
 
     test('empty favorites produces empty map', () {
       expect(container.read(favoritesByCategoryProvider), isEmpty);
     });
 
-    test('groups favorites by category', () {
+    test('groups favorites by category', () async {
       final notifier = container.read(favoritesProvider.notifier);
-      notifier.like(_vendor('f1', category: VendorCategory.fotograf),
+      await notifier.like(_vendor('f1', category: VendorCategory.fotograf),
           addedBy: 'u');
-      notifier.like(_vendor('f2', category: VendorCategory.fotograf),
+      await notifier.like(_vendor('f2', category: VendorCategory.fotograf),
           addedBy: 'u');
-      notifier.like(_vendor('d1', category: VendorCategory.dj), addedBy: 'u');
+      await notifier.like(_vendor('d1', category: VendorCategory.dj), addedBy: 'u');
 
       final grouped = container.read(favoritesByCategoryProvider);
       expect(grouped[VendorCategory.fotograf]?.length, 2);
@@ -128,11 +140,11 @@ void main() {
       expect(grouped.containsKey(VendorCategory.restaurant), isFalse);
     });
 
-    test('removing a favorite updates the grouped map', () {
+    test('removing a favorite updates the grouped map', () async {
       final notifier = container.read(favoritesProvider.notifier);
-      notifier.like(_vendor('f1', category: VendorCategory.fotograf),
+      await notifier.like(_vendor('f1', category: VendorCategory.fotograf),
           addedBy: 'u');
-      notifier.remove('f1');
+      await notifier.remove('f1');
       expect(container.read(favoritesByCategoryProvider), isEmpty);
     });
   });

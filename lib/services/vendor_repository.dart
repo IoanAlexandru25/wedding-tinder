@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
+import '../core/config/api_config.dart';
 import '../core/constants/categories.dart';
 import '../models/vendor.dart';
 
@@ -16,35 +18,20 @@ class VendorLoadException implements Exception {
 }
 
 class VendorRepository {
-  VendorRepository();
+  // Pass an http.Client to fetch from the API; omit to load from the
+  // bundled asset (used in mock mode and in tests via debugSeed).
+  VendorRepository([this._client]);
 
   static const String _assetPath = 'assets/data/vendors.json';
 
+  final http.Client? _client;
   List<Vendor>? _cache;
 
   Future<List<Vendor>> loadAll() async {
     final cached = _cache;
     if (cached != null) return cached;
-
-    final String raw;
-    try {
-      raw = await rootBundle.loadString(_assetPath);
-    } catch (e) {
-      throw VendorLoadException('Failed to load vendors asset.', cause: e);
-    }
-
-    final decoded = jsonDecode(raw);
-    if (decoded is! List) {
-      throw VendorLoadException('vendors.json has an invalid payload.');
-    }
-
-    final vendors = decoded.map((item) {
-      if (item is! Map<String, dynamic>) {
-        throw VendorLoadException('vendors.json contains invalid vendor data.');
-      }
-      return Vendor.fromJson(item);
-    }).toList(growable: false);
-
+    final vendors =
+        _client != null ? await _loadFromHttp() : await _loadFromAsset();
     _cache = vendors;
     return vendors;
   }
@@ -94,6 +81,46 @@ class VendorRepository {
   }
 
   void debugSeed(List<Vendor> vendors) => _cache = List.unmodifiable(vendors);
+
+  // ── Private ────────────────────────────────────────────────────────────────
+
+  Future<List<Vendor>> _loadFromAsset() async {
+    final String raw;
+    try {
+      raw = await rootBundle.loadString(_assetPath);
+    } catch (e) {
+      throw VendorLoadException('Failed to load vendors asset.', cause: e);
+    }
+    return _parseList(raw);
+  }
+
+  Future<List<Vendor>> _loadFromHttp() async {
+    final http.Response response;
+    try {
+      response = await _client!.get(Uri.parse('$kBaseUrl/vendors'));
+    } catch (e) {
+      throw VendorLoadException('Failed to fetch vendors from API.', cause: e);
+    }
+    if (response.statusCode != 200) {
+      throw VendorLoadException(
+          'Vendors API returned HTTP ${response.statusCode}.');
+    }
+    return _parseList(response.body);
+  }
+
+  static List<Vendor> _parseList(String raw) {
+    final decoded = jsonDecode(raw);
+    if (decoded is! List) {
+      throw const VendorLoadException('Vendors response has an invalid payload.');
+    }
+    return decoded.map((item) {
+      if (item is! Map<String, dynamic>) {
+        throw const VendorLoadException(
+            'Vendors response contains invalid item.');
+      }
+      return Vendor.fromJson(item);
+    }).toList(growable: false);
+  }
 
   static String _normalize(String? input) {
     if (input == null || input.isEmpty) return '';

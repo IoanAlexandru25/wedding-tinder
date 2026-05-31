@@ -45,6 +45,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 
       if (location == AppRoutes.designShowcase) return null;
 
+      // Hold all redirects while the session is loading (e.g. restoring the
+      // wedding on app restart). Without this guard the router would fire
+      // before _loadWeddingForUser completes and send the user to /wedding-setup
+      // even though they already have a wedding.
+      if (session.isLoading) return null;
+
       final isAuthRoute =
           location == AppRoutes.signIn || location == AppRoutes.signUp;
       final isSetupRoute = location == AppRoutes.weddingSetup;

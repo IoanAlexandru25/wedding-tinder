@@ -1,13 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/config/api_config.dart';
 import '../core/constants/categories.dart';
 import '../models/vendor.dart';
 import '../services/vendor_repository.dart';
 import 'filters_provider.dart';
 import 'seen_in_session_provider.dart';
+import 'service_providers.dart';
 
 final vendorRepositoryProvider = Provider<VendorRepository>((ref) {
-  return VendorRepository();
+  if (kUseMock) return VendorRepository();
+  return VendorRepository(ref.watch(httpClientProvider));
 });
 
 final vendorsProvider = FutureProvider<List<Vendor>>((ref) async {

@@ -3,30 +3,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/constants/categories.dart';
 import '../models/favorite.dart';
 import '../models/vendor.dart';
+import 'service_providers.dart';
+import 'session_provider.dart';
 
 class FavoritesNotifier extends Notifier<List<Favorite>> {
   @override
   List<Favorite> build() => const [];
 
-  void like(Vendor vendor, {required String addedBy}) {
+  String get _weddingId => ref.read(currentWeddingIdProvider) ?? 'mock';
+
+  Future<void> like(Vendor vendor, {required String addedBy}) async {
     if (contains(vendor.id)) return;
-    state = [
-      ...state,
-      Favorite(
-        vendorId: vendor.id,
-        category: vendor.category,
-        addedBy: addedBy,
-        addedAt: DateTime.now(),
-      ),
-    ];
+    final fav = await ref.read(favoritesServiceProvider).addFavorite(
+          _weddingId,
+          vendorId: vendor.id,
+          category: vendor.category,
+          addedBy: addedBy,
+        );
+    state = [...state, fav];
   }
 
-  void remove(String vendorId) {
+  Future<void> remove(String vendorId) async {
+    await ref.read(favoritesServiceProvider).removeFavorite(_weddingId, vendorId);
     state = state.where((f) => f.vendorId != vendorId).toList(growable: false);
   }
 
-  bool contains(String vendorId) =>
-      state.any((f) => f.vendorId == vendorId);
+  bool contains(String vendorId) => state.any((f) => f.vendorId == vendorId);
 }
 
 final favoritesProvider =

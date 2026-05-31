@@ -3,49 +3,49 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/constants/categories.dart';
 import '../models/final_selection.dart';
 import '../models/vendor.dart';
+import 'service_providers.dart';
+import 'session_provider.dart';
 
 class FinalSelectionsNotifier extends Notifier<List<FinalSelection>> {
   @override
   List<FinalSelection> build() => const [];
 
-  void confirm(Vendor vendor) {
+  String get _weddingId => ref.read(currentWeddingIdProvider) ?? 'mock';
+
+  Future<void> confirm(Vendor vendor) async {
+    final selection = await ref.read(finalSelectionsServiceProvider).confirm(
+          _weddingId,
+          vendorId: vendor.id,
+          category: vendor.category,
+        );
     final without =
         state.where((s) => s.category != vendor.category).toList(growable: true);
-    without.add(
-      FinalSelection(
-        vendorId: vendor.id,
-        category: vendor.category,
-        confirmedAt: DateTime.now(),
-      ),
-    );
+    without.add(selection);
     state = without;
   }
 
-  void remove(String vendorId) {
+  Future<void> remove(String vendorId) async {
+    await ref.read(finalSelectionsServiceProvider).remove(_weddingId, vendorId);
     state = state.where((s) => s.vendorId != vendorId).toList(growable: false);
   }
 
-  void updateCustomPrice(String vendorId, int? price) {
+  Future<void> updateCustomPrice(String vendorId, int? price) async {
+    final updated = await ref
+        .read(finalSelectionsServiceProvider)
+        .updateCustomPrice(_weddingId, vendorId, price);
     state = [
       for (final s in state)
-        if (s.vendorId == vendorId)
-          s.copyWith(customPrice: price, clearCustomPrice: price == null)
-        else
-          s,
+        if (s.vendorId == vendorId) updated else s,
     ];
   }
 
-  void updateNotes(String vendorId, String? notes) {
-    final trimmed = notes?.trim();
+  Future<void> updateNotes(String vendorId, String? notes) async {
+    final updated = await ref
+        .read(finalSelectionsServiceProvider)
+        .updateNotes(_weddingId, vendorId, notes);
     state = [
       for (final s in state)
-        if (s.vendorId == vendorId)
-          s.copyWith(
-            notes: trimmed,
-            clearNotes: trimmed == null || trimmed.isEmpty,
-          )
-        else
-          s,
+        if (s.vendorId == vendorId) updated else s,
     ];
   }
 
