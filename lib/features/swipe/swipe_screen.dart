@@ -13,9 +13,9 @@ import '../../core/theme/app_typography.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_empty_state.dart';
 import '../../models/vendor.dart';
+import '../../providers/dismissed_provider.dart';
 import '../../providers/favorites_provider.dart';
 import '../../providers/filters_provider.dart';
-import '../../providers/seen_in_session_provider.dart';
 import '../../providers/session_provider.dart';
 import '../../providers/vendors_provider.dart';
 import 'widgets/vendor_card.dart';
@@ -45,14 +45,13 @@ class _SwipeScreenState extends ConsumerState<SwipeScreen> {
   }
 
   void _restart() {
-    ref.read(seenInSessionProvider.notifier).reset();
+    ref.read(dismissedProvider.notifier).resetSession();
     setState(() => _stack = ref.read(filteredVendorsProvider));
   }
 
   void _onSwipeEnd(int prev, int target, SwiperActivity activity) {
     if (activity is! Swipe) return;
     final vendor = _stack[prev];
-    ref.read(seenInSessionProvider.notifier).markSeen(vendor.id);
 
     if (activity.direction == AxisDirection.right) {
       final user = ref.read(sessionProvider).user;
@@ -61,6 +60,7 @@ class _SwipeScreenState extends ConsumerState<SwipeScreen> {
       }
       HapticFeedback.mediumImpact();
     } else {
+      ref.read(dismissedProvider.notifier).dismiss(vendor.id);
       HapticFeedback.lightImpact();
     }
   }

@@ -8,7 +8,20 @@ import 'session_provider.dart';
 
 class FavoritesNotifier extends Notifier<List<Favorite>> {
   @override
-  List<Favorite> build() => const [];
+  List<Favorite> build() {
+    ref.listen<String?>(currentWeddingIdProvider, (prev, next) {
+      if (next != null && next != prev) _loadFromBackend(next);
+    });
+    final weddingId = ref.read(currentWeddingIdProvider);
+    if (weddingId != null) _loadFromBackend(weddingId);
+    return const [];
+  }
+
+  Future<void> _loadFromBackend(String weddingId) async {
+    final favs =
+        await ref.read(favoritesServiceProvider).listFavorites(weddingId);
+    state = favs;
+  }
 
   String get _weddingId => ref.read(currentWeddingIdProvider) ?? 'mock';
 

@@ -50,6 +50,16 @@ class ApiHttpClient {
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
+  /// POST that expects 204 No Content (no response body to decode).
+  Future<void> postNoContent(String path, Map<String, dynamic> body) async {
+    final response = await _inner.post(
+      Uri.parse('$kBaseUrl$path'),
+      headers: await _headers(),
+      body: jsonEncode(body),
+    );
+    _checkStatus(response);
+  }
+
   Future<void> delete(String path) async {
     final response = await _inner.delete(
       Uri.parse('$kBaseUrl$path'),

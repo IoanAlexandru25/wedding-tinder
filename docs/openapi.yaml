@@ -813,6 +813,73 @@ paths:
         "403":
           $ref: "#/components/responses/Forbidden"
 
+  # ── Dismissed ─────────────────────────────────────────────────────────────
+  /weddings/{weddingId}/dismissed:
+    get:
+      operationId: listDismissed
+      summary: List dismissed vendor IDs
+      description: |
+        Returns the list of vendor IDs that have been left-swiped (dismissed)
+        by either partner in the swipe deck. Used on app startup to exclude
+        already-seen vendors from the deck.
+
+        Caller must be a member of the wedding.
+      tags: [Dismissed]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of dismissed vendor IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: rest_01
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+    post:
+      operationId: dismissVendor
+      summary: Mark a vendor as dismissed (left-swiped)
+      description: |
+        Records a left-swipe on a vendor for this wedding. Idempotent — calling
+        with an already-dismissed vendorId is a no-op and still returns 204.
+
+        Caller must be a member of the wedding.
+      tags: [Dismissed]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [vendorId]
+              properties:
+                vendorId:
+                  type: string
+                  example: rest_01
+      responses:
+        "204":
+          description: Vendor dismissed (or was already dismissed).
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
   # ── Final Selections ──────────────────────────────────────────────────────
   /weddings/{weddingId}/final-selections:
     get:
@@ -1006,6 +1073,11 @@ tags:
     description: |
       Firestore subcollection `weddings/{weddingId}/favorites/{vendorId}`.
       Populated by right-swipes in the swipe deck.
+  - name: Dismissed
+    description: |
+      Firestore subcollection `weddings/{weddingId}/dismissed/{vendorId}`.
+      Populated by left-swipes in the swipe deck. Used to exclude already-seen
+      vendors from the deck on subsequent sessions.
   - name: Final Selections
     description: |
       Firestore subcollection `weddings/{weddingId}/finalSelections/{vendorId}`.

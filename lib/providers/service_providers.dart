@@ -3,13 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
 import '../core/config/api_config.dart';
+import '../services/api/api_dismissed_service.dart';
 import '../services/api/api_favorites_service.dart';
 import '../services/api/api_final_selections_service.dart';
 import '../services/api/api_http_client.dart';
 import '../services/api/api_user_service.dart';
 import '../services/api/api_wedding_service.dart';
+import '../services/dismissed_service.dart';
 import '../services/favorites_service.dart';
 import '../services/final_selections_service.dart';
+import '../services/mock/mock_dismissed_service.dart';
 import '../services/mock/mock_favorites_service.dart';
 import '../services/mock/mock_final_selections_service.dart';
 import '../services/mock/mock_user_service.dart';
@@ -50,4 +53,9 @@ final favoritesServiceProvider = Provider<FavoritesService>((ref) {
 final finalSelectionsServiceProvider = Provider<FinalSelectionsService>((ref) {
   if (kUseMock) return MockFinalSelectionsService();
   return ApiFinalSelectionsService(ref.watch(_apiHttpClientProvider));
+});
+
+final dismissedServiceProvider = Provider<DismissedService>((ref) {
+  if (kUseMock) return MockDismissedService();
+  return ApiDismissedService(ref.watch(_apiHttpClientProvider));
 });
