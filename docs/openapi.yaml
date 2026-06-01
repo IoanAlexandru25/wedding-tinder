@@ -1,0 +1,1085 @@
+openapi: 3.1.0
+info:
+  title: Wedding Tinder API
+  version: 1.0.0
+  description: |
+    Firebase Functions HTTP API for the Wedding Tinder Flutter app.
+
+    All endpoints are hosted at the Firebase Functions base URL.
+    Authenticated endpoints require a valid Firebase ID token obtained via the
+    Firebase Auth SDK (email/password sign-in or sign-up).
+
+    The vendor catalog is read-only and served from a bundled JSON file.
+    Wedding, favorites, and final-selection data is persisted in Firestore.
+
+servers:
+  - url: https://us-central1-wedding-tinder-7fa8b.cloudfunctions.net
+    description: Firebase Functions (production)
+
+security:
+  - firebaseAuth: []
+
+components:
+  securitySchemes:
+    firebaseAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Firebase ID Token
+      description: |
+        Firebase ID token obtained from `FirebaseAuth.currentUser.getIdToken()`.
+        Pass as `Authorization: Bearer <token>`.
+
+  schemas:
+    # ── Enums ────────────────────────────────────────────────────────────────
+    VendorCategory:
+      type: string
+      enum: [restaurant, fotograf, dj, formatie, florarie, tort]
+      description: Wedding vendor category.
+
+    # ── Core models ──────────────────────────────────────────────────────────
+    Vendor:
+      type: object
+      required:
+        - id
+        - name
+        - category
+        - description
+        - judet
+        - localitate
+        - priceMin
+        - priceMax
+        - priceUnit
+        - rating
+        - reviewCount
+        - photos
+        - tags
+      properties:
+        id:
+          type: string
+          example: rest_01
+        name:
+          type: string
+          example: Casa Doina
+        category:
+          $ref: "#/components/schemas/VendorCategory"
+        description:
+          type: string
+        judet:
+          type: string
+          example: Bucharest
+        localitate:
+          type: string
+          example: Bucharest
+        priceMin:
+          type: integer
+          description: Minimum price in RON.
+          example: 320
+        priceMax:
+          type: integer
+          description: Maximum price in RON.
+          example: 480
+        priceUnit:
+          type: string
+          description: Unit qualifier for prices.
+          example: RON/person
+        rating:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 5
+          example: 4.8
+        reviewCount:
+          type: integer
+          example: 142
+        photos:
+          type: array
+          items:
+            type: string
+          description: |
+            URLs to vendor photos. May be HTTPS URLs or app-bundled asset paths
+            (prefixed with `assets/`).
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["Historic manor", "Garden"]
+        phone:
+          type: string
+          nullable: true
+          example: "+40 21 000 0000"
+        website:
+          type: string
+          nullable: true
+          example: "https://example.com"
+        instagram:
+          type: string
+          nullable: true
+          example: "@example"
+
+    UserModel:
+      type: object
+      required: [id, email, createdAt]
+      properties:
+        id:
+          type: string
+          description: Firebase UID.
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+          nullable: true
+        weddingId:
+          type: string
+          nullable: true
+          description: ID of the wedding this user belongs to.
+        createdAt:
+          type: string
+          format: date-time
+
+    Wedding:
+      type: object
+      required:
+        - id
+        - inviteCode
+        - partnerIds
+        - weddingDateStart
+        - weddingDateEnd
+        - guestCount
+        - budgetMin
+        - budgetMax
+        - createdAt
+      properties:
+        id:
+          type: string
+        inviteCode:
+          type: string
+          pattern: "^WED-[A-Z0-9]{4}$"
+          description: Unique invite code for a partner to join the wedding.
+          example: WED-A3K9
+        partnerIds:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          maxItems: 2
+          description: Firebase UIDs of the couple.
+        weddingDateStart:
+          type: string
+          format: date
+          example: "2026-06-15"
+        weddingDateEnd:
+          type: string
+          format: date
+          example: "2026-06-15"
+        guestCount:
+          type: integer
+          minimum: 1
+          example: 150
+        budgetMin:
+          type: integer
+          description: Minimum budget in RON.
+          example: 60000
+        budgetMax:
+          type: integer
+          description: Maximum budget in RON.
+          example: 80000
+        createdAt:
+          type: string
+          format: date-time
+
+    Favorite:
+      type: object
+      required: [vendorId, category, addedBy, addedAt]
+      properties:
+        vendorId:
+          type: string
+          example: rest_01
+        category:
+          $ref: "#/components/schemas/VendorCategory"
+        addedBy:
+          type: string
+          description: Firebase UID of the partner who swiped right.
+        addedAt:
+          type: string
+          format: date-time
+
+    FinalSelection:
+      type: object
+      required: [vendorId, category, confirmedAt]
+      properties:
+        vendorId:
+          type: string
+          example: rest_01
+        category:
+          $ref: "#/components/schemas/VendorCategory"
+        confirmedAt:
+          type: string
+          format: date-time
+        customPrice:
+          type: integer
+          nullable: true
+          description: Negotiated price in RON, overrides the catalog estimate.
+        notes:
+          type: string
+          nullable: true
+          description: Free-form notes about the vendor.
+
+    # ── Error ────────────────────────────────────────────────────────────────
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          description: Machine-readable error code.
+          example: wedding/not-found
+        message:
+          type: string
+          description: Human-readable error description.
+          example: Wedding not found.
+
+  responses:
+    Unauthorized:
+      description: Missing or invalid Firebase ID token.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: auth/unauthorized
+            message: A valid Firebase ID token is required.
+
+    Forbidden:
+      description: The authenticated user is not a member of the requested wedding.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+          example:
+            code: auth/forbidden
+            message: You are not a member of this wedding.
+
+    NotFound:
+      description: The requested resource does not exist.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+
+# ── Paths ─────────────────────────────────────────────────────────────────────
+paths:
+
+  # ── Vendors ───────────────────────────────────────────────────────────────
+  /vendors:
+    get:
+      operationId: listVendors
+      summary: List vendors
+      description: |
+        Returns the full vendor catalog. Filtering is applied server-side.
+        The catalog is read-only and sourced from a bundled JSON file —
+        no Firestore reads are performed for this endpoint.
+
+        This endpoint is **public** — no auth token is required.
+      security: []
+      tags: [Vendors]
+      parameters:
+        - name: category
+          in: query
+          schema:
+            $ref: "#/components/schemas/VendorCategory"
+          description: Filter by vendor category.
+        - name: judet
+          in: query
+          schema:
+            type: string
+          description: Filter by Romanian county name (exact match, case-insensitive).
+          example: Bucharest
+        - name: q
+          in: query
+          schema:
+            type: string
+          description: |
+            Full-text search across name, description, localitate, and tags.
+            Diacritics are normalized (ă→a, ș→s, etc.) before matching.
+          example: fotograf cluj
+        - name: priceMin
+          in: query
+          schema:
+            type: integer
+          description: Minimum price filter in RON (inclusive, against `priceMax` field).
+        - name: priceMax
+          in: query
+          schema:
+            type: integer
+          description: Maximum price filter in RON (inclusive, against `priceMin` field).
+      responses:
+        "200":
+          description: Vendor list, filtered by any provided query parameters.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Vendor"
+
+  /vendors/{vendorId}:
+    get:
+      operationId: getVendor
+      summary: Get a single vendor
+      description: |
+        Returns one vendor by ID. Useful for deep-linking into a vendor detail
+        view without loading the full catalog first.
+
+        This endpoint is **public** — no auth token is required.
+      security: []
+      tags: [Vendors]
+      parameters:
+        - name: vendorId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: rest_01
+      responses:
+        "200":
+          description: The requested vendor.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vendor"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ── Users ─────────────────────────────────────────────────────────────────
+  /users:
+    post:
+      operationId: createUser
+      summary: Create user profile
+      description: |
+        Called once immediately after Firebase Auth account creation to write
+        the Firestore user document (`users/{uid}`).
+
+        The `id` is taken from the verified Firebase ID token — the request
+        body does not accept an `id` field.
+      tags: [Users]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email:
+                  type: string
+                  format: email
+                displayName:
+                  type: string
+                  nullable: true
+      responses:
+        "201":
+          description: User document created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserModel"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: A user document for this UID already exists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: user/already-exists
+                message: User profile already exists.
+
+  /users/{userId}:
+    get:
+      operationId: getUser
+      summary: Get user profile
+      description: |
+        Returns the Firestore user document. Callers may only fetch their own
+        profile (uid from token must match `userId`).
+      tags: [Users]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Firebase UID.
+      responses:
+        "200":
+          description: User profile.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserModel"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    patch:
+      operationId: updateUser
+      summary: Update user profile
+      description: |
+        Partial update of the user document. Currently used to write the
+        `weddingId` after creating or joining a wedding.
+
+        Callers may only update their own profile.
+      tags: [Users]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                  nullable: true
+                weddingId:
+                  type: string
+                  nullable: true
+      responses:
+        "200":
+          description: Updated user profile.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserModel"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ── Weddings ──────────────────────────────────────────────────────────────
+  /weddings:
+    post:
+      operationId: createWedding
+      summary: Create a wedding
+      description: |
+        Creates a new wedding document in Firestore (`weddings/{id}`).
+
+        The server:
+        1. Generates a unique `id` (UUID v4).
+        2. Generates a unique `inviteCode` in the format `WED-XXXX` (uppercase
+           alphanumeric excluding 0, O, 1, I to avoid visual ambiguity).
+        3. Sets `partnerIds` to `[callerUid]`.
+        4. Writes the user's `weddingId` field to the caller's user document.
+
+        Returns the full wedding object including the generated invite code.
+      tags: [Weddings]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - weddingDateStart
+                - weddingDateEnd
+                - guestCount
+                - budgetMin
+                - budgetMax
+              properties:
+                weddingDateStart:
+                  type: string
+                  format: date
+                  example: "2026-06-15"
+                weddingDateEnd:
+                  type: string
+                  format: date
+                  example: "2026-06-15"
+                guestCount:
+                  type: integer
+                  minimum: 1
+                  example: 150
+                budgetMin:
+                  type: integer
+                  minimum: 0
+                  description: Minimum budget in RON.
+                  example: 60000
+                budgetMax:
+                  type: integer
+                  minimum: 0
+                  description: Maximum budget in RON. Must be ≥ budgetMin.
+                  example: 80000
+      responses:
+        "201":
+          description: Wedding created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wedding"
+        "400":
+          description: Validation error (e.g. budgetMax < budgetMin, past date).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          description: Caller already belongs to a wedding.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: wedding/already-member
+                message: You are already a member of a wedding.
+
+  /weddings/join:
+    post:
+      operationId: joinWedding
+      summary: Join a wedding by invite code
+      description: |
+        Looks up a wedding by its `inviteCode` and adds the caller's UID to
+        `partnerIds`.
+
+        Validation:
+        - The invite code must match an existing wedding.
+        - The wedding must not already have two partners.
+        - The caller must not already belong to a wedding.
+
+        On success the server also writes `weddingId` to the caller's user
+        document and returns the full wedding object.
+      tags: [Weddings]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [inviteCode]
+              properties:
+                inviteCode:
+                  type: string
+                  pattern: "^WED-[A-Z0-9]{4}$"
+                  example: WED-A3K9
+      responses:
+        "200":
+          description: Successfully joined the wedding.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wedding"
+        "400":
+          description: |
+            Validation error — malformed invite code, wedding already full,
+            or caller already in a wedding.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                alreadyMember:
+                  value:
+                    code: wedding/already-member
+                    message: You are already a member of a wedding.
+                weddingFull:
+                  value:
+                    code: wedding/full
+                    message: This wedding already has two partners.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          description: No wedding found for the given invite code.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: wedding/not-found
+                message: No wedding found for that invite code.
+
+  /weddings/{weddingId}:
+    get:
+      operationId: getWedding
+      summary: Get wedding details
+      description: |
+        Returns the wedding document. The caller must be one of the
+        `partnerIds`.
+      tags: [Weddings]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Wedding details.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wedding"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    patch:
+      operationId: updateWedding
+      summary: Update wedding details
+      description: |
+        Partial update of the wedding document (dates, guest count, budget).
+        The `inviteCode` and `partnerIds` fields cannot be changed via this
+        endpoint. Only members of the wedding can call this.
+      tags: [Weddings]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                weddingDateStart:
+                  type: string
+                  format: date
+                weddingDateEnd:
+                  type: string
+                  format: date
+                guestCount:
+                  type: integer
+                  minimum: 1
+                budgetMin:
+                  type: integer
+                  minimum: 0
+                budgetMax:
+                  type: integer
+                  minimum: 0
+      responses:
+        "200":
+          description: Updated wedding.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Wedding"
+        "400":
+          description: Validation error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ── Favorites ─────────────────────────────────────────────────────────────
+  /weddings/{weddingId}/favorites:
+    get:
+      operationId: listFavorites
+      summary: List favorites
+      description: |
+        Returns all vendor IDs that have been swiped right by either partner,
+        stored in `weddings/{weddingId}/favorites/{vendorId}`.
+
+        Caller must be a member of the wedding.
+      tags: [Favorites]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of favorites.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Favorite"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    post:
+      operationId: addFavorite
+      summary: Add a favorite
+      description: |
+        Records a right-swipe on a vendor. Writes to
+        `weddings/{weddingId}/favorites/{vendorId}`.
+
+        If the vendor is already in favorites the call is idempotent and
+        returns the existing document.
+      tags: [Favorites]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [vendorId, category]
+              properties:
+                vendorId:
+                  type: string
+                  example: rest_01
+                category:
+                  $ref: "#/components/schemas/VendorCategory"
+      responses:
+        "201":
+          description: Favorite created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Favorite"
+        "200":
+          description: Favorite already existed — returned unchanged.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Favorite"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          description: Wedding or vendor not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /weddings/{weddingId}/favorites/{vendorId}:
+    delete:
+      operationId: removeFavorite
+      summary: Remove a favorite
+      description: |
+        Deletes the favorite document at
+        `weddings/{weddingId}/favorites/{vendorId}`.
+
+        Either partner may remove a favorite regardless of who added it.
+        If the vendor is also in final selections, that document is **not**
+        automatically removed — the client must call DELETE on
+        `/weddings/{weddingId}/final-selections/{vendorId}` separately.
+
+        Returns 204 whether the document existed or not.
+      tags: [Favorites]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: vendorId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: rest_01
+      responses:
+        "204":
+          description: Favorite removed (or was already absent).
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  # ── Dismissed ─────────────────────────────────────────────────────────────
+  /weddings/{weddingId}/dismissed:
+    get:
+      operationId: listDismissed
+      summary: List dismissed vendor IDs
+      description: |
+        Returns the list of vendor IDs that have been left-swiped (dismissed)
+        by either partner in the swipe deck. Used on app startup to exclude
+        already-seen vendors from the deck.
+
+        Caller must be a member of the wedding.
+      tags: [Dismissed]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of dismissed vendor IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: rest_01
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+    post:
+      operationId: dismissVendor
+      summary: Mark a vendor as dismissed (left-swiped)
+      description: |
+        Records a left-swipe on a vendor for this wedding. Idempotent — calling
+        with an already-dismissed vendorId is a no-op and still returns 204.
+
+        Caller must be a member of the wedding.
+      tags: [Dismissed]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [vendorId]
+              properties:
+                vendorId:
+                  type: string
+                  example: rest_01
+      responses:
+        "204":
+          description: Vendor dismissed (or was already dismissed).
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+  # ── Final Selections ──────────────────────────────────────────────────────
+  /weddings/{weddingId}/final-selections:
+    get:
+      operationId: listFinalSelections
+      summary: List final selections
+      description: |
+        Returns all confirmed vendor selections for the wedding, stored in
+        `weddings/{weddingId}/finalSelections/{vendorId}`.
+
+        At most one selection per `VendorCategory` is enforced by the POST
+        endpoint.
+      tags: [Final Selections]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of final selections.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FinalSelection"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    post:
+      operationId: confirmFinalSelection
+      summary: Confirm (or replace) a final selection
+      description: |
+        Writes a final selection to
+        `weddings/{weddingId}/finalSelections/{vendorId}`.
+
+        Business rules enforced server-side:
+        - Only one vendor per category is allowed. If another vendor is already
+          confirmed for the same category, it is **replaced** (the old document
+          is deleted and the new one is written atomically).
+        - The vendor must already be in favorites for this wedding.
+
+        Returns the new final selection.
+      tags: [Final Selections]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [vendorId, category]
+              properties:
+                vendorId:
+                  type: string
+                  example: rest_01
+                category:
+                  $ref: "#/components/schemas/VendorCategory"
+                customPrice:
+                  type: integer
+                  nullable: true
+                  description: Negotiated price in RON. Omit to use catalog estimate.
+                notes:
+                  type: string
+                  nullable: true
+      responses:
+        "201":
+          description: Final selection created or replaced.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FinalSelection"
+        "400":
+          description: Vendor is not in favorites or other validation error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: selection/not-favorited
+                message: The vendor must be in favorites before it can be confirmed.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  /weddings/{weddingId}/final-selections/{vendorId}:
+    patch:
+      operationId: updateFinalSelection
+      summary: Update price or notes on a final selection
+      description: |
+        Partial update of `customPrice` and/or `notes` on an existing final
+        selection. Used when the couple negotiates a price or wants to annotate
+        a confirmed vendor.
+      tags: [Final Selections]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: vendorId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: rest_01
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customPrice:
+                  type: integer
+                  nullable: true
+                notes:
+                  type: string
+                  nullable: true
+      responses:
+        "200":
+          description: Updated final selection.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FinalSelection"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    delete:
+      operationId: removeFinalSelection
+      summary: Remove a final selection
+      description: |
+        Deletes the final selection document at
+        `weddings/{weddingId}/finalSelections/{vendorId}`.
+
+        Does not affect the corresponding favorites document. Returns 204
+        whether the document existed or not.
+      tags: [Final Selections]
+      parameters:
+        - name: weddingId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: vendorId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: rest_01
+      responses:
+        "204":
+          description: Final selection removed (or was already absent).
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
+tags:
+  - name: Vendors
+    description: |
+      Read-only vendor catalog. Sourced from a bundled JSON file; no Firestore
+      reads. Public — no auth required.
+  - name: Users
+    description: |
+      Firestore user documents (`users/{uid}`). Created once after Firebase Auth
+      sign-up and updated when the user joins or creates a wedding.
+  - name: Weddings
+    description: |
+      Firestore wedding documents (`weddings/{id}`). A wedding links two
+      partners and stores the event details and invite code.
+  - name: Favorites
+    description: |
+      Firestore subcollection `weddings/{weddingId}/favorites/{vendorId}`.
+      Populated by right-swipes in the swipe deck.
+  - name: Dismissed
+    description: |
+      Firestore subcollection `weddings/{weddingId}/dismissed/{vendorId}`.
+      Populated by left-swipes in the swipe deck. Used to exclude already-seen
+      vendors from the deck on subsequent sessions.
+  - name: Final Selections
+    description: |
+      Firestore subcollection `weddings/{weddingId}/finalSelections/{vendorId}`.
+      At most one entry per VendorCategory — the "confirmed" vendor the couple
+      will book.

@@ -1,13 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../core/config/api_config.dart';
 import '../core/constants/categories.dart';
 import '../models/vendor.dart';
 import '../services/vendor_repository.dart';
+import 'dismissed_provider.dart';
+import 'favorites_provider.dart';
 import 'filters_provider.dart';
-import 'seen_in_session_provider.dart';
+import 'service_providers.dart';
 
 final vendorRepositoryProvider = Provider<VendorRepository>((ref) {
-  return VendorRepository();
+  if (kUseMock) return VendorRepository();
+  return VendorRepository(ref.watch(httpClientProvider));
 });
 
 final vendorsProvider = FutureProvider<List<Vendor>>((ref) async {
@@ -38,7 +42,10 @@ final filteredCategoryCountsProvider =
 final filteredVendorsProvider = Provider<List<Vendor>>((ref) {
   final all = ref.watch(vendorsProvider).asData?.value ?? const <Vendor>[];
   final filters = ref.watch(filtersProvider);
-  final seen = ref.watch(seenInSessionProvider);
+  final dismissed = ref.watch(dismissedProvider);
+  final favoriteIds =
+      ref.watch(favoritesProvider).map((f) => f.vendorId).toSet();
+  final excluded = dismissed.union(favoriteIds);
 
   return all.where((v) {
     if (filters.category != null && v.category != filters.category) {
@@ -51,7 +58,7 @@ final filteredVendorsProvider = Provider<List<Vendor>>((ref) {
     if (filters.priceMax != null && v.priceMin > filters.priceMax!) {
       return false;
     }
-    if (seen.contains(v.id)) return false;
+    if (excluded.contains(v.id)) return false;
     return true;
   }).toList(growable: false);
 });

@@ -13,9 +13,9 @@ import '../../core/theme/app_typography.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_empty_state.dart';
 import '../../models/vendor.dart';
+import '../../providers/dismissed_provider.dart';
 import '../../providers/favorites_provider.dart';
 import '../../providers/filters_provider.dart';
-import '../../providers/seen_in_session_provider.dart';
 import '../../providers/session_provider.dart';
 import '../../providers/vendors_provider.dart';
 import 'widgets/vendor_card.dart';
@@ -44,10 +44,14 @@ class _SwipeScreenState extends ConsumerState<SwipeScreen> {
     super.dispose();
   }
 
+  void _restart() {
+    ref.read(dismissedProvider.notifier).resetSession();
+    setState(() => _stack = ref.read(filteredVendorsProvider));
+  }
+
   void _onSwipeEnd(int prev, int target, SwiperActivity activity) {
     if (activity is! Swipe) return;
     final vendor = _stack[prev];
-    ref.read(seenInSessionProvider.notifier).markSeen(vendor.id);
 
     if (activity.direction == AxisDirection.right) {
       final user = ref.read(sessionProvider).user;
@@ -56,6 +60,7 @@ class _SwipeScreenState extends ConsumerState<SwipeScreen> {
       }
       HapticFeedback.mediumImpact();
     } else {
+      ref.read(dismissedProvider.notifier).dismiss(vendor.id);
       HapticFeedback.lightImpact();
     }
   }
@@ -74,6 +79,7 @@ class _SwipeScreenState extends ConsumerState<SwipeScreen> {
               child: _stack.isEmpty
                   ? _EmptyDeck(
                       onChangeCategory: () => context.pop(),
+                      onRestart: _restart,
                     )
                   : Padding(
                       padding: const EdgeInsets.symmetric(
@@ -237,8 +243,12 @@ class _CircleAction extends StatelessWidget {
 }
 
 class _EmptyDeck extends StatelessWidget {
-  const _EmptyDeck({required this.onChangeCategory});
+  const _EmptyDeck({
+    required this.onChangeCategory,
+    required this.onRestart,
+  });
   final VoidCallback onChangeCategory;
+  final VoidCallback onRestart;
 
   @override
   Widget build(BuildContext context) {
@@ -258,11 +268,21 @@ class _EmptyDeck extends StatelessWidget {
             AppSpacing.gapMd,
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
-              child: AppButton(
-                label: 'Change category',
-                onPressed: onChangeCategory,
-                variant: AppButtonVariant.secondary,
-                fullWidth: true,
+              child: Column(
+                children: [
+                  AppButton(
+                    label: 'Start over',
+                    onPressed: onRestart,
+                    fullWidth: true,
+                  ),
+                  AppSpacing.gapSm,
+                  AppButton(
+                    label: 'Change category',
+                    onPressed: onChangeCategory,
+                    variant: AppButtonVariant.secondary,
+                    fullWidth: true,
+                  ),
+                ],
               ),
             ),
           ],

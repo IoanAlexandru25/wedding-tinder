@@ -1,10 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../core/utils/invite_code_generator.dart';
 import '../models/user_model.dart';
 import '../models/wedding.dart';
 import '../services/auth_service.dart';
+import '../services/service_exception.dart';
+import 'service_providers.dart';
 
 final firebaseAuthProvider =
     Provider<fb_auth.FirebaseAuth>((_) => fb_auth.FirebaseAuth.instance);
@@ -62,18 +63,55 @@ class SessionNotifier extends Notifier<SessionState> {
             state = const SessionState();
             return;
           }
-          final shouldClearWedding =
+          final switchingUser =
               state.user != null && state.user!.id != firebaseUser.uid;
+          // Set isLoading=true; _loadWeddingForUser clears it when done.
           state = state.copyWith(
             user: _fromFirebase(firebaseUser),
-            isLoading: false,
+            isLoading: true,
             clearError: true,
-            clearWedding: shouldClearWedding,
+            clearWedding: switchingUser,
           );
+          _loadWeddingForUser(firebaseUser); // fire-and-forget
         });
       },
     );
     return const SessionState();
+  }
+
+  // Fetches the backend user document to retrieve weddingId, then loads the
+  // wedding. Called every time Firebase auth emits a user (app start, sign-in,
+  // token refresh). Creates the user doc first if the backend doesn't have it.
+  Future<void> _loadWeddingForUser(fb_auth.User firebaseUser) async {
+    try {
+      final userModel =
+          await ref.read(userServiceProvider).getUser(firebaseUser.uid);
+      if (state.user?.id != firebaseUser.uid) return;
+      state = state.copyWith(user: userModel);
+
+      final weddingId = userModel.weddingId;
+      if (weddingId != null) {
+        final wedding =
+            await ref.read(weddingServiceProvider).getWedding(weddingId);
+        if (state.user?.id != firebaseUser.uid) return;
+        state = state.copyWith(wedding: wedding, isLoading: false);
+      } else {
+        state = state.copyWith(isLoading: false);
+      }
+    } on UserException catch (e) {
+      if (e.code == 'not-found') await _ensureUserDoc(firebaseUser);
+      if (state.user?.id == firebaseUser.uid) {
+        state = state.copyWith(isLoading: false);
+      }
+    } on WeddingException {
+      if (state.user?.id == firebaseUser.uid) {
+        state = state.copyWith(isLoading: false);
+      }
+    } catch (_) {
+      if (state.user?.id == firebaseUser.uid) {
+        state = state.copyWith(isLoading: false);
+      }
+    }
   }
 
   Future<void> signIn({
@@ -86,6 +124,7 @@ class SessionNotifier extends Notifier<SessionState> {
             email: email,
             password: password,
           );
+      // Auth state change fires → _loadWeddingForUser restores the session.
     } on fb_auth.FirebaseAuthException catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -101,9 +140,14 @@ class SessionNotifier extends Notifier<SessionState> {
   }) async {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
-      await ref.read(authServiceProvider).signUp(
+      final firebaseUser = await ref.read(authServiceProvider).signUp(
             email: email,
             password: password,
+            displayName: displayName,
+          );
+      await ref.read(userServiceProvider).createUser(
+            userId: firebaseUser.uid,
+            email: email,
             displayName: displayName,
           );
     } on fb_auth.FirebaseAuthException catch (e) {
@@ -111,6 +155,32 @@ class SessionNotifier extends Notifier<SessionState> {
         isLoading: false,
         error: _authErrorMessage(e),
       );
+    } on UserException catch (e) {
+      if (e.code == 'already-exists') return; // idempotent — doc already there
+      state = state.copyWith(isLoading: false, error: e.message);
+    }
+  }
+
+  // Fetches the backend user document; creates it if the backend has never
+  // seen this Firebase UID (e.g. sign-in after account pre-existed, or after
+  // a failed sign-up POST /users call). Errors are swallowed here — if the
+  // backend is unreachable, the user will see an error when they next touch a
+  // backend-guarded action (e.g. createWedding), not silently here.
+  Future<void> _ensureUserDoc(fb_auth.User firebaseUser) async {
+    final userService = ref.read(userServiceProvider);
+    try {
+      await userService.getUser(firebaseUser.uid);
+    } on UserException catch (e) {
+      if (e.code != 'not-found') return;
+      try {
+        await userService.createUser(
+          userId: firebaseUser.uid,
+          email: firebaseUser.email ?? '',
+          displayName: firebaseUser.displayName,
+        );
+      } on UserException {
+        // already-exists race condition (concurrent call) — safe to ignore.
+      }
     }
   }
 
@@ -124,19 +194,19 @@ class SessionNotifier extends Notifier<SessionState> {
     final user = state.user;
     if (user == null) return;
     state = state.copyWith(isLoading: true, clearError: true);
-    await Future<void>.delayed(const Duration(milliseconds: 500));
-    final wedding = Wedding(
-      id: 'wed_mock_${DateTime.now().millisecondsSinceEpoch}',
-      inviteCode: InviteCodeGenerator.generate(),
-      partnerIds: [user.id],
-      weddingDateStart: weddingDateStart,
-      weddingDateEnd: weddingDateEnd,
-      guestCount: guestCount,
-      budgetMin: budgetMin,
-      budgetMax: budgetMax,
-      createdAt: DateTime.now(),
-    );
-    state = state.copyWith(wedding: wedding, isLoading: false);
+    try {
+      final wedding = await ref.read(weddingServiceProvider).createWedding(
+            userId: user.id,
+            start: weddingDateStart,
+            end: weddingDateEnd,
+            guestCount: guestCount,
+            budgetMin: budgetMin,
+            budgetMax: budgetMax,
+          );
+      state = state.copyWith(wedding: wedding, isLoading: false);
+    } on WeddingException catch (e) {
+      state = state.copyWith(isLoading: false, error: e.message);
+    }
   }
 
   Future<void> updateWedding({
@@ -149,42 +219,40 @@ class SessionNotifier extends Notifier<SessionState> {
     final current = state.wedding;
     if (current == null) return;
     state = state.copyWith(isLoading: true, clearError: true);
-    await Future<void>.delayed(const Duration(milliseconds: 250));
-    state = state.copyWith(
-      wedding: current.copyWith(
-        weddingDateStart: weddingDateStart,
-        weddingDateEnd: weddingDateEnd,
-        guestCount: guestCount,
-        budgetMin: budgetMin,
-        budgetMax: budgetMax,
-      ),
-      isLoading: false,
-    );
+    try {
+      final updated = await ref.read(weddingServiceProvider).updateWedding(
+            current.id,
+            start: weddingDateStart,
+            end: weddingDateEnd,
+            guestCount: guestCount,
+            budgetMin: budgetMin,
+            budgetMax: budgetMax,
+          );
+      state = state.copyWith(wedding: updated, isLoading: false);
+    } on WeddingException catch (e) {
+      state = state.copyWith(isLoading: false, error: e.message);
+    }
   }
 
   Future<void> joinWedding(String inviteCode) async {
     final user = state.user;
     if (user == null) return;
-    if (!InviteCodeGenerator.isValidFormat(inviteCode)) {
-      state = state.copyWith(error: 'Invite code format is invalid.');
-      return;
-    }
     state = state.copyWith(isLoading: true, clearError: true);
-    await Future<void>.delayed(const Duration(milliseconds: 600));
-    // Mock: pretend the code resolves to a wedding hosted by another partner.
-    final wedding = _mockSeededWedding(user.id).copyWith(
-      inviteCode: inviteCode.trim().toUpperCase(),
-      partnerIds: ['mock_partner_id', user.id],
-    );
-    state = state.copyWith(wedding: wedding, isLoading: false);
+    try {
+      final wedding = await ref.read(weddingServiceProvider).joinWedding(
+            inviteCode.trim().toUpperCase(),
+            userId: user.id,
+          );
+      state = state.copyWith(wedding: wedding, isLoading: false);
+    } on WeddingException catch (e) {
+      state = state.copyWith(isLoading: false, error: e.message);
+    }
   }
 
   void signOut() {
     ref.read(authServiceProvider).signOut();
   }
 
-  /// Best-effort display name from an email address. "ioana.popescu@..." →
-  /// "Ioana Popescu". Used only when signing in (sign-up takes a real name).
   static String _displayNameFromEmail(String email) {
     final local = email.split('@').first;
     if (local.isEmpty) return 'You';
@@ -224,23 +292,17 @@ class SessionNotifier extends Notifier<SessionState> {
         return e.message ?? 'Authentication failed.';
     }
   }
-
-  /// Seeded wedding for the join flow. Tuned to feel real
-  /// in the UI — June 2026, 150 guests, 80k RON.
-  static Wedding _mockSeededWedding(String userId) {
-    return Wedding(
-      id: 'wed_mock_default',
-      inviteCode: InviteCodeGenerator.generate(),
-      partnerIds: [userId],
-      weddingDateStart: DateTime(2026, 6, 12),
-      weddingDateEnd: DateTime(2026, 6, 13),
-      guestCount: 150,
-      budgetMin: 60000,
-      budgetMax: 80000,
-      createdAt: DateTime.now(),
-    );
-  }
 }
 
 final sessionProvider =
     NotifierProvider<SessionNotifier, SessionState>(SessionNotifier.new);
+
+// Convenience providers so other notifiers can read session context without
+// triggering Firebase Auth initialization in tests.
+final currentWeddingIdProvider = Provider<String?>((ref) {
+  return ref.watch(sessionProvider).wedding?.id;
+});
+
+final currentUserIdProvider = Provider<String?>((ref) {
+  return ref.watch(sessionProvider).user?.id;
+});
