@@ -369,23 +369,40 @@ class _FullscreenGalleryState extends State<_FullscreenGallery> {
               itemCount: widget.photos.length,
               onPageChanged: (i) => setState(() => _index = i),
               itemBuilder: (context, i) {
+                final photo = widget.photos[i];
+                final isNetwork = photo.startsWith('http');
+                const errorWidget = Center(
+                  child: Icon(
+                    Icons.broken_image_outlined,
+                    color: Colors.white54,
+                    size: 64,
+                  ),
+                );
                 return InteractiveViewer(
                   minScale: 1.0,
                   maxScale: 4.0,
                   child: Center(
-                    child: Image.asset(
-                      widget.photos[i],
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stack) {
-                        return const Center(
-                          child: Icon(
-                            Icons.broken_image_outlined,
-                            color: Colors.white54,
-                            size: 64,
+                    child: isNetwork
+                        ? Image.network(
+                            photo,
+                            fit: BoxFit.contain,
+                            loadingBuilder: (context, child, progress) =>
+                                progress == null
+                                    ? child
+                                    : const Center(
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white54,
+                                        ),
+                                      ),
+                            errorBuilder: (context, error, stack) =>
+                                errorWidget,
+                          )
+                        : Image.asset(
+                            photo,
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stack) =>
+                                errorWidget,
                           ),
-                        );
-                      },
-                    ),
                   ),
                 );
               },

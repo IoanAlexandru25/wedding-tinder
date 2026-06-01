@@ -14,24 +14,40 @@ class GradientPhoto extends StatelessWidget {
   final BoxFit fit;
   final double gradientHeight;
 
+  static bool _isNetworkUrl(String path) => path.startsWith('http');
+
+  Widget _buildImage() {
+    final placeholder = Container(
+      color: AppColors.surfaceVariant,
+      alignment: Alignment.center,
+      child: const Icon(
+        Icons.image_outlined,
+        size: 32,
+        color: AppColors.onSurfaceMuted,
+      ),
+    );
+    if (_isNetworkUrl(assetPath)) {
+      return Image.network(
+        assetPath,
+        fit: fit,
+        loadingBuilder: (context, child, progress) =>
+            progress == null ? child : placeholder,
+        errorBuilder: (context, error, stack) => placeholder,
+      );
+    }
+    return Image.asset(
+      assetPath,
+      fit: fit,
+      errorBuilder: (context, error, stack) => placeholder,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset(
-          assetPath,
-          fit: fit,
-          errorBuilder: (context, error, stack) => Container(
-            color: AppColors.surfaceVariant,
-            alignment: Alignment.center,
-            child: const Icon(
-              Icons.image_outlined,
-              size: 32,
-              color: AppColors.onSurfaceMuted,
-            ),
-          ),
-        ),
+        _buildImage(),
         Align(
           alignment: Alignment.bottomCenter,
           child: FractionallySizedBox(
