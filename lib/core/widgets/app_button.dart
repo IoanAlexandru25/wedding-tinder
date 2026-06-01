@@ -36,7 +36,8 @@ class _AppButtonState extends State<AppButton> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = _colorsFor(widget.variant, _enabled);
+    final c = AppColors.of(context);
+    final colors = _colorsFor(widget.variant, _enabled, c);
     final showBorder = widget.variant == AppButtonVariant.secondary;
     final isText = widget.variant == AppButtonVariant.text;
 
@@ -111,25 +112,26 @@ class _ButtonColors {
   final Color foreground;
 }
 
-_ButtonColors _colorsFor(AppButtonVariant variant, bool enabled) {
+_ButtonColors _colorsFor(
+    AppButtonVariant variant, bool enabled, AppColors c) {
   if (!enabled) {
     switch (variant) {
       case AppButtonVariant.primary:
       case AppButtonVariant.destructive:
-        return const _ButtonColors(AppColors.disabled, AppColors.onPrimary);
+        return _ButtonColors(c.disabled, c.onPrimary);
       case AppButtonVariant.secondary:
       case AppButtonVariant.text:
-        return const _ButtonColors(Colors.transparent, AppColors.disabled);
+        return _ButtonColors(Colors.transparent, c.disabled);
     }
   }
   switch (variant) {
     case AppButtonVariant.primary:
-      return const _ButtonColors(AppColors.primary, AppColors.onPrimary);
+      return _ButtonColors(c.primary, c.onPrimary);
     case AppButtonVariant.secondary:
-      return const _ButtonColors(Colors.transparent, AppColors.primary);
+      return _ButtonColors(Colors.transparent, c.primary);
     case AppButtonVariant.text:
-      return const _ButtonColors(Colors.transparent, AppColors.primary);
+      return _ButtonColors(Colors.transparent, c.primary);
     case AppButtonVariant.destructive:
-      return const _ButtonColors(AppColors.error, AppColors.onPrimary);
+      return _ButtonColors(c.error, c.onPrimary);
   }
 }

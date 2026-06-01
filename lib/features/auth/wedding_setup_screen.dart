@@ -57,8 +57,8 @@ class _WeddingSetupScreenState extends ConsumerState<WeddingSetupScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: AppColors.primary,
-                  onPrimary: AppColors.onPrimary,
+                  primary: AppColors.of(context).primary,
+                  onPrimary: AppColors.of(context).onPrimary,
                 ),
           ),
           child: child!,
@@ -132,7 +132,7 @@ class _WeddingSetupScreenState extends ConsumerState<WeddingSetupScreen> {
             Text(
               'We will tailor recommendations based on these details.',
               style: AppTypography.bodyMedium.copyWith(
-                color: AppColors.onSurfaceMuted,
+                color: AppColors.of(context).onSurfaceMuted,
               ),
             ),
             AppSpacing.gapXl,
@@ -178,7 +178,7 @@ class _ModeToggle extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
+        color: AppColors.of(context).surfaceVariant,
         borderRadius: AppRadii.mdAll,
       ),
       child: Row(
@@ -223,14 +223,14 @@ class _ToggleButton extends StatelessWidget {
         duration: const Duration(milliseconds: 220),
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm + 2),
         decoration: BoxDecoration(
-          color: selected ? AppColors.surface : Colors.transparent,
+          color: selected ? AppColors.of(context).surface : Colors.transparent,
           borderRadius: AppRadii.smAll,
         ),
         alignment: Alignment.center,
         child: Text(
           label.toUpperCase(),
           style: AppTypography.overline.copyWith(
-            color: selected ? AppColors.onSurface : AppColors.onSurfaceMuted,
+            color: selected ? AppColors.of(context).onSurface : AppColors.of(context).onSurfaceMuted,
             letterSpacing: 1.4,
           ),
         ),
@@ -266,9 +266,9 @@ class _CreateForm extends StatelessWidget {
           behavior: HitTestBehavior.opaque,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(color: AppColors.borderStrong),
+                bottom: BorderSide(color: AppColors.of(context).borderStrong),
               ),
             ),
             child: Column(
@@ -277,7 +277,7 @@ class _CreateForm extends StatelessWidget {
                 Text(
                   'WEDDING DATE',
                   style: AppTypography.overline.copyWith(
-                    color: AppColors.primary,
+                    color: AppColors.of(context).primary,
                   ),
                 ),
                 AppSpacing.gapSm,
@@ -286,7 +286,7 @@ class _CreateForm extends StatelessWidget {
                     Icon(
                       PhosphorIconsThin.calendarBlank,
                       size: 20,
-                      color: AppColors.onSurfaceMuted,
+                      color: AppColors.of(context).onSurfaceMuted,
                     ),
                     AppSpacing.gapSm,
                     Text(
@@ -343,7 +343,7 @@ class _JoinForm extends StatelessWidget {
         Text(
           'Enter the code you received from your partner.',
           style: AppTypography.bodyMedium.copyWith(
-            color: AppColors.onSurfaceMuted,
+            color: AppColors.of(context).onSurfaceMuted,
           ),
         ),
         AppSpacing.gapLg,

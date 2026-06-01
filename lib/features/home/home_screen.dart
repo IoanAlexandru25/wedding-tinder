@@ -80,7 +80,7 @@ class HomeScreen extends ConsumerWidget {
                   child: Text(
                     'Pick a category and start swiping.',
                     style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.onSurfaceMuted,
+                      color: AppColors.of(context).onSurfaceMuted,
                     ),
                   ),
                 ),
@@ -197,13 +197,13 @@ class _WeddingInfoChip extends StatelessWidget {
         vertical: AppSpacing.sm + 2,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
+        color: AppColors.of(context).surfaceVariant,
         borderRadius: AppRadii.fullAll,
       ),
       child: Text(
         parts.join('  ·  '),
         style: AppTypography.overline.copyWith(
-          color: AppColors.onSurface,
+          color: AppColors.of(context).onSurface,
           letterSpacing: 1.4,
         ),
       ),
@@ -223,11 +223,11 @@ class _SectionTitle extends StatelessWidget {
       children: [
         Text(number, style: AppTypography.overline),
         AppSpacing.gapMd,
-        Container(width: 24, height: 1, color: AppColors.borderStrong),
+        Container(width: 24, height: 1, color: AppColors.of(context).borderStrong),
         AppSpacing.gapMd,
         Text(
           title.toUpperCase(),
-          style: AppTypography.overline.copyWith(color: AppColors.onSurface),
+          style: AppTypography.overline.copyWith(color: AppColors.of(context).onSurface),
         ),
       ],
     );
@@ -249,7 +249,8 @@ class _FilterPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = active ? AppColors.onPrimary : AppColors.primary;
+    final c = AppColors.of(context);
+    final fg = active ? c.onPrimary : c.primary;
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -260,10 +261,10 @@ class _FilterPill extends StatelessWidget {
           vertical: AppSpacing.sm + 2,
         ),
         decoration: BoxDecoration(
-          color: active ? AppColors.primary : AppColors.surface,
+          color: active ? c.primary : c.surface,
           borderRadius: AppRadii.fullAll,
           border: Border.all(
-            color: active ? AppColors.primary : AppColors.borderStrong,
+            color: active ? c.primary : c.borderStrong,
           ),
         ),
         child: Row(

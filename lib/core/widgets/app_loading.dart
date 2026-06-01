@@ -14,9 +14,9 @@ class AppLoading extends StatelessWidget {
       child: SizedBox(
         width: size,
         height: size,
-        child: const CircularProgressIndicator(
+        child: CircularProgressIndicator(
           strokeWidth: 2,
-          color: AppColors.primary,
+          color: AppColors.of(context).primary,
         ),
       ),
     );
@@ -60,6 +60,7 @@ class _SkeletonBoxState extends State<SkeletonBox>
 
   @override
   Widget build(BuildContext context) {
+    final c = AppColors.of(context);
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, _) => Container(
@@ -67,8 +68,8 @@ class _SkeletonBoxState extends State<SkeletonBox>
         height: widget.height,
         decoration: BoxDecoration(
           color: Color.lerp(
-            AppColors.surfaceVariant,
-            AppColors.border,
+            c.surfaceVariant,
+            c.border,
             _controller.value,
           ),
           borderRadius: widget.borderRadius,

@@ -18,9 +18,10 @@ class BudgetSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppColors.of(context);
     final ratio = budgetMax == 0 ? 0.0 : (estimated / budgetMax).clamp(0.0, 2.0);
     final overBudget = ratio > 1.0;
-    final fillColor = overBudget ? AppColors.error : AppColors.primary;
+    final fillColor = overBudget ? c.error : c.primary;
 
     return Container(
       margin: const EdgeInsets.symmetric(
@@ -29,9 +30,9 @@ class BudgetSummary extends StatelessWidget {
       ),
       padding: AppSpacing.allLg,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: c.surface,
         borderRadius: AppRadii.lgAll,
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: c.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +49,7 @@ class BudgetSummary extends StatelessWidget {
                 Formatters.ron(estimated),
                 style: AppTypography.headlineMedium.copyWith(
                   fontStyle: FontStyle.italic,
-                  color: overBudget ? AppColors.error : AppColors.onSurface,
+                  color: overBudget ? c.error : c.onSurface,
                 ),
               ),
             ],
@@ -58,7 +59,7 @@ class BudgetSummary extends StatelessWidget {
             borderRadius: AppRadii.fullAll,
             child: Stack(
               children: [
-                Container(height: 2, color: AppColors.surfaceVariant),
+                Container(height: 2, color: c.surfaceVariant),
                 FractionallySizedBox(
                   widthFactor: ratio.clamp(0.0, 1.0),
                   child: Container(height: 2, color: fillColor),
@@ -72,7 +73,7 @@ class BudgetSummary extends StatelessWidget {
                 ? 'Over the ${Formatters.ron(budgetMax)} budget by ${Formatters.ron(estimated - budgetMax)}.'
                 : 'of ${Formatters.ron(budgetMax)} total budget.',
             style: AppTypography.bodySmall.copyWith(
-              color: overBudget ? AppColors.error : AppColors.onSurfaceMuted,
+              color: overBudget ? c.error : c.onSurfaceMuted,
             ),
           ),
         ],

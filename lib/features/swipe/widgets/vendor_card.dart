@@ -18,6 +18,7 @@ class VendorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppColors.of(context);
     final nameWords = vendor.name.split(' ');
     final spans = _italicLeadSpans(nameWords);
 
@@ -28,7 +29,7 @@ class VendorCard extends StatelessWidget {
           borderRadius: AppRadii.cardAll,
           boxShadow: [
             BoxShadow(
-              color: AppColors.wineShadow,
+              color: c.wineShadow,
               blurRadius: 32,
               offset: const Offset(0, 12),
             ),
@@ -44,8 +45,8 @@ class VendorCard extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    AppColors.wine.withValues(alpha: 0.85),
-                    AppColors.peach.withValues(alpha: 0.95),
+                    c.wine.withValues(alpha: 0.85),
+                    c.peach.withValues(alpha: 0.95),
                   ],
                 ),
               ),
@@ -56,27 +57,42 @@ class VendorCard extends StatelessWidget {
                 gradientHeight: 0.55,
               )
             else
-              const _DarkOverlay(),
+              _DarkOverlay(overlayDark: c.overlayDark),
             Padding(
               padding: AppSpacing.allLg,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    '${vendor.category.displayName.toUpperCase()} · ${vendor.localitate.toUpperCase()}',
-                    style: AppTypography.overline.copyWith(
-                      color: AppColors.background.withValues(alpha: 0.85),
-                      letterSpacing: 1.6,
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm,
+                      vertical: AppSpacing.xs + 2,
                     ),
-                  ),
-                  AppSpacing.gapSm,
-                  EditorialHeading(
-                    style: AppTypography.displaySmall.copyWith(
-                      color: AppColors.background,
-                      height: 1.0,
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.38),
+                      borderRadius: AppRadii.smAll,
                     ),
-                    spans: spans,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${vendor.category.displayName.toUpperCase()} · ${vendor.localitate.toUpperCase()}',
+                          style: AppTypography.overline.copyWith(
+                            color: Colors.white.withValues(alpha: 0.85),
+                            letterSpacing: 1.6,
+                          ),
+                        ),
+                        AppSpacing.gapSm,
+                        EditorialHeading(
+                          style: AppTypography.displaySmall.copyWith(
+                            color: Colors.white,
+                            height: 1.0,
+                          ),
+                          spans: spans,
+                        ),
+                      ],
+                    ),
                   ),
                   AppSpacing.gapMd,
                   Row(
@@ -87,9 +103,10 @@ class VendorCard extends StatelessWidget {
                           vendor.priceMax,
                           vendor.priceUnit,
                         ),
+                        background: Colors.white,
                       ),
                       AppSpacing.gapSm,
-                      _RatingChip(rating: vendor.rating),
+                      _RatingChip(rating: vendor.rating, background: Colors.white, brass: c.brass),
                     ],
                   ),
                 ],
@@ -113,16 +130,17 @@ class VendorCard extends StatelessWidget {
 }
 
 class _DarkOverlay extends StatelessWidget {
-  const _DarkOverlay();
+  const _DarkOverlay({required this.overlayDark});
+  final Color overlayDark;
 
   @override
   Widget build(BuildContext context) {
-    return const DecoratedBox(
+    return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.center,
           end: Alignment.bottomCenter,
-          colors: [Colors.transparent, AppColors.overlayDark],
+          colors: [Colors.transparent, overlayDark],
         ),
       ),
     );
@@ -130,8 +148,9 @@ class _DarkOverlay extends StatelessWidget {
 }
 
 class _Pill extends StatelessWidget {
-  const _Pill({required this.text});
+  const _Pill({required this.text, required this.background});
   final String text;
+  final Color background;
 
   @override
   Widget build(BuildContext context) {
@@ -146,26 +165,28 @@ class _Pill extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: AppTypography.labelSmall.copyWith(color: AppColors.background),
+        style: AppTypography.labelSmall.copyWith(color: background),
       ),
     );
   }
 }
 
 class _RatingChip extends StatelessWidget {
-  const _RatingChip({required this.rating});
+  const _RatingChip({required this.rating, required this.background, required this.brass});
   final double rating;
+  final Color background;
+  final Color brass;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.star, size: 14, color: AppColors.brass),
+        Icon(Icons.star, size: 14, color: brass),
         const SizedBox(width: 4),
         Text(
           rating.toStringAsFixed(1),
-          style: AppTypography.labelSmall.copyWith(color: AppColors.background),
+          style: AppTypography.labelSmall.copyWith(color: background),
         ),
       ],
     );

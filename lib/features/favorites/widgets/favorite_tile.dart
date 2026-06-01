@@ -16,16 +16,17 @@ class FavoriteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppColors.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: 156,
         decoration: BoxDecoration(
-          color: AppColors.surface,
+          color: c.surface,
           borderRadius: AppRadii.lgAll,
           boxShadow: [
             BoxShadow(
-              color: AppColors.wineShadow,
+              color: c.wineShadow,
               blurRadius: 18,
               offset: const Offset(0, 6),
             ),
@@ -46,8 +47,8 @@ class FavoriteTile extends StatelessWidget {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          AppColors.wine.withValues(alpha: 0.8),
-                          AppColors.peach.withValues(alpha: 0.9),
+                          c.wine.withValues(alpha: 0.8),
+                          c.peach.withValues(alpha: 0.9),
                         ],
                       ),
                     ),

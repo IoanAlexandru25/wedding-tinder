@@ -109,9 +109,9 @@ class _CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = selected ? AppColors.background : AppColors.onSurface;
+    final fg = selected ? AppColors.of(context).background : AppColors.of(context).onSurface;
     final mutedFg =
-        selected ? AppColors.background.withValues(alpha: 0.7) : AppColors.onSurfaceMuted;
+        selected ? AppColors.of(context).background.withValues(alpha: 0.7) : AppColors.of(context).onSurfaceMuted;
 
     return GestureDetector(
       onTap: onTap,
@@ -122,7 +122,7 @@ class _CategoryCard extends StatelessWidget {
         width: 132,
         padding: AppSpacing.allMd,
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary : AppColors.surfaceVariant,
+          color: selected ? AppColors.of(context).primary : AppColors.of(context).surfaceVariant,
           borderRadius: AppRadii.lgAll,
         ),
         child: Column(

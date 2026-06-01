@@ -144,7 +144,7 @@ class _TopBar extends StatelessWidget {
           Text(
             category.toUpperCase(),
             style: AppTypography.overline.copyWith(
-              color: AppColors.onSurface,
+              color: AppColors.of(context).onSurface,
               letterSpacing: 1.6,
             ),
           ),
@@ -170,7 +170,7 @@ class _ActionBar extends StatelessWidget {
             child: _CircleAction(
               icon: PhosphorIconsThin.x,
               onTap: () => controller.swipeLeft(),
-              foreground: AppColors.onSurface,
+              foreground: AppColors.of(context).onSurface,
             ),
           ),
           AppSpacing.gapMd,
@@ -179,7 +179,7 @@ class _ActionBar extends StatelessWidget {
             child: _CircleAction(
               icon: PhosphorIconsThin.arrowCounterClockwise,
               onTap: () => controller.unswipe(),
-              foreground: AppColors.onSurfaceMuted,
+              foreground: AppColors.of(context).onSurfaceMuted,
               small: true,
             ),
           ),
@@ -188,8 +188,8 @@ class _ActionBar extends StatelessWidget {
             child: _CircleAction(
               icon: PhosphorIconsThin.heart,
               onTap: () => controller.swipeRight(),
-              foreground: AppColors.background,
-              background: AppColors.primary,
+              foreground: AppColors.of(context).background,
+              background: AppColors.of(context).primary,
             ),
           ),
         ],
@@ -222,14 +222,14 @@ class _CircleAction extends StatelessWidget {
       child: Container(
         height: size,
         decoration: BoxDecoration(
-          color: background ?? AppColors.surface,
+          color: background ?? AppColors.of(context).surface,
           borderRadius: AppRadii.fullAll,
           border: background == null
-              ? Border.all(color: AppColors.border, width: 1)
+              ? Border.all(color: AppColors.of(context).border, width: 1)
               : null,
           boxShadow: [
             BoxShadow(
-              color: AppColors.wineShadow,
+              color: AppColors.of(context).wineShadow,
               blurRadius: 18,
               offset: const Offset(0, 6),
             ),

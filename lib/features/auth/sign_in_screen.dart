@@ -79,7 +79,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
               Text(
                 'Pick up planning right where you left off.',
                 style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.onSurfaceMuted,
+                  color: AppColors.of(context).onSurfaceMuted,
                 ),
               ),
               AppSpacing.gapXxl,
@@ -125,14 +125,14 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                   child: Text.rich(
                     TextSpan(
                       style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.onSurfaceMuted,
+                        color: AppColors.of(context).onSurfaceMuted,
                       ),
                       children: [
                         const TextSpan(text: 'Don\'t have an account? '),
                         TextSpan(
                           text: 'Create account',
                           style: AppTypography.bodyMedium.copyWith(
-                            color: AppColors.primary,
+                            color: AppColors.of(context).primary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

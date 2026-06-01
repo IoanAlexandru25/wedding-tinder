@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../constants/app_theme_variant.dart';
 import 'app_colors.dart';
 import 'app_radii.dart';
 import 'app_spacing.dart';
@@ -10,56 +11,70 @@ import 'app_typography.dart';
 class AppTheme {
   const AppTheme._();
 
-  static ThemeData get light {
-    const scheme = ColorScheme(
-      brightness: Brightness.light,
-      primary: AppColors.primary,
-      onPrimary: AppColors.onPrimary,
-      secondary: AppColors.secondary,
-      onSecondary: AppColors.onSurface,
-      tertiary: AppColors.accent,
-      onTertiary: AppColors.onSurface,
-      error: AppColors.error,
-      onError: AppColors.onPrimary,
-      surface: AppColors.surface,
-      onSurface: AppColors.onSurface,
-      surfaceContainerHighest: AppColors.surfaceVariant,
-      onSurfaceVariant: AppColors.onSurfaceMuted,
-      outline: AppColors.border,
-      outlineVariant: AppColors.borderStrong,
+  static ThemeData build(AppThemeVariant variant) {
+    final c = switch (variant) {
+      AppThemeVariant.rose => AppColors.rose,
+      AppThemeVariant.midnight => AppColors.midnight,
+      AppThemeVariant.sage => AppColors.sage,
+    };
+    final brightness =
+        variant == AppThemeVariant.midnight ? Brightness.dark : Brightness.light;
+    final overlayStyle = brightness == Brightness.dark
+        ? SystemUiOverlayStyle.light
+        : SystemUiOverlayStyle.dark;
+
+    final scheme = ColorScheme(
+      brightness: brightness,
+      primary: c.primary,
+      onPrimary: c.onPrimary,
+      secondary: c.secondary,
+      onSecondary: c.onSurface,
+      tertiary: c.accent,
+      onTertiary: c.onSurface,
+      error: c.error,
+      onError: c.onPrimary,
+      surface: c.surface,
+      onSurface: c.onSurface,
+      surfaceContainerHighest: c.surfaceVariant,
+      onSurfaceVariant: c.onSurfaceMuted,
+      outline: c.border,
+      outlineVariant: c.borderStrong,
     );
+
+    final textTheme = AppTypography.textThemeWith(c);
 
     return ThemeData(
       useMaterial3: true,
+      extensions: [c],
       colorScheme: scheme,
-      scaffoldBackgroundColor: AppColors.background,
-      textTheme: AppTypography.textTheme,
+      scaffoldBackgroundColor: c.background,
+      textTheme: textTheme,
       splashFactory: NoSplash.splashFactory,
       highlightColor: Colors.transparent,
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.onSurface,
+        backgroundColor: c.background,
+        foregroundColor: c.onSurface,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
-        titleTextStyle: AppTypography.headlineSmall,
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        titleTextStyle: AppTypography.headlineSmall.copyWith(color: c.onSurface),
+        systemOverlayStyle: overlayStyle,
       ),
-      iconTheme: const IconThemeData(
-        color: AppColors.onSurface,
+      iconTheme: IconThemeData(
+        color: c.onSurface,
         size: 22,
       ),
       cardTheme: CardThemeData(
-        color: AppColors.surface,
+        color: c.surface,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: AppRadii.cardAll,
-          side: const BorderSide(color: AppColors.border, width: 1),
+          side: BorderSide(color: c.border, width: 1),
         ),
       ),
-      dividerTheme: const DividerThemeData(
-        color: AppColors.border,
+      dividerTheme: DividerThemeData(
+        color: c.border,
         thickness: 1,
         space: 1,
       ),
@@ -69,43 +84,40 @@ class AppTheme {
           horizontal: 0,
           vertical: AppSpacing.md,
         ),
-        labelStyle: AppTypography.bodyMedium.copyWith(
-          color: AppColors.onSurfaceMuted,
-        ),
+        labelStyle: AppTypography.bodyMedium.copyWith(color: c.onSurfaceMuted),
         floatingLabelStyle: AppTypography.labelSmall.copyWith(
-          color: AppColors.primary,
+          color: c.primary,
           letterSpacing: 1.0,
         ),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
-        border: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.borderStrong),
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: c.borderStrong),
         ),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.borderStrong),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: c.borderStrong),
         ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: c.primary, width: 1.5),
         ),
-        errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.error),
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: c.error),
         ),
-        focusedErrorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: AppColors.error, width: 1.5),
+        focusedErrorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: c.error, width: 1.5),
         ),
-        errorStyle: AppTypography.labelSmall.copyWith(color: AppColors.error),
+        errorStyle: AppTypography.labelSmall.copyWith(color: c.error),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: AppColors.onSurface,
-        contentTextStyle: AppTypography.bodyMedium.copyWith(
-          color: AppColors.background,
-        ),
+        backgroundColor: c.onSurface,
+        contentTextStyle:
+            AppTypography.bodyMedium.copyWith(color: c.background),
         behavior: SnackBarBehavior.floating,
         shape: const RoundedRectangleBorder(borderRadius: AppRadii.mdAll),
       ),
-      bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: AppColors.surface,
-        surfaceTintColor: AppColors.surface,
-        shape: RoundedRectangleBorder(
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: c.surface,
+        surfaceTintColor: c.surface,
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(AppRadii.xl),
           ),
@@ -119,7 +131,7 @@ class AppTheme {
         },
       ),
     ).copyWith(
-      textTheme: GoogleFonts.interTextTheme(AppTypography.textTheme),
+      textTheme: GoogleFonts.interTextTheme(textTheme),
     );
   }
 }
