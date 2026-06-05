@@ -35,7 +35,7 @@ class VendorDetailSheet extends ConsumerWidget {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.of(context).surface,
       builder: (_) => VendorDetailSheet(
         vendor: vendor,
         onAddedFromSwipe: onAddedFromSwipe,
@@ -71,7 +71,7 @@ class VendorDetailSheet extends ConsumerWidget {
                       height: 4,
                       margin: const EdgeInsets.only(bottom: AppSpacing.md),
                       decoration: BoxDecoration(
-                        color: AppColors.border,
+                        color: AppColors.of(context).border,
                         borderRadius: AppRadii.fullAll,
                       ),
                     ),
@@ -88,7 +88,7 @@ class VendorDetailSheet extends ConsumerWidget {
                   AppSpacing.gapMd,
                   Row(
                     children: [
-                      const Icon(Icons.star, size: 16, color: AppColors.brass),
+                      Icon(Icons.star, size: 16, color: AppColors.of(context).brass),
                       const SizedBox(width: 4),
                       Text(
                         vendor.rating.toStringAsFixed(1),
@@ -201,9 +201,9 @@ class _PhotoCarouselState extends State<_PhotoCarousel> {
     if (widget.photos.isEmpty) {
       return Container(
         height: 240,
-        color: AppColors.surfaceVariant,
+        color: AppColors.of(context).surfaceVariant,
         alignment: Alignment.center,
-        child: const Icon(Icons.image_outlined, color: AppColors.disabled),
+        child: Icon(Icons.image_outlined, color: AppColors.of(context).disabled),
       );
     }
     return SizedBox(
@@ -226,8 +226,8 @@ class _PhotoCarouselState extends State<_PhotoCarousel> {
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                           colors: [
-                            AppColors.wine.withValues(alpha: 0.7),
-                            AppColors.peach.withValues(alpha: 0.9),
+                            AppColors.of(context).wine.withValues(alpha: 0.7),
+                            AppColors.of(context).peach.withValues(alpha: 0.9),
                           ],
                         ),
                       ),

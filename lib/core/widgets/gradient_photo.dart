@@ -16,14 +16,15 @@ class GradientPhoto extends StatelessWidget {
 
   static bool _isNetworkUrl(String path) => path.startsWith('http');
 
-  Widget _buildImage() {
+  Widget _buildImage(BuildContext context) {
+    final c = AppColors.of(context);
     final placeholder = Container(
-      color: AppColors.surfaceVariant,
+      color: c.surfaceVariant,
       alignment: Alignment.center,
-      child: const Icon(
+      child: Icon(
         Icons.image_outlined,
         size: 32,
-        color: AppColors.onSurfaceMuted,
+        color: c.onSurfaceMuted,
       ),
     );
     if (_isNetworkUrl(assetPath)) {
@@ -47,17 +48,17 @@ class GradientPhoto extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        _buildImage(),
+        _buildImage(context),
         Align(
           alignment: Alignment.bottomCenter,
           child: FractionallySizedBox(
             heightFactor: gradientHeight,
-            child: const DecoratedBox(
+            child: DecoratedBox(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, AppColors.overlayDark],
+                  colors: [Colors.transparent, AppColors.of(context).overlayDark],
                 ),
               ),
             ),

@@ -88,7 +88,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               Text(
                 'A few details and you\'re on your way.',
                 style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.onSurfaceMuted,
+                  color: AppColors.of(context).onSurfaceMuted,
                 ),
               ),
               AppSpacing.gapXxl,
@@ -159,14 +159,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   child: Text.rich(
                     TextSpan(
                       style: AppTypography.bodyMedium.copyWith(
-                        color: AppColors.onSurfaceMuted,
+                        color: AppColors.of(context).onSurfaceMuted,
                       ),
                       children: [
                         const TextSpan(text: 'Already have an account? '),
                         TextSpan(
                           text: 'Sign in',
                           style: AppTypography.bodyMedium.copyWith(
-                            color: AppColors.primary,
+                            color: AppColors.of(context).primary,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

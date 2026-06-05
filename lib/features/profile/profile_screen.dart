@@ -11,7 +11,9 @@ import '../../core/theme/app_typography.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/editorial_heading.dart';
+import '../../core/constants/app_theme_variant.dart';
 import '../../providers/session_provider.dart';
+import '../../providers/theme_provider.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -54,7 +56,7 @@ class ProfileScreen extends ConsumerWidget {
                 child: Text(
                   user.email,
                   style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.onSurfaceMuted,
+                    color: AppColors.of(context).onSurfaceMuted,
                   ),
                 ),
               ),
@@ -76,6 +78,11 @@ class ProfileScreen extends ConsumerWidget {
                 child: _InviteCodeCard(code: wedding.inviteCode),
               ),
             ],
+            AppSpacing.gapXl,
+            Padding(
+              padding: AppSpacing.screenEdge,
+              child: _AppearanceSection(),
+            ),
             AppSpacing.gapXl,
             Padding(
               padding: AppSpacing.screenEdge,
@@ -112,6 +119,106 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
+class _AppearanceSection extends ConsumerWidget {
+  const _AppearanceSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final current = ref.watch(themeProvider);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('APPEARANCE', style: AppTypography.overline),
+        AppSpacing.gapMd,
+        Row(
+          children: [
+            for (final variant in AppThemeVariant.values) ...[
+              if (variant != AppThemeVariant.values.first) AppSpacing.gapSm,
+              Expanded(
+                child: _ThemeOption(
+                  variant: variant,
+                  isSelected: current == variant,
+                  onTap: () =>
+                      ref.read(themeProvider.notifier).setVariant(variant),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _ThemeOption extends StatelessWidget {
+  const _ThemeOption({
+    required this.variant,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final AppThemeVariant variant;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  static Color _swatchFor(AppThemeVariant v) => switch (v) {
+        AppThemeVariant.rose => AppColors.rose.wine,
+        AppThemeVariant.midnight => AppColors.midnight.wine,
+        AppThemeVariant.sage => AppColors.sage.wine,
+      };
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppColors.of(context);
+    final swatch = _swatchFor(variant);
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOutCubic,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.sm + 2,
+        ),
+        decoration: BoxDecoration(
+          color: isSelected ? c.surfaceVariant : Colors.transparent,
+          borderRadius: AppRadii.mdAll,
+          border: Border.all(
+            color: isSelected ? c.borderStrong : c.border,
+            width: isSelected ? 1.5 : 1.0,
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: swatch,
+                shape: BoxShape.circle,
+              ),
+              child: isSelected
+                  ? const Icon(Icons.check, size: 16, color: Colors.white)
+                  : null,
+            ),
+            AppSpacing.gapXs,
+            Text(
+              variant.label,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: AppTypography.labelSmall.copyWith(
+                color: isSelected ? c.onSurface : c.onSurfaceMuted,
+                fontWeight:
+                    isSelected ? FontWeight.w600 : FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _WeddingCard extends StatelessWidget {
   const _WeddingCard({
     required this.dateRange,
@@ -128,9 +235,9 @@ class _WeddingCard extends StatelessWidget {
     return Container(
       padding: AppSpacing.allLg,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.of(context).surface,
         borderRadius: AppRadii.lgAll,
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.of(context).border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,7 +270,7 @@ class _Row extends StatelessWidget {
             child: Text(
               label,
               style: AppTypography.labelMedium.copyWith(
-                color: AppColors.onSurfaceMuted,
+                color: AppColors.of(context).onSurfaceMuted,
               ),
             ),
           ),
@@ -183,7 +290,7 @@ class _InviteCodeCard extends StatelessWidget {
     return Container(
       padding: AppSpacing.allLg,
       decoration: BoxDecoration(
-        color: AppColors.onSurface,
+        color: AppColors.of(context).onSurface,
         borderRadius: AppRadii.lgAll,
       ),
       child: Column(
@@ -192,7 +299,7 @@ class _InviteCodeCard extends StatelessWidget {
           Text(
             'INVITE PARTNER CODE',
             style: AppTypography.overline.copyWith(
-              color: AppColors.background.withValues(alpha: 0.65),
+              color: AppColors.of(context).background.withValues(alpha: 0.65),
               letterSpacing: 1.6,
             ),
           ),
@@ -203,7 +310,7 @@ class _InviteCodeCard extends StatelessWidget {
                 child: Text(
                   code,
                   style: AppTypography.headlineLarge.copyWith(
-                    color: AppColors.background,
+                    color: AppColors.of(context).background,
                     fontStyle: FontStyle.italic,
                     letterSpacing: 2.0,
                   ),
@@ -222,14 +329,14 @@ class _InviteCodeCard extends StatelessWidget {
                   padding: AppSpacing.allSm,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: AppColors.background.withValues(alpha: 0.35),
+                      color: AppColors.of(context).background.withValues(alpha: 0.35),
                     ),
                     borderRadius: AppRadii.smAll,
                   ),
                   child: Icon(
                     PhosphorIconsThin.copy,
                     size: 18,
-                    color: AppColors.background,
+                    color: AppColors.of(context).background,
                   ),
                 ),
               ),
@@ -259,14 +366,14 @@ class _ListAction extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(color: AppColors.border),
+            bottom: BorderSide(color: AppColors.of(context).border),
           ),
         ),
         child: Row(
           children: [
-            Icon(icon, size: 22, color: AppColors.onSurface),
+            Icon(icon, size: 22, color: AppColors.of(context).onSurface),
             AppSpacing.gapMd,
             Expanded(
               child: Text(label, style: AppTypography.bodyLarge),
@@ -274,7 +381,7 @@ class _ListAction extends StatelessWidget {
             Icon(
               PhosphorIconsThin.caretRight,
               size: 18,
-              color: AppColors.onSurfaceMuted,
+              color: AppColors.of(context).onSurfaceMuted,
             ),
           ],
         ),

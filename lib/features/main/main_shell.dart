@@ -15,6 +15,7 @@ class MainShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppColors.of(context);
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: SafeArea(
@@ -31,11 +32,11 @@ class MainShell extends StatelessWidget {
             vertical: AppSpacing.sm,
           ),
           decoration: BoxDecoration(
-            color: AppColors.onSurface,
+            color: c.navBarBackground,
             borderRadius: AppRadii.lgAll,
             boxShadow: [
               BoxShadow(
-                color: AppColors.wineShadow,
+                color: c.wineShadow,
                 blurRadius: 24,
                 offset: const Offset(0, 8),
               ),
@@ -43,10 +44,10 @@ class MainShell extends StatelessWidget {
           ),
           child: GNav(
             gap: AppSpacing.sm,
-            activeColor: AppColors.onSurface,
-            color: AppColors.background.withValues(alpha: 0.65),
+            activeColor: c.navBarActiveContent,
+            color: c.navBarContent.withValues(alpha: 0.55),
             iconSize: 20,
-            tabBackgroundColor: AppColors.background,
+            tabBackgroundColor: c.navBarTabPill,
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.md,
               vertical: AppSpacing.sm + 4,
@@ -56,7 +57,7 @@ class MainShell extends StatelessWidget {
             curve: Curves.easeOutCubic,
             haptic: true,
             textStyle: AppTypography.overline.copyWith(
-              color: AppColors.onSurface,
+              color: c.navBarActiveContent,
               letterSpacing: 1.4,
             ),
             tabs: const [

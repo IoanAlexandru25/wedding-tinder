@@ -44,7 +44,7 @@ class _DesignShowcaseScreenState extends State<DesignShowcaseScreen> {
         title: Text(
           'DESIGN SYSTEM',
           style: AppTypography.overline.copyWith(
-            color: AppColors.onSurface,
+            color: AppColors.of(context).onSurface,
             letterSpacing: 1.6,
           ),
         ),
@@ -88,7 +88,7 @@ class _DesignShowcaseScreenState extends State<DesignShowcaseScreen> {
                   Text(
                     'A curated selection of vendors for the perfect day.',
                     style: AppTypography.bodyMedium.copyWith(
-                      color: AppColors.onSurfaceMuted,
+                      color: AppColors.of(context).onSurfaceMuted,
                     ),
                   ),
                   AppSpacing.gapXl,
@@ -189,7 +189,7 @@ class _ShowcaseHeader extends StatelessWidget {
         SizedBox(
           width: 24,
           height: 1,
-          child: Container(color: AppColors.accent),
+          child: Container(color: AppColors.of(context).accent),
         ),
       ],
     );
@@ -207,10 +207,10 @@ class _SectionTitle extends StatelessWidget {
       children: [
         Text(number, style: AppTypography.overline),
         AppSpacing.gapMd,
-        Container(width: 24, height: 1, color: AppColors.borderStrong),
+        Container(width: 24, height: 1, color: AppColors.of(context).borderStrong),
         AppSpacing.gapMd,
         Text(title.toUpperCase(),
-            style: AppTypography.overline.copyWith(color: AppColors.onSurface)),
+            style: AppTypography.overline.copyWith(color: AppColors.of(context).onSurface)),
       ],
     );
   }
@@ -221,17 +221,18 @@ class _ColorSwatches extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const swatches = <_Swatch>[
-      _Swatch('Wine', '#7C2D3A', AppColors.wine, dark: true),
-      _Swatch('Peach', '#E8B4A0', AppColors.peach),
-      _Swatch('Brass', '#C9A961', AppColors.brass),
-      _Swatch('Background', '#FAF6F1', AppColors.background),
-      _Swatch('Surface', '#FFFFFF', AppColors.surface),
-      _Swatch('Surface variant', '#F2EBE3', AppColors.surfaceVariant),
-      _Swatch('On surface', '#1A1416', AppColors.onSurface, dark: true),
-      _Swatch('Muted', '#6B5A60', AppColors.onSurfaceMuted, dark: true),
-      _Swatch('Success', '#5C7F5E', AppColors.success, dark: true),
-      _Swatch('Error', '#B5483F', AppColors.error, dark: true),
+    final c = AppColors.of(context);
+    final swatches = <_SwatchData>[
+      _SwatchData('Wine', c.wine, dark: true),
+      _SwatchData('Peach', c.peach),
+      _SwatchData('Brass', c.brass),
+      _SwatchData('Background', c.background),
+      _SwatchData('Surface', c.surface),
+      _SwatchData('Surface variant', c.surfaceVariant),
+      _SwatchData('On surface', c.onSurface, dark: true),
+      _SwatchData('Muted', c.onSurfaceMuted, dark: true),
+      _SwatchData('Success', c.success, dark: true),
+      _SwatchData('Error', c.error, dark: true),
     ];
     return GridView.count(
       shrinkWrap: true,
@@ -240,35 +241,42 @@ class _ColorSwatches extends StatelessWidget {
       mainAxisSpacing: AppSpacing.md,
       crossAxisSpacing: AppSpacing.md,
       childAspectRatio: 2.2,
-      children: swatches.map((s) => s.build()).toList(),
+      children: swatches.map((s) => _SwatchTile(data: s)).toList(),
     );
   }
 }
 
-class _Swatch {
-  const _Swatch(this.name, this.hex, this.color, {this.dark = false});
+class _SwatchData {
+  const _SwatchData(this.name, this.color, {this.dark = false});
   final String name;
-  final String hex;
   final Color color;
   final bool dark;
+}
 
-  Widget build() {
-    final fg = dark ? AppColors.background : AppColors.onSurface;
+class _SwatchTile extends StatelessWidget {
+  const _SwatchTile({required this.data});
+  final _SwatchData data;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppColors.of(context);
+    final fg = data.dark ? c.background : c.onSurface;
     return Container(
       padding: AppSpacing.allMd,
       decoration: BoxDecoration(
-        color: color,
+        color: data.color,
         borderRadius: AppRadii.mdAll,
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: c.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(name,
-              style: AppTypography.titleSmall.copyWith(color: fg)),
-          Text(hex,
-              style: AppTypography.overline.copyWith(color: fg.withValues(alpha: 0.7))),
+          Text(data.name, style: AppTypography.titleSmall.copyWith(color: fg)),
+          Text(
+            '#${data.color.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
+            style: AppTypography.overline.copyWith(color: fg.withValues(alpha: 0.7)),
+          ),
         ],
       ),
     );
@@ -299,7 +307,7 @@ class _TypographyShowcase extends StatelessWidget {
       children: [
         for (final s in samples) ...[
           Text(s.$1,
-              style: AppTypography.overline.copyWith(color: AppColors.accent)),
+              style: AppTypography.overline.copyWith(color: AppColors.of(context).accent)),
           AppSpacing.gapXs,
           Text(s.$3, style: s.$2),
           AppSpacing.gapLg,
@@ -456,7 +464,7 @@ class _CategorySelectorPreview extends StatelessWidget {
             width: 120,
             padding: AppSpacing.allMd,
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary : AppColors.surfaceVariant,
+              color: isSelected ? AppColors.of(context).primary : AppColors.of(context).surfaceVariant,
               borderRadius: AppRadii.lgAll,
             ),
             child: Column(
@@ -467,8 +475,8 @@ class _CategorySelectorPreview extends StatelessWidget {
                   cat.icon,
                   size: 24,
                   color: isSelected
-                      ? AppColors.background
-                      : AppColors.onSurface,
+                      ? AppColors.of(context).background
+                      : AppColors.of(context).onSurface,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -478,16 +486,16 @@ class _CategorySelectorPreview extends StatelessWidget {
                       style: AppTypography.headlineSmall.copyWith(
                         fontStyle: FontStyle.italic,
                         color: isSelected
-                            ? AppColors.background
-                            : AppColors.onSurface,
+                            ? AppColors.of(context).background
+                            : AppColors.of(context).onSurface,
                       ),
                     ),
                     Text(
                       '— SELECT',
                       style: AppTypography.overline.copyWith(
                         color: isSelected
-                            ? AppColors.background.withValues(alpha: 0.7)
-                            : AppColors.onSurfaceMuted,
+                            ? AppColors.of(context).background.withValues(alpha: 0.7)
+                            : AppColors.of(context).onSurfaceMuted,
                       ),
                     ),
                   ],
@@ -513,7 +521,7 @@ class _VendorCardPreview extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(20)),
           boxShadow: [
             BoxShadow(
-              color: AppColors.wineShadow,
+              color: AppColors.of(context).wineShadow,
               blurRadius: 32,
               offset: const Offset(0, 12),
             ),
@@ -538,21 +546,21 @@ class _VendorCardPreview extends StatelessWidget {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        AppColors.wine.withValues(alpha: 0.85),
-                        AppColors.peach.withValues(alpha: 0.95),
+                        AppColors.of(context).wine.withValues(alpha: 0.85),
+                        AppColors.of(context).peach.withValues(alpha: 0.95),
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-            const Positioned.fill(
+            Positioned.fill(
               child: DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.center,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, AppColors.overlayDark],
+                    colors: [Colors.transparent, AppColors.of(context).overlayDark],
                   ),
                 ),
               ),
@@ -566,13 +574,13 @@ class _VendorCardPreview extends StatelessWidget {
                   Text(
                     'RESTAURANT · BUCHAREST',
                     style: AppTypography.overline.copyWith(
-                      color: AppColors.background.withValues(alpha: 0.85),
+                      color: AppColors.of(context).background.withValues(alpha: 0.85),
                     ),
                   ),
                   AppSpacing.gapSm,
                   EditorialHeading(
                     style: AppTypography.displaySmall.copyWith(
-                      color: AppColors.background,
+                      color: AppColors.of(context).background,
                     ),
                     spans: const [
                       EditorialSpan('Casa ', italic: true),
@@ -586,23 +594,23 @@ class _VendorCardPreview extends StatelessWidget {
                         child: Text(
                           '320 - 480 RON / person',
                           style: AppTypography.labelSmall.copyWith(
-                            color: AppColors.background,
+                            color: AppColors.of(context).background,
                           ),
                         ),
                       ),
                       AppSpacing.gapSm,
                       Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.star,
                             size: 14,
-                            color: AppColors.brass,
+                            color: AppColors.of(context).brass,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '4.8',
                             style: AppTypography.labelSmall.copyWith(
-                              color: AppColors.background,
+                              color: AppColors.of(context).background,
                             ),
                           ),
                         ],
@@ -687,7 +695,7 @@ class _WeddingFieldPreview extends StatelessWidget {
         Text(
           "We'll personalize recommendations based on these details.",
           style: AppTypography.bodyMedium.copyWith(
-            color: AppColors.onSurfaceMuted,
+            color: AppColors.of(context).onSurfaceMuted,
           ),
         ),
         AppSpacing.gapXl,

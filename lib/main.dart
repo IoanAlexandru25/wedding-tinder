@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'app.dart';
-import 'core/theme/app_colors.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -24,7 +23,7 @@ Future<void> main() async {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
-      systemNavigationBarColor: AppColors.background,
+      systemNavigationBarColor: Color(0xFFFAF6F1),
       systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );

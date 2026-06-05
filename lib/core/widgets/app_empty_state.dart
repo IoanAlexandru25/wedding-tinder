@@ -31,7 +31,7 @@ class AppEmptyState extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (icon != null) ...[
-            Icon(icon, size: 32, color: AppColors.onSurfaceMuted),
+            Icon(icon, size: 32, color: AppColors.of(context).onSurfaceMuted),
             AppSpacing.gapLg,
           ],
           Text(italicTitle, style: AppTypography.headlineItalic),
@@ -40,7 +40,7 @@ class AppEmptyState extends StatelessWidget {
             Text(
               subtitle!,
               style: AppTypography.bodyMedium.copyWith(
-                color: AppColors.onSurfaceMuted,
+                color: AppColors.of(context).onSurfaceMuted,
               ),
             ),
           ],

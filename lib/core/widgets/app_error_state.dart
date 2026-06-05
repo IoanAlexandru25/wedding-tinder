@@ -29,7 +29,7 @@ class AppErrorState extends StatelessWidget {
           Icon(
             PhosphorIconsThin.warningCircle,
             size: 32,
-            color: AppColors.error,
+            color: AppColors.of(context).error,
           ),
           AppSpacing.gapLg,
           Text('Something went wrong', style: AppTypography.headlineItalic),
@@ -37,7 +37,7 @@ class AppErrorState extends StatelessWidget {
           Text(
             message ?? AppStrings.eroareNecunoscuta,
             style: AppTypography.bodyMedium.copyWith(
-              color: AppColors.onSurfaceMuted,
+              color: AppColors.of(context).onSurfaceMuted,
             ),
           ),
           if (onRetry != null) ...[

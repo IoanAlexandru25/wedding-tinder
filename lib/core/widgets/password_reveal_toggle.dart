@@ -22,7 +22,7 @@ class PasswordRevealToggle extends StatelessWidget {
       icon: Icon(
         revealed ? PhosphorIconsThin.eyeSlash : PhosphorIconsThin.eye,
         size: 22,
-        color: revealed ? AppColors.primary : AppColors.onSurfaceMuted,
+        color: revealed ? AppColors.of(context).primary : AppColors.of(context).onSurfaceMuted,
       ),
     );
   }

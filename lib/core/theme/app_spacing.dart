@@ -11,7 +11,6 @@ class AppSpacing {
   static const double xxl = 48;
   static const double huge = 64;
 
-  // Common EdgeInsets shortcuts — favored over repeating EdgeInsets.all(...).
   static const EdgeInsets allXs = EdgeInsets.all(xs);
   static const EdgeInsets allSm = EdgeInsets.all(sm);
   static const EdgeInsets allMd = EdgeInsets.all(md);
@@ -26,10 +25,8 @@ class AppSpacing {
   static const EdgeInsets verticalMd = EdgeInsets.symmetric(vertical: md);
   static const EdgeInsets verticalLg = EdgeInsets.symmetric(vertical: lg);
 
-  /// Default screen edge padding — generous left, content can bleed right.
   static const EdgeInsets screenEdge = EdgeInsets.symmetric(horizontal: lg);
 
-  // Common gap widgets — saves `SizedBox(height: AppSpacing.md)` boilerplate.
   static const Widget gapXs = SizedBox(height: xs, width: xs);
   static const Widget gapSm = SizedBox(height: sm, width: sm);
   static const Widget gapMd = SizedBox(height: md, width: md);

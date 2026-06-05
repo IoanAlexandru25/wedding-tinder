@@ -44,6 +44,7 @@ class AppTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppColors.of(context);
     return TextFormField(
       controller: controller,
       initialValue: initialValue,
@@ -64,21 +65,18 @@ class AppTextField extends StatelessWidget {
       autofillHints: const <String>[],
       style: AppTypography.bodyLarge,
       textAlignVertical: TextAlignVertical.center,
-      cursorColor: AppColors.primary,
+      cursorColor: c.primary,
       cursorWidth: 1.5,
       decoration: InputDecoration(
         labelText: label.toUpperCase(),
         hintText: hintText,
         helperText: helperText,
         helperStyle: AppTypography.labelSmall,
-        hintStyle: AppTypography.bodyLarge.copyWith(
-          color: AppColors.onSurfaceMuted,
-        ),
+        hintStyle: AppTypography.bodyLarge.copyWith(color: c.onSurfaceMuted),
         prefixIcon: prefixIcon != null
             ? Padding(
                 padding: const EdgeInsets.only(right: AppSpacing.sm),
-                child:
-                    Icon(prefixIcon, size: 20, color: AppColors.onSurfaceMuted),
+                child: Icon(prefixIcon, size: 20, color: c.onSurfaceMuted),
               )
             : null,
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),

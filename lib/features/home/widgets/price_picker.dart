@@ -27,7 +27,7 @@ class PricePicker extends StatefulWidget {
     return showModalBottomSheet<PriceRange>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.of(context).surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.xl)),
       ),
@@ -90,7 +90,7 @@ class _PricePickerState extends State<PricePicker> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppColors.border,
+                color: AppColors.of(context).border,
                 borderRadius: AppRadii.fullAll,
               ),
             ),
@@ -110,7 +110,7 @@ class _PricePickerState extends State<PricePicker> {
           Text(
             'Applies to the listed price for each vendor (total or per person).',
             style: AppTypography.bodySmall.copyWith(
-              color: AppColors.onSurfaceMuted,
+              color: AppColors.of(context).onSurfaceMuted,
             ),
           ),
           AppSpacing.gapXl,
@@ -121,7 +121,7 @@ class _PricePickerState extends State<PricePicker> {
               Icon(
                 PhosphorIconsThin.arrowRight,
                 size: 18,
-                color: AppColors.onSurfaceMuted,
+                color: AppColors.of(context).onSurfaceMuted,
               ),
               _ValueChip(
                 label: 'MAX',
@@ -134,10 +134,10 @@ class _PricePickerState extends State<PricePicker> {
           AppSpacing.gapMd,
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
-              activeTrackColor: AppColors.primary,
-              inactiveTrackColor: AppColors.surfaceVariant,
-              thumbColor: AppColors.primary,
-              overlayColor: AppColors.primary.withValues(alpha: 0.12),
+              activeTrackColor: AppColors.of(context).primary,
+              inactiveTrackColor: AppColors.of(context).surfaceVariant,
+              thumbColor: AppColors.of(context).primary,
+              overlayColor: AppColors.of(context).primary.withValues(alpha: 0.12),
               trackHeight: 2,
               rangeThumbShape: const RoundRangeSliderThumbShape(
                 enabledThumbRadius: 9,
@@ -169,7 +169,7 @@ class _PricePickerState extends State<PricePicker> {
               child: Text(
                 'All prices',
                 style: AppTypography.labelSmall.copyWith(
-                  color: AppColors.onSurfaceMuted,
+                  color: AppColors.of(context).onSurfaceMuted,
                 ),
               ),
             ),
@@ -199,7 +199,7 @@ class _ValueChip extends StatelessWidget {
         vertical: AppSpacing.sm + 2,
       ),
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
+        color: AppColors.of(context).surfaceVariant,
         borderRadius: AppRadii.mdAll,
       ),
       child: Column(

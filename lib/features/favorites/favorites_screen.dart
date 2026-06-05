@@ -149,9 +149,10 @@ class _TabLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = AppColors.of(context);
     final color = Color.lerp(
-      AppColors.onSurfaceMuted,
-      AppColors.primary,
+      c.onSurfaceMuted,
+      c.primary,
       interpolation,
     )!;
     return GestureDetector(
@@ -278,8 +279,8 @@ class _CategorySection extends ConsumerWidget {
                   style: AppTypography.headlineLarge.copyWith(
                     fontStyle: FontStyle.italic,
                     color: isEmpty
-                        ? AppColors.onSurfaceMuted
-                        : AppColors.onSurface,
+                        ? AppColors.of(context).onSurfaceMuted
+                        : AppColors.of(context).onSurface,
                   ),
                 ),
                 AppSpacing.gapSm,
@@ -290,7 +291,7 @@ class _CategorySection extends ConsumerWidget {
                         ? 'NO PICKS'
                         : '${vendors.length} ${vendors.length == 1 ? 'PICK' : 'PICKS'}',
                     style: AppTypography.overline.copyWith(
-                      color: AppColors.onSurfaceMuted,
+                      color: AppColors.of(context).onSurfaceMuted,
                       letterSpacing: 1.4,
                     ),
                   ),
@@ -370,19 +371,19 @@ class _EmptyCategoryCard extends StatelessWidget {
           vertical: AppSpacing.md + 2,
         ),
         decoration: BoxDecoration(
-          color: AppColors.surfaceVariant,
+          color: AppColors.of(context).surfaceVariant,
           borderRadius: AppRadii.lgAll,
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: AppColors.of(context).border),
         ),
         child: Row(
           children: [
-            Icon(category.icon, size: 22, color: AppColors.onSurfaceMuted),
+            Icon(category.icon, size: 22, color: AppColors.of(context).onSurfaceMuted),
             AppSpacing.gapMd,
             Expanded(
               child: Text(
                 'Start swiping for ${category.pluralLabel.toLowerCase()}',
                 style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.onSurfaceMuted,
+                  color: AppColors.of(context).onSurfaceMuted,
                 ),
               ),
             ),
@@ -390,7 +391,7 @@ class _EmptyCategoryCard extends StatelessWidget {
             Icon(
               PhosphorIconsThin.arrowRight,
               size: 18,
-              color: AppColors.primary,
+              color: AppColors.of(context).primary,
             ),
           ],
         ),
@@ -414,18 +415,18 @@ class _ConfirmBadge extends StatelessWidget {
         height: 32,
         decoration: BoxDecoration(
           color: isConfirmed
-              ? AppColors.primary
-              : AppColors.surface.withValues(alpha: 0.92),
+              ? AppColors.of(context).primary
+              : AppColors.of(context).surface.withValues(alpha: 0.92),
           shape: BoxShape.circle,
           border: Border.all(
-            color: isConfirmed ? AppColors.primary : AppColors.borderStrong,
+            color: isConfirmed ? AppColors.of(context).primary : AppColors.of(context).borderStrong,
             width: 1,
           ),
         ),
         child: Icon(
           PhosphorIconsThin.check,
           size: 16,
-          color: isConfirmed ? AppColors.onPrimary : AppColors.onSurfaceMuted,
+          color: isConfirmed ? AppColors.of(context).onPrimary : AppColors.of(context).onSurfaceMuted,
         ),
       ),
     );
@@ -444,14 +445,14 @@ class _RemoveBadge extends StatelessWidget {
         width: 32,
         height: 32,
         decoration: BoxDecoration(
-          color: AppColors.surface.withValues(alpha: 0.92),
+          color: AppColors.of(context).surface.withValues(alpha: 0.92),
           shape: BoxShape.circle,
-          border: Border.all(color: AppColors.borderStrong, width: 1),
+          border: Border.all(color: AppColors.of(context).borderStrong, width: 1),
         ),
         child: Icon(
           PhosphorIconsThin.x,
           size: 16,
-          color: AppColors.onSurfaceMuted,
+          color: AppColors.of(context).onSurfaceMuted,
         ),
       ),
     );
@@ -577,11 +578,11 @@ class _FinalSelectionCard extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.of(context).surface,
         borderRadius: AppRadii.lgAll,
         boxShadow: [
           BoxShadow(
-            color: AppColors.wineShadow,
+            color: AppColors.of(context).wineShadow,
             blurRadius: 18,
             offset: const Offset(0, 6),
           ),
@@ -602,8 +603,8 @@ class _FinalSelectionCard extends StatelessWidget {
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                       colors: [
-                        AppColors.wine.withValues(alpha: 0.8),
-                        AppColors.peach.withValues(alpha: 0.9),
+                        AppColors.of(context).wine.withValues(alpha: 0.8),
+                        AppColors.of(context).peach.withValues(alpha: 0.9),
                       ],
                     ),
                   ),
@@ -629,7 +630,7 @@ class _FinalSelectionCard extends StatelessWidget {
                   Text(
                     vendor.category.displayName.toUpperCase(),
                     style: AppTypography.overline.copyWith(
-                      color: AppColors.onSurfaceMuted,
+                      color: AppColors.of(context).onSurfaceMuted,
                       letterSpacing: 1.4,
                     ),
                   ),
@@ -651,8 +652,8 @@ class _FinalSelectionCard extends StatelessWidget {
                             : PhosphorIconsThin.tagSimple,
                         size: 14,
                         color: hasCustom
-                            ? AppColors.primary
-                            : AppColors.onSurfaceMuted,
+                            ? AppColors.of(context).primary
+                            : AppColors.of(context).onSurfaceMuted,
                       ),
                       AppSpacing.gapXs,
                       Flexible(
@@ -662,8 +663,8 @@ class _FinalSelectionCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: AppTypography.labelSmall.copyWith(
                             color: hasCustom
-                                ? AppColors.primary
-                                : AppColors.onSurfaceMuted,
+                                ? AppColors.of(context).primary
+                                : AppColors.of(context).onSurfaceMuted,
                             fontWeight: hasCustom
                                 ? FontWeight.w600
                                 : FontWeight.w500,
@@ -686,7 +687,7 @@ class _FinalSelectionCard extends StatelessWidget {
                   icon: Icon(
                     PhosphorIconsThin.pencilSimple,
                     size: 20,
-                    color: AppColors.onSurfaceMuted,
+                    color: AppColors.of(context).onSurfaceMuted,
                   ),
                   tooltip: 'Edit price',
                 ),
@@ -695,7 +696,7 @@ class _FinalSelectionCard extends StatelessWidget {
                   icon: Icon(
                     PhosphorIconsThin.x,
                     size: 20,
-                    color: AppColors.onSurfaceMuted,
+                    color: AppColors.of(context).onSurfaceMuted,
                   ),
                   tooltip: 'Remove from final list',
                 ),
@@ -726,7 +727,7 @@ class _PriceInputSheet extends StatefulWidget {
     return showModalBottomSheet<_PriceSheetResult>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).extension<AppColors>()!.background,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.xl)),
       ),
@@ -783,7 +784,7 @@ class _PriceInputSheetState extends State<_PriceInputSheet> {
               width: 36,
               height: 3,
               decoration: BoxDecoration(
-                color: AppColors.borderStrong,
+                color: AppColors.of(context).borderStrong,
                 borderRadius: AppRadii.fullAll,
               ),
             ),
@@ -803,7 +804,7 @@ class _PriceInputSheetState extends State<_PriceInputSheet> {
           Text(
             'Estimare catalog: ${Formatters.priceRange(widget.vendor.priceMin, widget.vendor.priceMax, widget.vendor.priceUnit)}',
             style: AppTypography.bodySmall.copyWith(
-              color: AppColors.onSurfaceMuted,
+              color: AppColors.of(context).onSurfaceMuted,
             ),
           ),
           AppSpacing.gapLg,
@@ -831,7 +832,7 @@ class _PriceInputSheetState extends State<_PriceInputSheet> {
               child: Text(
                 'Revert to catalog estimate',
                 style: AppTypography.labelSmall.copyWith(
-                  color: AppColors.onSurfaceMuted,
+                  color: AppColors.of(context).onSurfaceMuted,
                 ),
               ),
             ),

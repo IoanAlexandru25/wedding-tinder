@@ -65,7 +65,6 @@ class SessionNotifier extends Notifier<SessionState> {
           }
           final switchingUser =
               state.user != null && state.user!.id != firebaseUser.uid;
-          // Set isLoading=true; _loadWeddingForUser clears it when done.
           state = state.copyWith(
             user: _fromFirebase(firebaseUser),
             isLoading: true,
@@ -79,9 +78,6 @@ class SessionNotifier extends Notifier<SessionState> {
     return const SessionState();
   }
 
-  // Fetches the backend user document to retrieve weddingId, then loads the
-  // wedding. Called every time Firebase auth emits a user (app start, sign-in,
-  // token refresh). Creates the user doc first if the backend doesn't have it.
   Future<void> _loadWeddingForUser(fb_auth.User firebaseUser) async {
     try {
       final userModel =
@@ -124,7 +120,6 @@ class SessionNotifier extends Notifier<SessionState> {
             email: email,
             password: password,
           );
-      // Auth state change fires → _loadWeddingForUser restores the session.
     } on fb_auth.FirebaseAuthException catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -156,16 +151,11 @@ class SessionNotifier extends Notifier<SessionState> {
         error: _authErrorMessage(e),
       );
     } on UserException catch (e) {
-      if (e.code == 'already-exists') return; // idempotent — doc already there
+      if (e.code == 'already-exists') return;
       state = state.copyWith(isLoading: false, error: e.message);
     }
   }
 
-  // Fetches the backend user document; creates it if the backend has never
-  // seen this Firebase UID (e.g. sign-in after account pre-existed, or after
-  // a failed sign-up POST /users call). Errors are swallowed here — if the
-  // backend is unreachable, the user will see an error when they next touch a
-  // backend-guarded action (e.g. createWedding), not silently here.
   Future<void> _ensureUserDoc(fb_auth.User firebaseUser) async {
     final userService = ref.read(userServiceProvider);
     try {
@@ -179,7 +169,7 @@ class SessionNotifier extends Notifier<SessionState> {
           displayName: firebaseUser.displayName,
         );
       } on UserException {
-        // already-exists race condition (concurrent call) — safe to ignore.
+        // already-exists — concurrent create, safe to ignore.
       }
     }
   }
@@ -297,8 +287,6 @@ class SessionNotifier extends Notifier<SessionState> {
 final sessionProvider =
     NotifierProvider<SessionNotifier, SessionState>(SessionNotifier.new);
 
-// Convenience providers so other notifiers can read session context without
-// triggering Firebase Auth initialization in tests.
 final currentWeddingIdProvider = Provider<String?>((ref) {
   return ref.watch(sessionProvider).wedding?.id;
 });

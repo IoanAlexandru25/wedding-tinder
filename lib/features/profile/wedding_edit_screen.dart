@@ -58,8 +58,8 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
         return Theme(
           data: Theme.of(context).copyWith(
             colorScheme: Theme.of(context).colorScheme.copyWith(
-                  primary: AppColors.primary,
-                  onPrimary: AppColors.onPrimary,
+                  primary: AppColors.of(context).primary,
+                  onPrimary: AppColors.of(context).onPrimary,
                 ),
           ),
           child: child!,
@@ -135,7 +135,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
             Text(
               'Changes apply immediately across the app.',
               style: AppTypography.bodyMedium.copyWith(
-                color: AppColors.onSurfaceMuted,
+                color: AppColors.of(context).onSurfaceMuted,
               ),
             ),
             AppSpacing.gapXl,
@@ -144,9 +144,9 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
               behavior: HitTestBehavior.opaque,
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: AppColors.borderStrong),
+                    bottom: BorderSide(color: AppColors.of(context).borderStrong),
                   ),
                 ),
                 child: Column(
@@ -155,7 +155,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
                     Text(
                       'WEDDING DATE',
                       style: AppTypography.overline.copyWith(
-                        color: AppColors.primary,
+                        color: AppColors.of(context).primary,
                       ),
                     ),
                     AppSpacing.gapSm,
@@ -164,7 +164,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
                         Icon(
                           PhosphorIconsThin.calendarBlank,
                           size: 20,
-                          color: AppColors.onSurfaceMuted,
+                          color: AppColors.of(context).onSurfaceMuted,
                         ),
                         AppSpacing.gapSm,
                         Expanded(
@@ -176,7 +176,7 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
                         Icon(
                           PhosphorIconsThin.caretRight,
                           size: 18,
-                          color: AppColors.onSurfaceMuted,
+                          color: AppColors.of(context).onSurfaceMuted,
                         ),
                       ],
                     ),

@@ -17,7 +17,7 @@ class JudetPicker extends StatefulWidget {
     return showModalBottomSheet<String?>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.of(context).surface,
       builder: (_) => JudetPicker(initial: initial),
     );
   }
@@ -56,7 +56,7 @@ class _JudetPickerState extends State<JudetPicker> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.border,
+                  color: AppColors.of(context).border,
                   borderRadius: AppRadii.fullAll,
                 ),
               ),
@@ -134,16 +134,16 @@ class _SearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surfaceVariant,
+        color: AppColors.of(context).surfaceVariant,
         borderRadius: AppRadii.mdAll,
       ),
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
       child: Row(
         children: [
-          const Icon(
+          Icon(
             PhosphorIconsThin.magnifyingGlass,
             size: 20,
-            color: AppColors.onSurfaceMuted,
+            color: AppColors.of(context).onSurfaceMuted,
           ),
           AppSpacing.gapSm,
           Expanded(
@@ -154,7 +154,7 @@ class _SearchField extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: 'Search county',
                 hintStyle: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.onSurfaceMuted,
+                  color: AppColors.of(context).onSurfaceMuted,
                 ),
                 border: InputBorder.none,
                 enabledBorder: InputBorder.none,
@@ -187,14 +187,14 @@ class _JudetRow extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       splashFactory: NoSplash.splashFactory,
-      highlightColor: AppColors.surfaceVariant,
+      highlightColor: AppColors.of(context).surfaceVariant,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
           vertical: AppSpacing.md,
         ),
-        decoration: const BoxDecoration(
-          border: Border(bottom: BorderSide(color: AppColors.border)),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: AppColors.of(context).border)),
         ),
         child: Row(
           children: [
@@ -202,16 +202,16 @@ class _JudetRow extends StatelessWidget {
               child: Text(
                 label,
                 style: AppTypography.bodyLarge.copyWith(
-                  color: selected ? AppColors.primary : AppColors.onSurface,
+                  color: selected ? AppColors.of(context).primary : AppColors.of(context).onSurface,
                   fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                 ),
               ),
             ),
             if (selected)
-              const Icon(
+              Icon(
                 PhosphorIconsThin.check,
                 size: 20,
-                color: AppColors.primary,
+                color: AppColors.of(context).primary,
               ),
           ],
         ),
