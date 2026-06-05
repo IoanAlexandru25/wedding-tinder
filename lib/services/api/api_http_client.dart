@@ -9,7 +9,6 @@ class ApiHttpClient {
   ApiHttpClient(this._inner, this._getToken);
 
   final http.Client _inner;
-  // Returns the current Firebase ID token, or null when not signed in.
   final Future<String?> Function() _getToken;
 
   Future<List<dynamic>> getList(String path) async {
@@ -50,7 +49,6 @@ class ApiHttpClient {
     return jsonDecode(response.body) as Map<String, dynamic>;
   }
 
-  /// POST that expects 204 No Content (no response body to decode).
   Future<void> postNoContent(String path, Map<String, dynamic> body) async {
     final response = await _inner.post(
       Uri.parse('$kBaseUrl$path'),
@@ -67,8 +65,6 @@ class ApiHttpClient {
     );
     _checkStatus(response);
   }
-
-  // ── Internals ──────────────────────────────────────────────────────────────
 
   Future<Map<String, String>> _headers() async {
     final token = await _getToken();

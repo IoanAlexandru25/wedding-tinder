@@ -23,7 +23,7 @@ class ApiFavoritesService implements FavoritesService {
     String weddingId, {
     required String vendorId,
     required VendorCategory category,
-    required String addedBy, // ignored — server derives from ID token
+    required String addedBy,
   }) async {
     final json = await _client.post('/weddings/$weddingId/favorites', {
       'vendorId': vendorId,
@@ -36,8 +36,6 @@ class ApiFavoritesService implements FavoritesService {
   Future<void> removeFavorite(String weddingId, String vendorId) async {
     await _client.delete('/weddings/$weddingId/favorites/$vendorId');
   }
-
-  // ── Helper ─────────────────────────────────────────────────────────────────
 
   static Favorite _fromJson(Map<String, dynamic> json) {
     final category = VendorCategoryX.tryParse(json['category'] as String?);
