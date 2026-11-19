@@ -7,6 +7,7 @@ import '../../core/theme/app_radii.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/utils/formatters.dart';
+import '../../core/utils/wedding_dates.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_text_field.dart';
 import '../../core/widgets/editorial_heading.dart';
@@ -26,14 +27,22 @@ class _WeddingSetupScreenState extends ConsumerState<WeddingSetupScreen> {
   _SetupMode _mode = _SetupMode.create;
 
   // Create form state
-  DateTime _start = DateTime(2026, 6, 12);
-  DateTime _end = DateTime(2026, 6, 13);
+  late DateTime _start;
+  late DateTime _end;
   final _guestsCtl = TextEditingController(text: '150');
   final _budgetMinCtl = TextEditingController(text: '60000');
   final _budgetMaxCtl = TextEditingController(text: '80000');
 
   // Join form state
   final _codeCtl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final range = WeddingDates.defaultRange();
+    _start = range.start;
+    _end = range.end;
+  }
 
   @override
   void dispose() {
@@ -47,8 +56,8 @@ class _WeddingSetupScreenState extends ConsumerState<WeddingSetupScreen> {
   Future<void> _pickRange() async {
     final picked = await showDateRangePicker(
       context: context,
-      initialDateRange: DateTimeRange(start: _start, end: _end),
-      firstDate: DateTime.now(),
+      initialDateRange: WeddingDates.pickerInitialRange(_start, _end),
+      firstDate: WeddingDates.firstSelectableDate(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
       helpText: 'Choose the wedding date',
       saveText: 'Save',
