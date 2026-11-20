@@ -28,6 +28,7 @@ import '../../providers/session_provider.dart';
 import '../swipe/widgets/vendor_detail_sheet.dart';
 import 'widgets/budget_summary.dart';
 import 'widgets/favorite_tile.dart';
+import 'widgets/horizontal_edge_fade.dart';
 
 class FavoritesScreen extends ConsumerStatefulWidget {
   const FavoritesScreen({super.key});
@@ -311,42 +312,44 @@ class _CategorySection extends ConsumerWidget {
           else
             SizedBox(
               height: 264,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
-                itemCount: vendors.length,
-                separatorBuilder: (_, _) => AppSpacing.gapMd,
-                itemBuilder: (context, i) {
-                  final vendor = vendors[i];
-                  final isConfirmed = confirmedIds.contains(vendor.id);
-                  return Stack(
-                    key: ValueKey(vendor.id),
-                    children: [
-                      FavoriteTile(
-                        vendor: vendor,
-                        onTap: () => onTap(vendor),
-                      ),
-                      Positioned(
-                        top: AppSpacing.sm,
-                        left: AppSpacing.sm,
-                        child: _RemoveBadge(
-                          onTap: () {
-                            HapticFeedback.lightImpact();
-                            onRemove(vendor.id);
-                          },
+              child: HorizontalEdgeFade(
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                  itemCount: vendors.length,
+                  separatorBuilder: (_, _) => AppSpacing.gapMd,
+                  itemBuilder: (context, i) {
+                    final vendor = vendors[i];
+                    final isConfirmed = confirmedIds.contains(vendor.id);
+                    return Stack(
+                      key: ValueKey(vendor.id),
+                      children: [
+                        FavoriteTile(
+                          vendor: vendor,
+                          onTap: () => onTap(vendor),
                         ),
-                      ),
-                      Positioned(
-                        top: AppSpacing.sm,
-                        right: AppSpacing.sm,
-                        child: _ConfirmBadge(
-                          isConfirmed: isConfirmed,
-                          onTap: () => onToggleConfirm(vendor, isConfirmed),
+                        Positioned(
+                          top: AppSpacing.sm,
+                          left: AppSpacing.sm,
+                          child: _RemoveBadge(
+                            onTap: () {
+                              HapticFeedback.lightImpact();
+                              onRemove(vendor.id);
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  );
-                },
+                        Positioned(
+                          top: AppSpacing.sm,
+                          right: AppSpacing.sm,
+                          child: _ConfirmBadge(
+                            isConfirmed: isConfirmed,
+                            onTap: () => onToggleConfirm(vendor, isConfirmed),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
         ],
