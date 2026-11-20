@@ -7,7 +7,33 @@ import 'package:wedding_tinder/providers/session_provider.dart';
 import 'package:wedding_tinder/services/mock/mock_user_service.dart';
 import 'package:wedding_tinder/services/mock/mock_wedding_service.dart';
 
+import 'package:wedding_tinder/models/user_model.dart';
+import 'package:wedding_tinder/services/user_service.dart';
+
 import '../helpers/fake_auth.dart';
+
+class _OfflineUserService implements UserService {
+  Never _offline() => throw Exception('SocketException: Connection timed out');
+
+  @override
+  Future<UserModel> createUser({
+    required String userId,
+    required String email,
+    String? displayName,
+  }) async =>
+      _offline();
+
+  @override
+  Future<UserModel> getUser(String userId) async => _offline();
+
+  @override
+  Future<UserModel> updateUser(
+    String userId, {
+    String? displayName,
+    String? weddingId,
+  }) async =>
+      _offline();
+}
 
 void main() {
   late FakeAuthService auth;
@@ -123,10 +149,10 @@ void main() {
     });
 
     test('display name falls back to a name derived from the email', () async {
-      auth.emit(FakeFirebaseUser(uid: 'uid_2', email: 'ioan.alexandru@x.ro'));
+      auth.emit(FakeFirebaseUser(uid: 'uid_2', email: 'maria.ionescu@x.ro'));
       await settle();
 
-      expect(session().user!.displayName, 'Ioan Alexandru');
+      expect(session().user!.displayName, 'Maria Ionescu');
     });
 
     test('wedding that cannot be loaded leaves the user without wedding', () async {
@@ -282,6 +308,115 @@ void main() {
       expect(session().error, 'Password is too weak.');
     });
 
+    test('profile keeps the typed name although Firebase reports the user first',
+        () async {
+      auth.userToReturn = FakeFirebaseUser(
+        uid: 'uid_9',
+        email: 'elena.popescu@example.com',
+        displayName: 'Elena',
+      );
+
+      await notifier().signUp(
+        email: 'elena.popescu@example.com',
+        password: 'secret123',
+        displayName: 'Elena',
+      );
+      await settle();
+
+      final doc = await userService.getUser('uid_9');
+      expect(doc.displayName, 'Elena');
+      expect(session().user!.displayName, 'Elena');
+      expect(session().isLoading, isFalse);
+    });
+
+    test('shows the typed name while sign-up is still running', () async {
+      auth.userToReturn = FakeFirebaseUser(
+        uid: 'uid_9',
+        email: 'elena.popescu@example.com',
+        displayName: 'Elena',
+      );
+
+      final pending = notifier().signUp(
+        email: 'elena.popescu@example.com',
+        password: 'secret123',
+        displayName: '  Elena  ',
+      );
+      await Future<void>.delayed(Duration.zero);
+
+      expect(session().user!.displayName, 'Elena');
+      await pending;
+    });
+
+    test('completes an existing profile that has no name', () async {
+      await userService.createUser(userId: 'uid_1', email: 'ana@example.com');
+
+      await notifier().signUp(
+        email: 'ana@example.com',
+        password: 'secret123',
+        displayName: 'Ana',
+      );
+      await settle();
+
+      expect((await userService.getUser('uid_1')).displayName, 'Ana');
+      expect(session().user!.displayName, 'Ana');
+      expect(session().error, isNull);
+    });
+
+    test('keeps an existing profile that already has the same name', () async {
+      await userService.createUser(
+        userId: 'uid_1',
+        email: 'ana@example.com',
+        displayName: 'Ana',
+      );
+
+      await notifier().signUp(
+        email: 'ana@example.com',
+        password: 'secret123',
+        displayName: 'Ana',
+      );
+      await settle();
+
+      expect((await userService.getUser('uid_1')).displayName, 'Ana');
+      expect(session().error, isNull);
+    });
+
+    test('loads the wedding when the existing profile already has one', () async {
+      await userService.createUser(userId: 'uid_1', email: 'ana@example.com');
+      final wedding = await seedWeddingFor('uid_1');
+
+      await notifier().signUp(
+        email: 'ana@example.com',
+        password: 'secret123',
+        displayName: 'Ana',
+      );
+      await settle();
+
+      expect(session().wedding?.id, wedding.id);
+    });
+
+    test('a connection failure stops loading and reports an error', () async {
+      final offline = ProviderContainer(
+        overrides: [
+          authServiceProvider.overrideWithValue(auth),
+          userServiceProvider.overrideWithValue(_OfflineUserService()),
+          weddingServiceProvider.overrideWithValue(weddingService),
+        ],
+      );
+      addTearDown(offline.dispose);
+      offline.listen(sessionProvider, (_, _) {});
+
+      await offline.read(sessionProvider.notifier).signUp(
+            email: 'ana@example.com',
+            password: 'secret123',
+            displayName: 'Ana',
+          );
+
+      final s = offline.read(sessionProvider);
+      expect(s.isLoading, isFalse);
+      expect(s.error, contains('Could not reach the server'));
+      expect(s.isSignedIn, isTrue);
+    });
+
     test('existing user document is not treated as an error', () async {
       await userService.createUser(userId: 'uid_1', email: 'ana@example.com');
 
@@ -293,6 +428,49 @@ void main() {
       await settle();
 
       expect(session().error, isNull);
+    });
+  });
+
+  group('profile name backfill on sign-in', () {
+    test('fills a missing profile name from the Firebase account', () async {
+      await userService.createUser(userId: 'uid_1', email: 'ana@example.com');
+
+      auth.emit(FakeFirebaseUser(
+        uid: 'uid_1',
+        email: 'ana@example.com',
+        displayName: 'Ana Pop',
+      ));
+      await settle();
+
+      expect((await userService.getUser('uid_1')).displayName, 'Ana Pop');
+      expect(session().user!.displayName, 'Ana Pop');
+    });
+
+    test('never overwrites a name the profile already has', () async {
+      await userService.createUser(
+        userId: 'uid_1',
+        email: 'ana@example.com',
+        displayName: 'Ana',
+      );
+
+      auth.emit(FakeFirebaseUser(
+        uid: 'uid_1',
+        email: 'ana@example.com',
+        displayName: 'Someone Else',
+      ));
+      await settle();
+
+      expect((await userService.getUser('uid_1')).displayName, 'Ana');
+      expect(session().user!.displayName, 'Ana');
+    });
+
+    test('leaves the profile alone when Firebase has no name either', () async {
+      await userService.createUser(userId: 'uid_1', email: 'ana@example.com');
+
+      auth.emit(FakeFirebaseUser(uid: 'uid_1', email: 'ana@example.com'));
+      await settle();
+
+      expect((await userService.getUser('uid_1')).displayName, isNull);
     });
   });
 
