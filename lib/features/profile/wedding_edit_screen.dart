@@ -7,6 +7,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_typography.dart';
 import '../../core/utils/formatters.dart';
+import '../../core/utils/wedding_dates.dart';
 import '../../core/widgets/app_button.dart';
 import '../../core/widgets/app_text_field.dart';
 import '../../core/widgets/editorial_heading.dart';
@@ -48,8 +49,8 @@ class _WeddingEditScreenState extends ConsumerState<WeddingEditScreen> {
   Future<void> _pickRange() async {
     final picked = await showDateRangePicker(
       context: context,
-      initialDateRange: DateTimeRange(start: _start, end: _end),
-      firstDate: DateTime.now(),
+      initialDateRange: WeddingDates.pickerInitialRange(_start, _end),
+      firstDate: WeddingDates.firstSelectableDate(),
       lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
       helpText: 'Choose the wedding date',
       saveText: 'Save',
