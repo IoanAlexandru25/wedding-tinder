@@ -77,7 +77,8 @@ class FakeAuthService implements AuthService {
   }) async {
     final error = nextError;
     if (error != null) throw error;
-    emit(userToReturn);
+    emit(FakeFirebaseUser(uid: userToReturn.uid, email: userToReturn.email));
+    await settle();
     return userToReturn;
   }
 

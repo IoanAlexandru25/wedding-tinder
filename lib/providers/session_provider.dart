@@ -53,6 +53,9 @@ class SessionState {
 }
 
 class SessionNotifier extends Notifier<SessionState> {
+  bool _signUpInProgress = false;
+  String? _signUpDisplayName;
+
   @override
   SessionState build() {
     ref.listen<AsyncValue<fb_auth.User?>>(
@@ -66,11 +69,15 @@ class SessionNotifier extends Notifier<SessionState> {
           final switchingUser =
               state.user != null && state.user!.id != firebaseUser.uid;
           state = state.copyWith(
-            user: _fromFirebase(firebaseUser),
+            user: _fromFirebase(
+              firebaseUser,
+              displayName: _signUpInProgress ? _signUpDisplayName : null,
+            ),
             isLoading: true,
             clearError: true,
             clearWedding: switchingUser,
           );
+          if (_signUpInProgress) return;
           _loadWeddingForUser(firebaseUser); // fire-and-forget
         });
       },
@@ -80,8 +87,10 @@ class SessionNotifier extends Notifier<SessionState> {
 
   Future<void> _loadWeddingForUser(fb_auth.User firebaseUser) async {
     try {
-      final userModel =
-          await ref.read(userServiceProvider).getUser(firebaseUser.uid);
+      final userModel = await _backfillDisplayName(
+        await ref.read(userServiceProvider).getUser(firebaseUser.uid),
+        firebaseUser.displayName,
+      );
       if (state.user?.id != firebaseUser.uid) return;
       state = state.copyWith(user: userModel);
 
@@ -133,26 +142,83 @@ class SessionNotifier extends Notifier<SessionState> {
     required String password,
     required String displayName,
   }) async {
+    final name = displayName.trim();
+    _signUpInProgress = true;
+    _signUpDisplayName = name.isEmpty ? null : name;
     state = state.copyWith(isLoading: true, clearError: true);
     try {
       final firebaseUser = await ref.read(authServiceProvider).signUp(
             email: email,
             password: password,
-            displayName: displayName,
+            displayName: name,
           );
-      await ref.read(userServiceProvider).createUser(
-            userId: firebaseUser.uid,
-            email: email,
-            displayName: displayName,
-          );
+      final profile = await _createOrCompleteProfile(
+        userId: firebaseUser.uid,
+        email: email,
+        displayName: _signUpDisplayName,
+      );
+      final weddingId = profile.weddingId;
+      final wedding = weddingId == null
+          ? null
+          : await ref.read(weddingServiceProvider).getWedding(weddingId);
+      if (state.user?.id != firebaseUser.uid) return;
+      state = state.copyWith(
+        user: profile.displayName == null
+            ? profile.copyWith(displayName: state.user?.displayName)
+            : profile,
+        wedding: wedding,
+        isLoading: false,
+      );
     } on fb_auth.FirebaseAuthException catch (e) {
       state = state.copyWith(
         isLoading: false,
         error: _authErrorMessage(e),
       );
-    } on UserException catch (e) {
-      if (e.code == 'already-exists') return;
+    } on ServiceException catch (e) {
       state = state.copyWith(isLoading: false, error: e.message);
+    } catch (_) {
+      state = state.copyWith(isLoading: false, error: _connectionError);
+    } finally {
+      _signUpInProgress = false;
+      _signUpDisplayName = null;
+    }
+  }
+
+  Future<UserModel> _createOrCompleteProfile({
+    required String userId,
+    required String email,
+    required String? displayName,
+  }) async {
+    final userService = ref.read(userServiceProvider);
+    try {
+      return await userService.createUser(
+        userId: userId,
+        email: email,
+        displayName: displayName,
+      );
+    } on UserException catch (e) {
+      if (e.code != 'already-exists') rethrow;
+      final existing = await userService.getUser(userId);
+      if (displayName == null || existing.displayName == displayName) {
+        return existing;
+      }
+      return userService.updateUser(userId, displayName: displayName);
+    }
+  }
+
+  Future<UserModel> _backfillDisplayName(
+    UserModel profile,
+    String? authDisplayName,
+  ) async {
+    final current = profile.displayName?.trim() ?? '';
+    final fromAuth = authDisplayName?.trim() ?? '';
+    if (current.isNotEmpty || fromAuth.isEmpty) return profile;
+    try {
+      return await ref
+          .read(userServiceProvider)
+          .updateUser(profile.id, displayName: fromAuth);
+    } catch (_) {
+      return profile.copyWith(displayName: fromAuth);
     }
   }
 
@@ -254,12 +320,16 @@ class SessionNotifier extends Notifier<SessionState> {
     return cleaned.isEmpty ? 'You' : cleaned.join(' ');
   }
 
-  static UserModel _fromFirebase(fb_auth.User user) {
+  static const String _connectionError =
+      'Could not reach the server. Check your connection and try again.';
+
+  static UserModel _fromFirebase(fb_auth.User user, {String? displayName}) {
     final email = user.email ?? '';
     return UserModel(
       id: user.uid,
       email: email,
-      displayName: user.displayName ?? _displayNameFromEmail(email),
+      displayName:
+          displayName ?? user.displayName ?? _displayNameFromEmail(email),
       createdAt: user.metadata.creationTime ?? DateTime.now(),
     );
   }
