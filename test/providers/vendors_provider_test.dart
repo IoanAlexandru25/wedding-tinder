@@ -50,8 +50,8 @@ final _catalog = [
       category: VendorCategory.dj, judet: 'Bucharest', priceMin: 1500, priceMax: 2500),
 ];
 
-Future<ProviderContainer> _makeContainer() async {
-  final repo = VendorRepository()..debugSeed(_catalog);
+Future<ProviderContainer> _makeContainer({List<Vendor>? catalog}) async {
+  final repo = VendorRepository()..debugSeed(catalog ?? _catalog);
   final container = ProviderContainer(
     overrides: [
       vendorRepositoryProvider.overrideWithValue(repo),
@@ -196,6 +196,36 @@ void main() {
       expect(counts[VendorCategory.restaurant], 1);
       expect(counts[VendorCategory.fotograf], 0);
       expect(counts[VendorCategory.dj], 0);
+    });
+  });
+
+  group('county filter with diacritics', () {
+    late ProviderContainer diacritics;
+
+    setUp(() async {
+      diacritics = await _makeContainer(catalog: [
+        _vendor('r_brasov', judet: 'Brașov'),
+        _vendor('t_iasi', category: VendorCategory.tort, judet: 'Iași'),
+        _vendor('r_cluj', judet: 'Cluj'),
+      ]);
+    });
+    tearDown(() => diacritics.dispose());
+
+    void pick(String judet) =>
+        diacritics.read(filtersProvider.notifier).state =
+            VendorFilters(judet: judet);
+
+    test('picking a county without diacritics finds vendors stored with them',
+        () {
+      pick('Brasov');
+      expect(_ids(diacritics.read(filteredVendorsProvider)), ['r_brasov']);
+    });
+
+    test('category counts include vendors stored with diacritics', () {
+      pick('Iasi');
+      final counts = diacritics.read(filteredCategoryCountsProvider);
+      expect(counts[VendorCategory.tort], 1);
+      expect(counts[VendorCategory.restaurant], 0);
     });
   });
 

@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/config/api_config.dart';
 import '../core/constants/categories.dart';
+import '../core/utils/text_normalizer.dart';
 import '../models/vendor.dart';
 import '../services/vendor_repository.dart';
 import 'dismissed_provider.dart';
@@ -31,7 +32,10 @@ final filteredCategoryCountsProvider =
     for (final c in VendorCategory.values) c: 0,
   };
   for (final v in all) {
-    if (filters.judet != null && v.judet != filters.judet) continue;
+    if (filters.judet != null &&
+        !TextNormalizer.sameCounty(v.judet, filters.judet!)) {
+      continue;
+    }
     if (filters.priceMin != null && v.priceMax < filters.priceMin!) continue;
     if (filters.priceMax != null && v.priceMin > filters.priceMax!) continue;
     counts[v.category] = (counts[v.category] ?? 0) + 1;
@@ -51,7 +55,10 @@ final filteredVendorsProvider = Provider<List<Vendor>>((ref) {
     if (filters.category != null && v.category != filters.category) {
       return false;
     }
-    if (filters.judet != null && v.judet != filters.judet) return false;
+    if (filters.judet != null &&
+        !TextNormalizer.sameCounty(v.judet, filters.judet!)) {
+      return false;
+    }
     if (filters.priceMin != null && v.priceMax < filters.priceMin!) {
       return false;
     }
