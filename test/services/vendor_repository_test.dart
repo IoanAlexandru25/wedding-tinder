@@ -69,10 +69,11 @@ void main() {
           _make(id: 'v1', judet: 'Cluj'),
           _make(id: 'v2', judet: 'Cluj'),
           _make(id: 'v3', judet: 'Bucharest'),
+          _make(id: 'v4', judet: 'Brașov'),
         ]);
       });
 
-      test('judet filter is an exact match', () async {
+      test('judet filter matches the whole county name', () async {
         final result = await repo.filterBy(judet: 'Cluj');
         expect(result.length, 2);
         expect(result.every((v) => v.judet == 'Cluj'), isTrue);
@@ -80,6 +81,22 @@ void main() {
 
       test('judet with no match returns empty', () async {
         final result = await repo.filterBy(judet: 'Iasi');
+        expect(result, isEmpty);
+      });
+
+      test('judet without diacritics matches a county stored with them',
+          () async {
+        final result = await repo.filterBy(judet: 'Brasov');
+        expect(result.map((v) => v.id), ['v4']);
+      });
+
+      test('judet filter ignores case', () async {
+        final result = await repo.filterBy(judet: 'bucharest');
+        expect(result.map((v) => v.id), ['v3']);
+      });
+
+      test('a partial county name does not match', () async {
+        final result = await repo.filterBy(judet: 'Bra');
         expect(result, isEmpty);
       });
     });
